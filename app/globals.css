@@ -562,3 +562,15 @@ img{display:block;max-width:100%}
 @media(max-width:560px){.db-stage{grid-template-columns:1fr}.db-stage>button{position:fixed;z-index:50;bottom:20px}.db-stage>button:first-child{left:18px}.db-stage>button:last-child{right:18px}.db-book.single{max-width:100%;width:100%}.db-controls{padding:0 8px}.db-thumbs{padding:0 8px 55px}.readerbar{position:relative}.readerbar .actions{width:100%;justify-content:flex-start;overflow:auto}.admin-top{display:grid}.admin-pages>div{grid-template-columns:1fr}.admin-login form{padding:28px 22px}}
 @media print{.print-toolbar{display:none!important}.db-print-view{background:#fff}.db-print-magazine{display:block;padding:0}.db-page-print{width:148mm;height:210mm;max-width:none;box-shadow:none;break-after:page;page-break-after:always}.db-page h1{font-size:34pt}.db-page h2{font-size:24pt}.db-page p{font-size:10pt}.db-page small{font-size:7pt}}
 @media(prefers-reduced-motion:reduce){.db-page-wrap{animation:none}.db-media img,.db-cover-media img{transition:none}}
+
+
+/* V5.1 — correções de contraste e sincronização */
+.home-hero-copy{padding:clamp(24px,3.2vw,48px);border:1px solid rgba(255,255,255,.15);border-radius:32px;background:linear-gradient(135deg,rgba(2,6,23,.88),rgba(7,30,52,.76));box-shadow:0 28px 70px rgba(2,6,23,.34);backdrop-filter:blur(20px)}
+.home-hero-copy h1,.home-hero-copy h1 em{color:#fff!important;text-shadow:0 4px 28px rgba(0,0,0,.42)}
+.home-hero-copy h1 em{color:#67e8f9!important}
+.home-hero-copy>p{color:#f1f5f9!important;text-shadow:0 2px 12px rgba(0,0,0,.35)}
+.home-hero-copy .glass-chip{color:#e0f2fe;background:rgba(14,165,233,.15);border-color:rgba(125,211,252,.38)}
+.home-hero-copy .hero-trust span{color:#f8fafc!important}
+.db-sync-warning{width:min(760px,calc(100% - 32px));margin:0 auto 14px;padding:10px 14px;border:1px solid rgba(250,204,21,.28);border-radius:12px;background:rgba(113,63,18,.42);color:#fef3c7;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;backdrop-filter:blur(12px)}
+.login-message.success{background:rgba(6,78,59,.62);color:#a7f3d0}.login-message.error{background:#7f1d1d66;color:#fecaca}
+@media(max-width:680px){.home-hero-copy{padding:24px 19px;border-radius:24px}.home-hero-copy h1{font-size:clamp(44px,14vw,68px)!important}.home-hero-copy>p{font-size:16px!important;line-height:1.55}.db-sync-warning{font-size:10px;text-align:center}}

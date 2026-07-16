@@ -11,7 +11,7 @@ export type AuthSession = {
 
 const jsonHeaders = (token?: string) => ({
   apikey: SUPABASE_KEY,
-  Authorization: `Bearer ${token || SUPABASE_KEY}`,
+  ...(token ? { Authorization: `Bearer ${token}` } : {}),
   'Content-Type': 'application/json',
 });
 
@@ -31,6 +31,16 @@ export async function signUp(email: string, password: string): Promise<AuthSessi
   const body = await response.json();
   if (!response.ok) throw new Error(body.error_description || body.msg || body.message || 'Não foi possível criar o usuário.');
   return body;
+}
+
+export async function resendConfirmation(email: string): Promise<void> {
+  const response = await fetch(`${SUPABASE_URL}/auth/v1/resend`, {
+    method: 'POST',
+    headers: jsonHeaders(),
+    body: JSON.stringify({ type: 'signup', email }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error_description || body.msg || body.message || 'Não foi possível reenviar a confirmação.');
 }
 
 export function saveSession(session: AuthSession) {
