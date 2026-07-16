@@ -7,3 +7,4 @@ out/
 !.env.example
 .vercel/
 pnpm-workspace.yaml
+public/media/demo/community-volunteers.jpg
