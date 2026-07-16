@@ -53,3 +53,11 @@ feat: reconstruir identidade visual e revista na versão 3
 ## Observação sobre conteúdo
 
 Textos, números, endereço, e-mail e links sociais devem ser revisados com o vereador antes da publicação definitiva. Os dados principais ficam em `content/site.ts`.
+
+
+## Versão 4 — fotografia editorial
+
+- Fundo em mosaico recuperado do projeto original.
+- Galerias e mosaicos fotográficos responsivos.
+- Revista com mais áreas para imagens e enquadramento individual.
+- Ajustes de composição para evitar cortes e sobreposições.

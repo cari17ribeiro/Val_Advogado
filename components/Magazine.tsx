@@ -52,7 +52,7 @@ const pages: Page[] = [
     label: 'Capa',
     className: 'mag-page mag-cover',
     content: (
-      <div className="mag-safe mag-cover-grid">
+      <><div className="mag-cover-mosaic" aria-hidden="true"/><div className="mag-safe mag-cover-grid mag-cover-grid-v4">
         <div className="mag-cover-copy">
           <img className="mag-cover-logo" src={photos.logo} alt="Logo Val Advogado"/>
           <div>
@@ -67,7 +67,7 @@ const pages: Page[] = [
           <img src={photos.hero} alt="Val Advogado"/>
         </div>
         <span className="mag-page-number">01</span>
-      </div>
+      </div></>
     ),
   },
   {
@@ -82,6 +82,7 @@ const pages: Page[] = [
         <div className="mag-three-values">
           <span><Users/>Comunidade</span><span><ShieldCheck/>Direitos</span><span><Home/>Família</span>
         </div>
+        <div className="mag-about-photo-strip"><img src={photos.familia} alt="Família e valores"/><img src={photos.gabinete} alt="Atuação no gabinete"/></div>
         <span className="mag-page-number">02</span>
       </div>
     ),
@@ -93,10 +94,12 @@ const pages: Page[] = [
     content: (
       <div className="mag-safe mag-story-grid">
         <header><span className="mag-overline">03 — TRAJETÓRIA</span><h2>História feita de presença.</h2></header>
-        <div className="mag-story-photos">
+        <div className="mag-story-photos mag-story-mosaic-v4">
           <figure className="mag-photo-card mag-photo-large"><img src={photos.familia} alt="Val com sua família"/><figcaption>Família e valores</figcaption></figure>
           <figure className="mag-photo-card"><img src={photos.gabinete} alt="Val no gabinete"/><figcaption>Atuação pública</figcaption></figure>
           <figure className="mag-photo-card"><img src={photos.acao} alt="Val em ação"/><figcaption>Trabalho de campo</figcaption></figure>
+          <figure className="mag-photo-card mag-photo-detail"><img src={photos.luvas} alt="Esporte social"/><figcaption>Projetos sociais</figcaption></figure>
+          <figure className="mag-photo-card mag-photo-portrait"><img src={photos.hero} alt="Val Advogado"/></figure>
         </div>
         <span className="mag-page-number">03</span>
       </div>
@@ -150,6 +153,7 @@ const pages: Page[] = [
         </div>
         <blockquote>“Cada tatame pode ser uma porta para um futuro melhor.”</blockquote>
         <div className="mag-cause-pill-row"><span>Disciplina</span><span>Pertencimento</span><span>Futuro</span></div>
+        <div className="mag-fight-photo-strip"><img src={photos.luvas} alt="Escolas de luta"/><img src={photos.acao} alt="Ação comunitária"/></div>
         <span className="mag-page-number">06</span>
       </div>
     ),
@@ -160,7 +164,7 @@ const pages: Page[] = [
     className: 'mag-page mag-fight-photo-page',
     content: (
       <div className="mag-safe mag-photo-story-layout">
-        <div className="mag-photo-story-image"><img src={photos.luvas} alt="Projeto de escolas de luta"/></div>
+        <div className="mag-sport-mosaic"><img className="sport-main" src={photos.luvas} alt="Projeto de escolas de luta"/><img className="sport-detail" src={photos.luvas} alt="Detalhe do projeto esportivo"/><img className="sport-action" src={photos.acao} alt="Ação comunitária"/></div>
         <div className="mag-photo-story-copy">
           <span className="mag-overline">07 — ESPORTE SOCIAL</span>
           <h2>Mais que treino: oportunidade.</h2>
@@ -176,7 +180,7 @@ const pages: Page[] = [
     className: 'mag-page mag-autism-intro',
     content: (
       <div className="mag-safe mag-autism-layout">
-        <div className="mag-autism-art" aria-hidden="true"><div/><div/><HeartHandshake/></div>
+        <div className="mag-autism-art mag-autism-photo-v4"><img src={photos.familia} alt="Família e acolhimento"/><div/><div/><HeartHandshake/></div>
         <div className="mag-autism-copy">
           <span className="mag-overline">08 — PROJETO DE DESTAQUE</span>
           <h2>Inclusão começa com compreensão.</h2>
@@ -200,6 +204,7 @@ const pages: Page[] = [
           <article><BookOpen/><h3>Informar</h3><p>Conhecimento para combater preconceitos.</p></article>
           <article><Users/><h3>Participar</h3><p>Autonomia e presença na comunidade.</p></article>
         </div>
+        <div className="mag-inclusion-photo-band"><img src={photos.gabinete} alt="Atendimento e escuta"/><img src={photos.familia} alt="Família e comunidade"/></div>
         <span className="mag-page-number">09</span>
       </div>
     ),
@@ -233,7 +238,7 @@ const pages: Page[] = [
           <li><b>03</b><span>Manter a fiscalização próxima dos bairros.</span></li>
           <li><b>04</b><span>Transformar participação popular em resultados.</span></li>
         </ol>
-        <div className="mag-commitment-note"><MessageCircle/><span>O gabinete continua aberto para ouvir, construir e prestar contas.</span></div>
+        <div className="mag-commitments-photo-band"><img src={photos.gabinete} alt="Gabinete"/><img src={photos.acao} alt="Trabalho de campo"/></div><div className="mag-commitment-note"><MessageCircle/><span>O gabinete continua aberto para ouvir, construir e prestar contas.</span></div>
         <span className="mag-page-number">11</span>
       </div>
     ),
@@ -243,7 +248,7 @@ const pages: Page[] = [
     label: 'Contato',
     className: 'mag-page mag-back-cover',
     content: (
-      <div className="mag-safe mag-back-layout">
+      <><div className="mag-back-mosaic" aria-hidden="true"/><div className="mag-safe mag-back-layout">
         <img className="mag-back-logo" src={photos.logo} alt="Val Advogado"/>
         <div>
           <span className="mag-overline">FAÇA PARTE</span>
@@ -257,7 +262,7 @@ const pages: Page[] = [
         </div>
         <footer>Transparência • Presença • Ação</footer>
         <span className="mag-page-number">12</span>
-      </div>
+      </div></>
     ),
   },
 ];
@@ -328,15 +333,15 @@ export function Magazine({ interactive = false }: MagazineProps) {
   const lastPage = visiblePages[visiblePages.length - 1];
 
   return (
-    <div className="magazine-reader-v3">
+    <div className="magazine-reader-v4">
       <div className="reader-ambient reader-ambient-one" aria-hidden="true"/>
       <div className="reader-ambient reader-ambient-two" aria-hidden="true"/>
 
-      <div className="reader-stage-v3">
+      <div className="reader-stage-v4">
         <button type="button" className="reader-arrow" onClick={() => go(-1)} disabled={index === 0} aria-label="Página anterior"><ChevronLeft/></button>
 
         <div
-          className={`book-v3 ${singlePage ? 'book-single' : ''}`}
+          className={`book-v4 ${singlePage ? 'book-single' : ''}`}
           onPointerDown={(event) => { pointerStart.current = event.clientX; }}
           onPointerUp={(event) => {
             if (pointerStart.current === null) return;
@@ -345,7 +350,7 @@ export function Magazine({ interactive = false }: MagazineProps) {
             if (Math.abs(distance) > 45) go(distance < 0 ? 1 : -1);
           }}
         >
-          {!singlePage && <div className="book-spine-v3" aria-hidden="true"/>}
+          {!singlePage && <div className="book-spine-v4" aria-hidden="true"/>}
           <AnimatePresence mode="sync" initial={false} custom={direction}>
             {visiblePages.map((page, pageIndex) => (
               <PageCard
@@ -361,13 +366,13 @@ export function Magazine({ interactive = false }: MagazineProps) {
         <button type="button" className="reader-arrow" onClick={() => go(1)} disabled={index === maxIndex} aria-label="Próxima página"><ChevronRight/></button>
       </div>
 
-      <div className="reader-status-v3">
+      <div className="reader-status-v4">
         <span>{singlePage ? `Página ${firstPage.id} de 12` : `Páginas ${firstPage.id}–${lastPage.id} de 12`}</span>
-        <div className="reader-progress-v3"><i style={{ width: `${((index + 1) / totalSteps) * 100}%` }}/></div>
+        <div className="reader-progress-v4"><i style={{ width: `${((index + 1) / totalSteps) * 100}%` }}/></div>
         <button type="button" onClick={() => document.documentElement.requestFullscreen?.()}><Maximize2 size={16}/> Tela cheia</button>
       </div>
 
-      <div className="reader-thumbnails-v3" aria-label="Índice da revista">
+      <div className="reader-thumbnails-v4" aria-label="Índice da revista">
         {pages.map((page, pageIndex) => {
           const target = singlePage ? pageIndex : Math.floor(pageIndex / 2);
           return (

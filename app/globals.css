@@ -441,3 +441,106 @@ img{display:block;max-width:100%}
   .mag-safe{padding:10mm!important}
   .mag-cover-grid{grid-template-columns:47% 53%!important}
 }
+
+/* =========================================================
+   V4 — editorial photography, mosaics and safer framing
+   ========================================================= */
+.home-hero-v4{isolation:isolate;background:
+  linear-gradient(110deg,rgba(238,248,255,.97) 0%,rgba(238,248,255,.9) 48%,rgba(220,244,255,.82) 100%),
+  linear-gradient(135deg,#f7fbff,#dff5ff)}
+.hero-mosaic-background{position:absolute;inset:0;z-index:-2;opacity:.12;background-image:url('https://i.ibb.co/Kz9HyrPX/67f29597-c56c-4f03-8064-1a8f978908d5.jpg');background-size:520px;background-position:center;background-repeat:repeat;filter:grayscale(1) saturate(.4);mask-image:linear-gradient(90deg,#000,rgba(0,0,0,.55) 48%,transparent 78%)}
+.portrait-glass-v4{overflow:visible;padding-top:42px}
+.portrait-glass-v4:after{content:"";position:absolute;inset:5% 7% 3%;z-index:0;border:1px solid rgba(14,165,233,.22);border-radius:46% 46% 24px 24px;box-shadow:inset 0 0 50px rgba(56,189,248,.12)}
+.portrait-glass-v4 img{position:relative;z-index:2;width:100%;height:100%;object-fit:contain;object-position:center bottom;transform:none!important}
+
+.story-section-v4{grid-template-columns:1.15fr .85fr}
+.home-photo-mosaic{position:relative;min-height:620px;display:grid;grid-template-columns:1.25fr .75fr .75fr;grid-template-rows:1.1fr .9fr .75fr;gap:14px}
+.mosaic-tile{position:relative;margin:0;overflow:hidden;border:1px solid rgba(255,255,255,.86);border-radius:24px;background:linear-gradient(145deg,#dff3ff,#fff);box-shadow:0 22px 55px rgba(15,23,42,.12)}
+.mosaic-tile img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .7s cubic-bezier(.22,1,.36,1)}
+.mosaic-tile:hover img{transform:scale(1.045)}
+.mosaic-tile figcaption{position:absolute;left:10px;bottom:10px;padding:7px 10px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(2,6,23,.65);backdrop-filter:blur(14px);color:#fff;font:700 10px 'Manrope'}
+.mosaic-main{grid-row:1/3;grid-column:1}.mosaic-main img{object-fit:contain;background:#eaf7fd}
+.mosaic-gabinete{grid-column:2/4;grid-row:1}.mosaic-acao{grid-column:2;grid-row:2/4}.mosaic-luta{grid-column:3;grid-row:2}.mosaic-portrait{grid-column:1;grid-row:3;background:linear-gradient(145deg,#d9f4ff,#fff)}
+.mosaic-portrait img{object-fit:contain;object-position:center bottom}
+.mosaic-glass-label{position:absolute;right:4%;bottom:4%;z-index:4;max-width:250px;padding:14px 16px;display:flex;align-items:center;gap:11px;border:1px solid rgba(255,255,255,.28);border-radius:18px;background:rgba(3,15,32,.76);backdrop-filter:blur(18px);box-shadow:0 22px 48px rgba(2,6,23,.24);color:#fff;font-size:12px}
+.mosaic-glass-label svg{color:#67e8f9;flex:0 0 auto}.mosaic-glass-label b{color:#7dd3fc}
+
+.cause-panel-v4{grid-template-columns:1.08fr .92fr}
+.cause-photo-collage{min-height:520px;padding:18px;display:grid;grid-template-columns:1.28fr .72fr;grid-template-rows:1fr 1fr;gap:12px;background:linear-gradient(145deg,#06172d,#075985)}
+.cause-photo-collage>div{min-width:0;min-height:0;overflow:hidden;border-radius:22px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06)}
+.cause-photo-large{grid-row:1/3}.cause-photo-collage img{width:100%;height:100%;object-fit:cover;object-position:center}
+.cause-photo-large img{object-fit:contain;background:rgba(255,255,255,.035)}
+.autism-photo-composition{position:relative;min-height:520px;overflow:hidden;background:linear-gradient(145deg,#e8fbff,#c7f1f8)}
+.autism-photo-composition>img{width:100%;height:100%;object-fit:contain;object-position:center bottom;padding:18px}
+.autism-soft-layer{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,transparent 35%,rgba(2,132,199,.16))}
+.autism-soft-layer div{position:absolute;border:1px solid rgba(8,145,178,.24);border-radius:50%}.autism-soft-layer div:first-child{width:230px;height:230px}.autism-soft-layer div:nth-child(2){width:330px;height:330px}.autism-soft-layer svg{width:74px;height:74px;padding:18px;border-radius:26px;background:rgba(255,255,255,.62);backdrop-filter:blur(16px);color:#0e7490;box-shadow:0 20px 50px rgba(14,116,144,.18)}
+
+.street-gallery-v4{grid-template-columns:1.15fr .85fr;grid-template-rows:1fr 1fr;height:640px}
+.street-gallery-v4 figure:nth-child(1){grid-row:1/3}.street-gallery-v4 figure:nth-child(2){margin-top:0;height:auto}.street-gallery-v4 figure:nth-child(3){margin-top:0;height:auto}
+.street-gallery-v4 img{object-fit:contain!important;object-position:center;background:#e8f4fb}
+
+.photo-journal-section{padding-top:40px}
+.photo-journal-grid{height:700px;display:grid;grid-template-columns:1.15fr .85fr .72fr;grid-template-rows:1fr .8fr .7fr;gap:15px}
+.journal-item{margin:0;min-width:0;min-height:0;overflow:hidden;border-radius:27px;border:1px solid rgba(255,255,255,.82);background:linear-gradient(145deg,#dff3ff,#fff);box-shadow:0 24px 60px rgba(15,23,42,.11)}
+.journal-item img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .7s cubic-bezier(.22,1,.36,1)}
+.journal-item:hover img{transform:scale(1.04)}
+.journal-item-1{grid-column:1;grid-row:1/3}.journal-item-1 img,.journal-item-5 img{object-fit:contain;background:#e9f7fd}
+.journal-item-2{grid-column:2/4;grid-row:1}.journal-item-3{grid-column:2;grid-row:2/4}.journal-item-4{grid-column:3;grid-row:2}.journal-item-5{grid-column:1;grid-row:3}
+
+/* Reader aliases for V4 */
+.magazine-reader-v4{position:relative;min-height:calc(100svh - 68px);padding:30px 16px 22px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;background:radial-gradient(circle at 50% -10%,rgba(14,116,144,.55),transparent 42%),linear-gradient(145deg,#020617,#07172c 55%,#020617)}
+.reader-stage-v4{position:relative;z-index:3;display:grid;grid-template-columns:52px auto 52px;align-items:center;justify-content:center;gap:13px}
+.book-v4{position:relative;width:min(1180px,calc(100vw - 180px),calc((100svh - 245px) * 1.409524));aspect-ratio:296/210;display:grid;grid-template-columns:1fr 1fr;perspective:2400px;filter:drop-shadow(0 38px 54px rgba(0,0,0,.52));touch-action:pan-y}
+.book-v4.book-single{width:min(565px,calc(100vw - 92px),calc((100svh - 245px) * .704762));aspect-ratio:148/210;grid-template-columns:1fr}
+.book-spine-v4{position:absolute;z-index:20;left:50%;top:0;bottom:0;width:2px;background:linear-gradient(90deg,rgba(0,0,0,.38),rgba(255,255,255,.55),rgba(0,0,0,.35));box-shadow:0 0 24px rgba(0,0,0,.58)}
+.reader-status-v4{position:relative;z-index:3;width:min(1180px,calc(100% - 140px));margin:16px auto 0;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:17px;color:#b8c9da;font-size:11px}
+.reader-status-v4 button{border:0;background:transparent;color:#d6e9f8;display:flex;align-items:center;gap:7px;cursor:pointer}
+.reader-progress-v4{height:4px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.11)}
+.reader-progress-v4 i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#0284c7,#22d3ee);transition:width .5s cubic-bezier(.22,1,.36,1)}
+.reader-thumbnails-v4{position:relative;z-index:3;width:min(1180px,calc(100% - 140px));margin:13px auto 0;padding-bottom:7px;display:flex;gap:7px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#0ea5e9 transparent}
+.reader-thumbnails-v4 button{flex:0 0 auto;padding:7px 10px;display:flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.11);border-radius:10px;background:rgba(255,255,255,.05);color:#93a7bb;cursor:pointer;transition:.25s}
+.reader-thumbnails-v4 button b{color:#e2eef8;font-size:10px}.reader-thumbnails-v4 button span{font-size:9px}.reader-thumbnails-v4 button.active{background:linear-gradient(135deg,#0369a1,#0891b2);color:#fff;border-color:#38bdf8}
+
+/* Magazine V4: more photography, safer composition */
+.mag-cover-mosaic,.mag-back-mosaic{position:absolute;inset:0;z-index:0;pointer-events:none;background-image:url('https://i.ibb.co/Kz9HyrPX/67f29597-c56c-4f03-8064-1a8f978908d5.jpg');background-size:35cqw;background-repeat:repeat;background-position:center;opacity:.08;filter:grayscale(1)}
+.mag-cover-grid-v4{position:relative;z-index:1;grid-template-columns:45% 55%;gap:2.4cqw}
+.mag-cover-photo{padding-top:2cqw;overflow:visible!important}
+.mag-cover-photo img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;transform:none!important}
+.mag-column-layout{grid-template-rows:auto auto auto auto minmax(18%,1fr)}
+.mag-about-photo-strip{min-height:0;display:grid;grid-template-columns:1.25fr .75fr;gap:1.3cqw}
+.mag-about-photo-strip img{width:100%;height:100%;min-height:0;object-fit:contain;object-position:center;background:#e7f5fc;border:1px solid rgba(2,132,199,.1);border-radius:1.8cqw}
+.mag-story-grid{grid-template-rows:auto 1fr}
+.mag-story-mosaic-v4{grid-template-columns:1.1fr .72fr .72fr;grid-template-rows:1fr .86fr .66fr;gap:1.15cqw}
+.mag-story-mosaic-v4 .mag-photo-large{grid-column:1;grid-row:1/3}.mag-story-mosaic-v4 .mag-photo-card:nth-child(2){grid-column:2/4;grid-row:1}.mag-story-mosaic-v4 .mag-photo-card:nth-child(3){grid-column:2;grid-row:2/4}.mag-story-mosaic-v4 .mag-photo-detail{grid-column:3;grid-row:2}.mag-story-mosaic-v4 .mag-photo-portrait{grid-column:1;grid-row:3}
+.mag-story-mosaic-v4 .mag-photo-card{padding:.85cqw;gap:.6cqw;border-radius:1.8cqw}.mag-story-mosaic-v4 .mag-photo-card img{object-fit:cover}.mag-story-mosaic-v4 .mag-photo-large img,.mag-story-mosaic-v4 .mag-photo-portrait img{object-fit:contain}
+.mag-cause-intro-layout{grid-template-rows:auto auto auto auto minmax(18%,1fr)}
+.mag-fight-photo-strip{min-height:0;display:grid;grid-template-columns:1.25fr .75fr;gap:1.2cqw}
+.mag-fight-photo-strip img{width:100%;height:100%;min-height:0;object-fit:contain;object-position:center;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);border-radius:1.8cqw}
+.mag-photo-story-layout{grid-template-rows:58% 42%}
+.mag-sport-mosaic{min-height:0;padding:2.2cqw;display:grid;grid-template-columns:1.2fr .8fr;grid-template-rows:1fr 1fr;gap:1.1cqw;background:#07172c}
+.mag-sport-mosaic img{width:100%;height:100%;min-height:0;border-radius:2cqw;background:rgba(255,255,255,.05);object-fit:cover}
+.mag-sport-mosaic .sport-main{grid-row:1/3;object-fit:contain}.mag-sport-mosaic .sport-detail{object-position:70% center}.mag-sport-mosaic .sport-action{object-fit:contain}
+.mag-autism-layout{grid-template-rows:46% 54%}
+.mag-autism-photo-v4{position:relative}.mag-autism-photo-v4>img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;padding:1.2cqw;opacity:.94}.mag-autism-photo-v4:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(224,247,250,.06),rgba(8,145,178,.18))}.mag-autism-photo-v4 svg{z-index:4;padding:2.8cqw;border-radius:3cqw;background:rgba(255,255,255,.56);backdrop-filter:blur(15px)}
+.mag-inclusion-layout{grid-template-rows:auto 1fr 22%;gap:1.8cqw}
+.mag-inclusion-photo-band{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw}
+.mag-inclusion-photo-band img{width:100%;height:100%;min-height:0;object-fit:contain;background:#edf9fd;border-radius:1.6cqw;border:1px solid rgba(8,145,178,.12)}
+.mag-commitments-layout{grid-template-rows:auto 1fr 17% auto;gap:1.5cqw}
+.mag-commitments-photo-band{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw}.mag-commitments-photo-band img{width:100%;height:100%;min-height:0;object-fit:contain;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);border-radius:1.6cqw}
+.mag-back-layout{position:relative;z-index:1}.mag-back-mosaic{opacity:.075;mix-blend-mode:screen}
+
+@media(max-width:1100px){.story-section-v4{grid-template-columns:1fr}.home-photo-mosaic{order:2}}
+@media(max-width:959px){.cause-panel-v4{grid-template-columns:1fr}.cause-photo-collage,.autism-photo-composition{min-height:430px}.reader-stage-v4{grid-template-columns:42px auto 42px;gap:7px}.reader-status-v4,.reader-thumbnails-v4{width:calc(100% - 90px)}}
+@media(max-width:680px){.hero-mosaic-background{background-size:380px;opacity:.09;mask-image:linear-gradient(#000,transparent 82%)}.portrait-glass-v4{padding-top:20px}.home-photo-mosaic{min-height:500px;grid-template-columns:1.15fr .85fr;grid-template-rows:1fr .8fr .7fr}.mosaic-main{grid-column:1;grid-row:1/3}.mosaic-gabinete{grid-column:2;grid-row:1}.mosaic-acao{grid-column:2;grid-row:2/4}.mosaic-luta{display:none}.mosaic-portrait{grid-column:1;grid-row:3}.mosaic-glass-label{right:3%;bottom:3%;max-width:190px;font-size:10px}.cause-photo-collage,.autism-photo-composition{min-height:350px}.street-gallery-v4{height:500px;grid-template-columns:1.1fr .9fr}.photo-journal-grid{height:540px;grid-template-columns:1.1fr .9fr;grid-template-rows:1fr .8fr .7fr}.journal-item-1{grid-column:1;grid-row:1/3}.journal-item-2{grid-column:2;grid-row:1}.journal-item-3{grid-column:2;grid-row:2/4}.journal-item-4{display:none}.journal-item-5{grid-column:1;grid-row:3}.reader-stage-v4{grid-template-columns:31px auto 31px;gap:3px}.reader-status-v4{width:calc(100% - 70px);grid-template-columns:1fr auto;font-size:9px}.reader-status-v4 .reader-progress-v4{grid-column:1/3;grid-row:2}.reader-thumbnails-v4{display:none}.book-v4.book-single{width:min(calc(100vw - 70px),calc((100svh - 205px) * .704762),500px)}}
+@media print{.mag-cover-grid-v4{grid-template-columns:45% 55%!important}.mag-cover-mosaic,.mag-back-mosaic{print-color-adjust:exact!important}.mag-column-layout{grid-template-rows:auto auto auto auto minmax(18%,1fr)!important}.mag-inclusion-layout{grid-template-rows:auto 1fr 22%!important}.mag-commitments-layout{grid-template-rows:auto 1fr 17% auto!important}}
+/* V4 layout corrections after content expansion */
+.mag-column-layout{display:grid!important;grid-template-rows:auto auto auto auto minmax(17%,1fr);gap:2.1cqw}
+.mag-column-layout blockquote{margin:0!important}
+.mag-cause-intro-layout{display:grid!important;grid-template-rows:auto auto auto auto minmax(18%,1fr);gap:1.8cqw}
+.mag-cause-intro-layout blockquote{margin:0!important}
+.mag-about-page .mag-three-values{margin:0}
+.mag-fight-intro .mag-overline{margin-top:0}
+.mag-commitments-layout ol{gap:1cqw}
+.mag-commitments-layout li{padding:1.25cqw 1.7cqw}
+.mag-commitment-note{padding:1.35cqw 1.7cqw}
+@media(max-width:680px){.mag-column-layout{gap:1.7cqw}.mag-cause-intro-layout{gap:1.5cqw}}
