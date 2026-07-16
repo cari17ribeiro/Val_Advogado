@@ -1,0 +1,16 @@
+CORREÇÃO V5.1
+
+Substitua os arquivos mantendo as pastas.
+
+Correções:
+- chave pública do Supabase não é mais enviada como JWT;
+- revista usa 20 páginas locais de segurança se o banco falhar;
+- mensagens de erro de sincronização;
+- contraste reforçado na Home;
+- fluxo de cadastro e reenvio de confirmação mais claro.
+
+LOGIN DE TESTE
+E-mail: admin@valadvogado.com.br
+Senha: ValAdmin@2026
+
+Na primeira vez, clique em "Criar usuário de teste" e confirme o e-mail recebido.
