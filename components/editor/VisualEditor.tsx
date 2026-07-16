@@ -2,12 +2,12 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, Copy, ImagePlus,
-  Layers3, Lock, Maximize, MousePointer2, Palette, Plus, Redo2, RotateCcw,
-  Shapes, Sparkles, Trash2, Type, Undo2, Unlock, Upload, ZoomIn, ZoomOut,
+  AlignCenter, AlignLeft, AlignRight, AlertTriangle, ArrowDown, ArrowUp, CheckCircle2, Copy, ImagePlus,
+  Info, Layers3, Lock, Maximize, MousePointer2, Palette, Plus, Redo2, RotateCcw,
+  ScanLine, Shapes, Sparkles, Trash2, Type, Undo2, Unlock, Upload, ZoomIn, ZoomOut,
 } from 'lucide-react';
 import { CanvasPage, iconNames } from './CanvasRenderer';
-import { clamp, makeId, type CanvasDocument, type CanvasElement, type IconElement, type ImageElement, type MediaItem, type ShapeElement, type TextElement } from '@/lib/editor-types';
+import { clamp, makeId, type CanvasDocument, type CanvasElement, type IconElement, type ImageElement, type MediaItem, type PreflightIssue, type ShapeElement, type TextElement } from '@/lib/editor-types';
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const round = (value: number) => Math.round(value * 100) / 100;
@@ -31,6 +31,35 @@ type Gesture = {
   rect: DOMRect;
 };
 
+
+function analyzeDocument(document: CanvasDocument): PreflightIssue[] {
+  const issues: PreflightIssue[] = [];
+  const safe = document.safeArea;
+  for (const element of document.elements) {
+    if (element.hidden) continue;
+    if (!element.allowBleed && (
+      element.x < safe || element.y < safe ||
+      element.x + element.w > 100 - safe || element.y + element.h > 100 - safe
+    )) {
+      issues.push({ severity: 'warning', code: 'safe-area', elementId: element.id, message: `${element.name}: parte do elemento está fora da margem segura.` });
+    }
+    if (element.type === 'text') {
+      if (!element.text.trim()) issues.push({ severity: 'error', code: 'empty-text', elementId: element.id, message: `${element.name}: caixa de texto vazia.` });
+      if (element.fontSize < 1.15) issues.push({ severity: 'warning', code: 'small-text', elementId: element.id, message: `${element.name}: fonte pode ficar pequena na impressão.` });
+      const capacity = Math.max(20, element.w * element.h * 1.15);
+      if (element.text.length > capacity) issues.push({ severity: 'warning', code: 'dense-text', elementId: element.id, message: `${element.name}: texto muito denso para a caixa atual.` });
+    }
+    if (element.type === 'image') {
+      if (!element.src.trim()) issues.push({ severity: 'error', code: 'missing-image', elementId: element.id, message: `${element.name}: selecione uma fotografia.` });
+      if (element.fit === 'cover' && element.zoom > 145) issues.push({ severity: 'warning', code: 'image-crop', elementId: element.id, message: `${element.name}: zoom alto pode cortar a foto e reduzir a qualidade.` });
+    }
+  }
+  if (!document.elements.some((element) => element.type === 'image')) {
+    issues.push({ severity: 'info', code: 'no-image', message: 'Esta página não possui fotografias.' });
+  }
+  return issues;
+}
+
 function ColorControl({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   const safeColor = /^#[0-9a-f]{6}$/i.test(value) ? value : '#0f2744';
   return <label className="ve-field ve-color-field"><span>{label}</span><div><input type="color" value={safeColor} onChange={(event) => onChange(event.target.value)} /><input value={value} onChange={(event) => onChange(event.target.value)} /></div></label>;
@@ -44,6 +73,7 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [zoom, setZoom] = useState(62);
   const [showSafeArea, setShowSafeArea] = useState(true);
+  const [showTrimGuide, setShowTrimGuide] = useState(true);
   const [undoStack, setUndoStack] = useState<CanvasDocument[]>([]);
   const [redoStack, setRedoStack] = useState<CanvasDocument[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -57,6 +87,9 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
   useEffect(() => { setSelectedId(null); setUndoStack([]); setRedoStack([]); }, [pageKey]);
 
   const selected = useMemo(() => document.elements.find((element) => element.id === selectedId) || null, [document.elements, selectedId]);
+  const preflight = useMemo(() => analyzeDocument(document), [document]);
+  const preflightErrors = preflight.filter((issue) => issue.severity === 'error').length;
+  const preflightWarnings = preflight.filter((issue) => issue.severity === 'warning').length;
 
   const emit = useCallback((next: CanvasDocument, remember = true) => {
     if (remember) {
@@ -111,7 +144,7 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
   const addImage = (src: string, name = 'Nova fotografia') => addElement({
     id: makeId('image'), type: 'image', name, x: 18, y: 18, w: 45, h: 42,
     rotation: 0, opacity: 1, z: 1, src, alt: name, fit: 'cover', positionX: 50, positionY: 50,
-    zoom: 100, borderRadius: 3, borderColor: 'transparent', borderWidth: 0,
+    zoom: 100, borderRadius: 3, borderColor: 'transparent', borderWidth: 0, frameStyle: 'rounded', shadow: '0 10px 24px rgba(15,23,42,.12)',
   });
 
   const uploadNew = async (file?: File) => {
@@ -243,7 +276,7 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
             <button type="button" onClick={undo} disabled={!undoStack.length} title="Desfazer"><Undo2 /></button>
             <button type="button" onClick={redo} disabled={!redoStack.length} title="Refazer"><Redo2 /></button>
           </div>
-          <label><input type="checkbox" checked={showSafeArea} onChange={(event) => setShowSafeArea(event.target.checked)} /> Margem segura</label>
+          <div className="ve-guides"><label><input type="checkbox" checked={showSafeArea} onChange={(event) => setShowSafeArea(event.target.checked)} /> Margem segura</label><label><input type="checkbox" checked={showTrimGuide} onChange={(event) => setShowTrimGuide(event.target.checked)} /> Linha de corte</label></div>
           <div className="ve-zoom"><button type="button" onClick={() => setZoom((value) => clamp(value - 5, 30, 105))}><ZoomOut /></button><span>{zoom}%</span><button type="button" onClick={() => setZoom((value) => clamp(value + 5, 30, 105))}><ZoomIn /></button><button type="button" onClick={() => setZoom(62)} title="Ajustar"><Maximize /></button></div>
         </div>
         <div className="ve-stage" ref={canvasHostRef}>
@@ -254,6 +287,7 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
                 interactive
                 selectedId={selectedId}
                 showSafeArea={showSafeArea}
+                showTrimGuide={showTrimGuide}
                 onSelect={setSelectedId}
                 onElementPointerDown={startGesture}
                 onElementDoubleClick={(element) => { setSelectedId(element.id); setTimeout(() => window.document.getElementById('ve-text-content')?.focus(), 30); }}
@@ -271,6 +305,16 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
             <ColorControl label="Cor rápida" value={document.background.value} onChange={(value) => emit({ ...document, background: { type: 'color', value } })} />
             <label className="ve-field"><span>Cor, degradê ou URL</span><textarea rows={4} value={document.background.value} onChange={(event) => emit({ ...document, background: { ...document.background, value: event.target.value } })} /></label>
             {document.background.type === 'image' && <><label className="ve-field"><span>Ajuste</span><select value={document.background.fit || 'cover'} onChange={(event) => emit({ ...document, background: { ...document.background, fit: event.target.value as 'cover' | 'contain' } })}><option value="cover">Preencher</option><option value="contain">Imagem inteira</option></select></label><label className="ve-field"><span>Sobreposição</span><input value={document.background.overlay || ''} onChange={(event) => emit({ ...document, background: { ...document.background, overlay: event.target.value } })} /></label></>}
+            <div className={`ve-preflight ${preflightErrors ? 'has-errors' : preflightWarnings ? 'has-warnings' : 'is-ready'}`}>
+              <div className="ve-preflight-title">
+                {preflightErrors ? <AlertTriangle /> : preflightWarnings ? <ScanLine /> : <CheckCircle2 />}
+                <span><b>{preflightErrors ? `${preflightErrors} erro(s)` : preflightWarnings ? `${preflightWarnings} alerta(s)` : 'Pronta para impressão'}</b><small>Pré-verificação A5 • sangria 3 mm</small></span>
+              </div>
+              <div className="ve-preflight-list">
+                {preflight.slice(0, 6).map((issue, index) => <button type="button" key={`${issue.code}-${index}`} onClick={() => issue.elementId && setSelectedId(issue.elementId)}><span className={`severity-${issue.severity}`}>{issue.severity === 'error' ? <AlertTriangle /> : issue.severity === 'warning' ? <ScanLine /> : <Info />}</span>{issue.message}</button>)}
+                {!preflight.length && <p>Nenhum problema básico detectado. Confira as imagens em 100% antes de enviar à gráfica.</p>}
+              </div>
+            </div>
             <div className="ve-help"><MousePointer2 /><p><b>Selecione um elemento</b> para editar. Arraste para mover e use o ponto azul para redimensionar.</p></div>
           </>
         ) : (
@@ -308,7 +352,7 @@ function TextInspector({ element, onChange }: { element: TextElement; onChange: 
   const patch = (value: Partial<TextElement>) => onChange({ ...element, ...value });
   return <div className="ve-type-inspector">
     <label className="ve-field"><span>Texto</span><textarea id="ve-text-content" rows={7} value={element.text} onChange={(event) => patch({ text: event.target.value })} /></label>
-    <label className="ve-field"><span>Fonte</span><select value={element.fontFamily} onChange={(event) => patch({ fontFamily: event.target.value as TextElement['fontFamily'] })}><option>Playfair Display</option><option>Inter</option><option>Georgia</option><option>Arial</option></select></label>
+    <label className="ve-field"><span>Fonte</span><select value={element.fontFamily} onChange={(event) => patch({ fontFamily: event.target.value as TextElement['fontFamily'] })}><option>Arial Black</option><option>Playfair Display</option><option>Inter</option><option>Georgia</option><option>Arial</option></select></label>
     <div className="ve-grid-2"><NumberControl label="Tamanho" value={element.fontSize} min={.8} max={14} step={.1} onChange={(fontSize) => patch({ fontSize })} /><NumberControl label="Peso" value={element.fontWeight} min={300} max={900} step={50} onChange={(fontWeight) => patch({ fontWeight })} /><NumberControl label="Entrelinhas" value={element.lineHeight} min={.7} max={2.2} step={.05} onChange={(lineHeight) => patch({ lineHeight })} /><NumberControl label="Espaçamento" value={element.letterSpacing} min={-.1} max={.3} step={.01} onChange={(letterSpacing) => patch({ letterSpacing })} /></div>
     <ColorControl label="Cor do texto" value={element.color} onChange={(color) => patch({ color })} />
     <div className="ve-align"><button type="button" className={element.align === 'left' ? 'active' : ''} onClick={() => patch({ align: 'left' })}><AlignLeft /></button><button type="button" className={element.align === 'center' ? 'active' : ''} onClick={() => patch({ align: 'center' })}><AlignCenter /></button><button type="button" className={element.align === 'right' ? 'active' : ''} onClick={() => patch({ align: 'right' })}><AlignRight /></button><button type="button" className={element.italic ? 'active' : ''} onClick={() => patch({ italic: !element.italic })}><i>I</i></button></div>
@@ -321,10 +365,12 @@ function ImageInspector({ element, onChange, onReplace, uploading }: { element: 
     <button type="button" className="ve-replace-button" onClick={onReplace}><Upload /> {uploading ? 'Enviando…' : 'Substituir fotografia'}</button>
     <label className="ve-field"><span>URL</span><textarea rows={3} value={element.src} onChange={(event) => patch({ src: event.target.value })} /></label>
     <label className="ve-field"><span>Ajuste</span><select value={element.fit} onChange={(event) => patch({ fit: event.target.value as ImageElement['fit'] })}><option value="cover">Preencher moldura</option><option value="contain">Mostrar imagem inteira</option></select></label>
+    <label className="ve-field"><span>Estilo da foto</span><select value={element.frameStyle || 'rounded'} onChange={(event) => patch({ frameStyle: event.target.value as ImageElement['frameStyle'] })}><option value="none">Sem moldura</option><option value="rounded">Editorial arredondada</option><option value="polaroid">Foto impressa</option><option value="circle">Circular</option><option value="arch">Arco</option><option value="torn">Papel rasgado</option></select></label>
     <label className="ve-range"><span>Posição horizontal <b>{element.positionX}%</b></span><input type="range" min="0" max="100" value={element.positionX} onChange={(event) => patch({ positionX: Number(event.target.value) })} /></label>
     <label className="ve-range"><span>Posição vertical <b>{element.positionY}%</b></span><input type="range" min="0" max="100" value={element.positionY} onChange={(event) => patch({ positionY: Number(event.target.value) })} /></label>
     <label className="ve-range"><span>Zoom <b>{element.zoom}%</b></span><input type="range" min="70" max="180" value={element.zoom} onChange={(event) => patch({ zoom: Number(event.target.value) })} /></label>
     <div className="ve-grid-2"><NumberControl label="Cantos" value={element.borderRadius} min={0} max={50} step={.5} onChange={(borderRadius) => patch({ borderRadius })} /><NumberControl label="Borda" value={element.borderWidth || 0} min={0} max={10} onChange={(borderWidth) => patch({ borderWidth })} /></div>
+    <label className="ve-field"><span>Sombra CSS</span><input value={element.shadow || ''} placeholder="0 10px 24px rgba(...)" onChange={(event) => patch({ shadow: event.target.value })} /></label>
   </div>;
 }
 

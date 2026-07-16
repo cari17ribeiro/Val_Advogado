@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   Accessibility, BookOpen, CalendarDays, Download, Dumbbell, GraduationCap,
   HeartHandshake, HeartPulse, Layers3, MapPinned, Medal, MessageCircle,
   PawPrint, PhoneCall, QrCode, Scale, School, Share2, ShieldCheck, Sparkles,
   Swords, Users, type LucideIcon,
 } from 'lucide-react';
-import type { CanvasDocument, CanvasElement, IconElement, TextElement } from '@/lib/editor-types';
+import type { CanvasDocument, CanvasElement, IconElement, ImageElement, TextElement } from '@/lib/editor-types';
 
 const ICONS: Record<string, LucideIcon> = {
   Accessibility, BookOpen, CalendarDays, Download, Dumbbell, GraduationCap,
@@ -18,7 +18,7 @@ const ICONS: Record<string, LucideIcon> = {
 
 export const iconNames = Object.keys(ICONS);
 
-function backgroundStyle(background: CanvasDocument['background']): React.CSSProperties {
+export function backgroundStyle(background: CanvasDocument['background']): React.CSSProperties {
   if (background.type === 'image') {
     return {
       backgroundColor: '#f7fbff',
@@ -48,13 +48,13 @@ function AutoFitText({ element }: { element: TextElement }) {
     if (!node) return;
     let frame = 0;
     const fit = () => {
-      const min = Math.min(1, (element.minFontSize ?? element.fontSize * 0.55) / element.fontSize);
+      const min = Math.min(1, (element.minFontSize ?? element.fontSize * .55) / element.fontSize);
       let next = 1;
       node.style.setProperty('--fit-scale', '1');
-      for (let i = 0; i < 18; i += 1) {
+      for (let i = 0; i < 24; i += 1) {
         const overflow = node.scrollHeight > node.clientHeight + 1 || node.scrollWidth > node.clientWidth + 1;
         if (!overflow || next <= min) break;
-        next = Math.max(min, next - 0.045);
+        next = Math.max(min, next - .035);
         node.style.setProperty('--fit-scale', String(next));
       }
       setScale(next);
@@ -72,7 +72,7 @@ function AutoFitText({ element }: { element: TextElement }) {
       style={{
         '--fit-scale': scale,
         color: element.color,
-        fontFamily: `'${element.fontFamily}', sans-serif`,
+        fontFamily: `'${element.fontFamily}', Arial, sans-serif`,
         fontSize: `calc(${element.fontSize}cqw * var(--fit-scale))`,
         fontWeight: element.fontWeight,
         lineHeight: element.lineHeight,
@@ -83,22 +83,32 @@ function AutoFitText({ element }: { element: TextElement }) {
         background: element.background || 'transparent',
         padding: `${element.padding ?? 0}cqw`,
         borderRadius: `${element.borderRadius ?? 0}cqw`,
+        WebkitTextStroke: element.strokeWidth ? `${element.strokeWidth}px ${element.strokeColor || '#000000'}` : undefined,
       } as React.CSSProperties}
     >{element.text}</div>
   );
+}
+
+function imageFrameStyle(element: ImageElement): React.CSSProperties {
+  const frame = element.frameStyle || 'rounded';
+  const base: React.CSSProperties = {
+    borderRadius: `${element.borderRadius}cqw`,
+    border: `${element.borderWidth ?? 0}px solid ${element.borderColor || 'transparent'}`,
+    boxShadow: element.shadow,
+  };
+  if (frame === 'polaroid') return { ...base, background: '#fff', padding: '2.2%', borderRadius: '1.1cqw', boxShadow: element.shadow || '0 1.2cqw 2.4cqw rgba(15,23,42,.18)' };
+  if (frame === 'circle') return { ...base, borderRadius: '50%' };
+  if (frame === 'arch') return { ...base, borderRadius: '50% 50% 6% 6% / 35% 35% 6% 6%' };
+  if (frame === 'torn') return { ...base, borderRadius: 0, clipPath: 'polygon(1% 2%,10% 0,18% 2%,28% 0,39% 2%,49% 0,59% 2%,70% 0,81% 2%,91% 0,99% 2%,100% 96%,92% 98%,83% 96%,73% 100%,62% 97%,51% 100%,40% 97%,29% 100%,18% 97%,8% 100%,0 97%)' };
+  if (frame === 'none') return { ...base, borderRadius: 0 };
+  return base;
 }
 
 export function CanvasElementView({ element }: { element: CanvasElement }) {
   if (element.type === 'text') return <AutoFitText element={element} />;
   if (element.type === 'image') {
     return (
-      <div
-        className="canvas-image-frame"
-        style={{
-          borderRadius: `${element.borderRadius}cqw`,
-          border: `${element.borderWidth ?? 0}px solid ${element.borderColor || 'transparent'}`,
-        }}
-      >
+      <div className={`canvas-image-frame frame-${element.frameStyle || 'rounded'}`} style={imageFrameStyle(element)}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={element.src}
@@ -108,13 +118,14 @@ export function CanvasElementView({ element }: { element: CanvasElement }) {
             objectFit: element.fit,
             objectPosition: `${element.positionX}% ${element.positionY}%`,
             transform: `scale(${element.zoom / 100})`,
+            filter: element.filter,
           }}
         />
       </div>
     );
   }
   if (element.type === 'shape') {
-    return <div className="canvas-shape" style={{ background: element.fill, border: `${element.borderWidth}px solid ${element.borderColor}`, borderRadius: `${element.borderRadius}cqw`, boxShadow: element.shadow }} />;
+    return <div className="canvas-shape" style={{ background: element.fill, border: `${element.borderWidth}px solid ${element.borderColor}`, borderRadius: `${element.borderRadius}cqw`, boxShadow: element.shadow, clipPath: element.clipPath }} />;
   }
   const Icon = ICONS[(element as IconElement).icon] || Sparkles;
   return (
@@ -131,13 +142,14 @@ export type CanvasPageProps = {
   selectedId?: string | null;
   interactive?: boolean;
   showSafeArea?: boolean;
+  showTrimGuide?: boolean;
   onSelect?: (id: string | null) => void;
   onElementPointerDown?: (event: React.PointerEvent<HTMLElement>, element: CanvasElement, action: 'move' | 'resize') => void;
   onElementDoubleClick?: (element: CanvasElement) => void;
 };
 
 export function CanvasPage({
-  document, className = '', selectedId, interactive = false, showSafeArea = false,
+  document, className = '', selectedId, interactive = false, showSafeArea = false, showTrimGuide = false,
   onSelect, onElementPointerDown, onElementDoubleClick,
 }: CanvasPageProps) {
   const sorted = useMemo(() => [...document.elements].sort((a, b) => a.z - b.z), [document.elements]);
@@ -152,6 +164,7 @@ export function CanvasPage({
           key={element.id}
           className={`canvas-element canvas-element-${element.type} ${selectedId === element.id ? 'is-selected' : ''} ${element.locked ? 'is-locked' : ''}`}
           style={elementBoxStyle(element)}
+          data-allow-bleed={element.allowBleed ? 'true' : 'false'}
           onPointerDown={(event) => {
             if (!interactive) return;
             event.stopPropagation();
@@ -177,6 +190,7 @@ export function CanvasPage({
           )}
         </div>
       ))}
+      {showTrimGuide && <div className="canvas-trim-guide" />}
       {showSafeArea && <div className="canvas-safe-area" style={{ inset: `${document.safeArea}%` }} />}
     </div>
   );

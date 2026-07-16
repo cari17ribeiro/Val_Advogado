@@ -1,49 +1,74 @@
-# Val Advogado — Site, Revista e Editor Visual
+# Val Advogado - Site, Revista Editorial e Editor Visual
 
 Projeto Next.js com site institucional, revista digital de 20 páginas, versão A5 para impressão e painel administrativo conectado ao Supabase.
 
-## V6 — Editor visual A5
+## V7 - Editorial e impressão
 
-A V6 substitui o formulário simples da revista por um editor visual inspirado em ferramentas como Canva:
+A V7 reorganiza a revista como uma publicação editorial pronta para revisão gráfica, preservando as informações do Val e utilizando azul-marinho, azul institucional, ciano e fundos claros.
 
-- canvas A5 com proporção fixa de impressão;
-- elementos de texto, fotografia, forma e ícone;
-- arrastar e redimensionar diretamente na página;
-- posição e tamanho armazenados em porcentagem, mantendo o layout responsivo;
-- escolha de fonte, tamanho, peso, alinhamento, cor e opacidade;
-- controle de camadas, bloqueio, duplicação e exclusão;
-- ajuste individual de fotografia: preencher, imagem inteira, foco horizontal, foco vertical e zoom;
-- cor, degradê ou imagem no fundo da página;
-- margem segura para impressão;
-- desfazer e refazer;
-- movimentação fina pelo teclado;
-- biblioteca com as fotografias enviadas;
-- 20 modelos editoriais iniciais;
-- texto com redução automática para não ser cortado;
-- a mesma composição é usada na revista digital e no PDF.
+Principais recursos:
+
+- 20 páginas A5 com famílias de layout diferentes;
+- capa editorial, sumário, biografia, páginas de abertura, mosaicos, cards, linha do tempo, participação popular e contracapa;
+- maior quantidade de fotografias, com molduras polaroid, círculo, arco, recorte e cantos arredondados;
+- modelos específicos para escolas de luta e apoio ao autismo;
+- editor visual com elementos arrastáveis, redimensionáveis e organizados em camadas;
+- verificação pré-impressão dentro do editor;
+- linhas de corte, margem segura e suporte a sangria de 3 mm;
+- PDF de prova no formato final A5, 148 x 210 mm;
+- PDF para gráfica com sangria, 154 x 216 mm;
+- revista digital separada da composição de impressão;
+- layouts salvos em `magazine_pages.elements.canvas`.
 
 ## Rotas
 
-- `/` — site institucional
-- `/revista` — revista digital responsiva
-- `/impressao` — prévia A5 para impressão
-- `/api/pdf` — geração do PDF
-- `/admin/login` — acesso administrativo
-- `/admin` — editor visual
+- `/` - site institucional
+- `/revista` - revista digital responsiva
+- `/impressao` - prévia de impressão
+- `/impressao?mode=bleed` - prévia com sangria
+- `/api/pdf?mode=proof` - PDF de prova A5
+- `/api/pdf?mode=bleed` - PDF para gráfica com sangria de 3 mm
+- `/admin/login` - acesso administrativo
+- `/admin` - editor visual
 
-## Atalhos do editor
+## Editor e pré-impressão
 
-- `Ctrl/Cmd + S` — salvar página
-- `Ctrl/Cmd + Z` — desfazer
-- `Ctrl/Cmd + Shift + Z` — refazer
-- `Ctrl/Cmd + D` — duplicar elemento
-- `Delete` — excluir elemento
-- setas — mover elemento
-- `Shift + setas` — mover com passo maior
+O painel mostra avisos para:
+
+- elementos fora da margem segura;
+- textos vazios ou muito densos;
+- fontes pequenas para impressão;
+- imagens ausentes;
+- fotografias com zoom elevado e risco de corte;
+- elementos que precisam alcançar a sangria.
+
+Cada fotografia pode receber:
+
+- modo preencher ou imagem inteira;
+- posição horizontal e vertical;
+- zoom;
+- moldura editorial;
+- sombra;
+- opacidade e rotação.
+
+## Fotografias finais
+
+As imagens em `public/media` são cópias locais de segurança para a demonstração não depender de servidores externos. Antes da impressão definitiva, substitua-as pelos arquivos originais em alta resolução dentro da biblioteca do painel.
+
+Para uma fotografia que ocupe uma página A5 inteira, use preferencialmente uma imagem próxima de 1748 x 2480 pixels ou superior para impressão a 300 dpi. Fotografias menores podem usar resolução proporcional ao espaço ocupado.
+
+## Canva
+
+O projeto não depende do Canva para produzir o PDF. Isso mantém o conteúdo, as permissões, o banco Supabase e a geração de impressão dentro do próprio sistema.
+
+O Canva pode ser usado posteriormente como uma etapa opcional para acabamento manual. Uma integração bidirecional completa exigiria uma aplicação Canva Connect separada e criaria dois locais diferentes para editar a mesma página. Por isso, a arquitetura recomendada é:
+
+1. editar conteúdo, fotografias e enquadramentos no painel do projeto;
+2. validar margem segura e sangria;
+3. gerar o PDF A5 ou o PDF com sangria;
+4. usar o Canva apenas para ajustes gráficos excepcionais, quando realmente necessário.
 
 ## Supabase
-
-O editor usa as tabelas `magazine_pages` e `media_library` e o bucket `val-media`. O documento visual fica em `magazine_pages.elements.canvas`, sem exigir uma nova tabela.
 
 Configure na Vercel:
 
@@ -52,11 +77,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://suwjmyetnifzeehirpxt.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sua_chave_publicavel
 ```
 
-A chave publicável pode ficar no navegador porque as operações administrativas continuam protegidas pelo login e pelas políticas RLS.
-
-## Usuário administrativo
-
-Cadastre no Supabase Authentication um e-mail real que você controle ou crie um usuário com **Auto Confirm User**. Depois adicione o mesmo endereço à tabela `admin_allowlist`.
+Cadastre no Supabase Authentication um e-mail real que você controle e adicione o mesmo endereço à tabela `admin_allowlist`.
 
 ## Executar localmente
 
@@ -65,6 +86,12 @@ npm install
 npm run dev
 ```
 
-## Conteúdo
+## Validação
 
-Revise textos, contatos, números e fotografias antes da publicação definitiva. Os modelos iniciais usam imagens existentes no projeto como demonstração e podem ser substituídos dentro do editor.
+Antes da tiragem definitiva:
+
+- revise todos os textos, números, contatos e QR Codes;
+- substitua as imagens de demonstração por originais em alta resolução;
+- gere primeiro o PDF de prova;
+- faça uma prova física;
+- confirme com a gráfica se ela exige conversão CMYK e um perfil ICC específico.

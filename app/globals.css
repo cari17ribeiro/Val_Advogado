@@ -430,7 +430,7 @@ img{display:block;max-width:100%}
 @keyframes spinSlow{to{transform:rotate(360deg)}}
 
 @media print{
-  @page{size:A5 portrait;margin:0}
+  @page{size:auto;margin:0}
   html,body{width:148mm;background:#fff!important}
   .print-toolbar,.readerbar{display:none!important}
   .print-view{background:#fff!important}
@@ -595,3 +595,63 @@ img{display:block;max-width:100%}
 @media(max-width:950px){.canva-admin-shell{min-height:680px}.visual-editor{grid-template-columns:76px minmax(360px,1fr) 245px}.ve-left-panel{padding:10px}.ve-panel-title span{display:none}.ve-panel-title{justify-content:center}.ve-add-grid{grid-template-columns:1fr}.ve-add-grid button{min-height:51px}.ve-add-grid button span{display:none}.ve-media-grid{grid-template-columns:1fr}.ve-layer-list,.ve-panel-title-spaced:nth-of-type(3){display:none}.canva-page-strip{grid-template-columns:95px minmax(0,1fr)}.canva-save-status{display:none}.canva-page-strip-title small{display:none}.canva-page-name strong{max-width:220px}}
 @media(max-width:720px){.canva-admin-shell{height:auto;min-height:100vh;overflow:auto;grid-template-rows:auto auto auto}.canva-admin-topbar{position:sticky;top:0;height:60px;grid-template-columns:120px minmax(0,1fr) auto}.canva-brand div,.canva-page-name small,.canva-page-name em{display:none}.canva-admin-topbar nav a{display:none}.visual-editor{min-height:900px;grid-template-columns:58px minmax(300px,1fr)}.ve-right-panel{grid-column:1/-1;max-height:390px;border-top:1px solid #dce5ec}.ve-stage{padding:20px}.canva-page-strip{position:sticky;bottom:0;grid-template-columns:1fr;padding:7px}.canva-page-strip-title{display:none}.canva-page-thumbnails button{flex-basis:82px}.canvas-reader{padding:10px 5px 22px}.canvas-reader-stage{grid-template-columns:1fr}.reader-arrow{position:fixed;z-index:80;bottom:18px}.reader-arrow.previous{left:15px}.reader-arrow.next{right:15px}.canvas-book.single{width:100%;max-width:520px}.canvas-reader-controls{padding:0 8px;grid-template-columns:auto 1fr}.canvas-reader-controls>button{display:none}.canvas-reader-thumbs{padding:3px 8px 60px}}
 @media print{.canvas-print-magazine{display:block;padding:0;background:#fff}.canvas-page-print{width:148mm!important;height:210mm!important;max-width:none;aspect-ratio:auto;box-shadow:none;break-after:page;page-break-after:always}.canvas-page-print:last-child{break-after:auto;page-break-after:auto}}
+
+
+/* ================================================================
+   V7 - editorial print-first system inspired by high-density political
+   magazines, adapted to Val Advogado's blue/cyan identity.
+   ================================================================ */
+.canvas-image-frame{position:relative;width:100%;height:100%;overflow:hidden;background:#eaf4f8}
+.canvas-image-frame.frame-polaroid img{border-radius:.45cqw}
+.canvas-image-frame.frame-circle img{border-radius:50%}
+.canvas-image-frame.frame-arch img{border-radius:inherit}
+.canvas-image-frame.frame-torn img{border-radius:0}
+.canvas-text-autofit{-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+.canvas-trim-guide{position:absolute;inset:1.35%;border:1px dotted rgba(239,68,68,.52);z-index:9998;pointer-events:none}
+.canvas-trim-guide::before{content:'linha de corte';position:absolute;top:-16px;left:0;padding:2px 5px;border-radius:4px;background:rgba(239,68,68,.9);color:#fff;font:700 8px/1 Inter,Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em}
+.ve-guides{display:flex;align-items:center;gap:12px}.ve-guides label{white-space:nowrap}
+
+.ve-preflight{margin-top:16px;border:1px solid #d5e3ea;border-radius:12px;background:#fff;overflow:hidden}
+.ve-preflight-title{display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid #e3edf2}.ve-preflight-title>svg{width:22px}.ve-preflight-title span{display:flex;flex-direction:column;gap:2px}.ve-preflight-title b{font-size:12px}.ve-preflight-title small{font-size:9px;color:#678092}
+.ve-preflight.is-ready .ve-preflight-title{background:#ecfdf5;color:#047857}.ve-preflight.has-warnings .ve-preflight-title{background:#fffbeb;color:#b45309}.ve-preflight.has-errors .ve-preflight-title{background:#fef2f2;color:#b91c1c}
+.ve-preflight-list{max-height:220px;overflow:auto;padding:7px}.ve-preflight-list button{width:100%;display:flex;align-items:flex-start;gap:7px;padding:8px;border:0;border-radius:8px;background:transparent;text-align:left;color:#435d70;font-size:10px;line-height:1.3;cursor:pointer}.ve-preflight-list button:hover{background:#eef6fa}.ve-preflight-list svg{width:13px;height:13px;flex:0 0 auto}.ve-preflight-list .severity-error{color:#dc2626}.ve-preflight-list .severity-warning{color:#d97706}.ve-preflight-list .severity-info{color:#0284c7}.ve-preflight-list p{margin:0;padding:8px;font-size:10px;line-height:1.4;color:#526b7c}
+
+.print-view-v7{min-height:100vh;background:#c9d3da}.print-toolbar-actions{display:flex;gap:8px;align-items:center}.pdf-mode-bleed{background:#063e61!important}.pdf-mode-proof{background:#0284c7!important}
+.print-magazine-v7{padding:28px;display:grid;justify-content:center;gap:28px;background:#c9d3da}
+.print-sheet-v7{position:relative;background:#fff;box-shadow:0 24px 60px rgba(15,23,42,.23);overflow:visible;isolation:isolate}
+.proof-a5 .print-sheet-v7{width:148mm;height:210mm}.proof-a5 .print-trim-v7{position:absolute;inset:0}
+.with-bleed .print-sheet-v7{width:154mm;height:216mm;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
+.with-bleed .print-trim-v7{position:absolute;left:3mm;top:3mm;width:148mm;height:210mm;box-shadow:0 0 0 .25mm rgba(15,23,42,.18)}
+.canvas-page-print-v7{width:100%!important;height:100%!important;aspect-ratio:auto!important;box-shadow:none!important}
+.print-crop-marks{position:absolute;inset:0;pointer-events:none;z-index:9999;background:
+ linear-gradient(#111,#111) 0 3mm/2mm .15mm no-repeat,
+ linear-gradient(#111,#111) 152mm 3mm/2mm .15mm no-repeat,
+ linear-gradient(#111,#111) 0 213mm/2mm .15mm no-repeat,
+ linear-gradient(#111,#111) 152mm 213mm/2mm .15mm no-repeat,
+ linear-gradient(#111,#111) 3mm 0/.15mm 2mm no-repeat,
+ linear-gradient(#111,#111) 151mm 0/.15mm 2mm no-repeat,
+ linear-gradient(#111,#111) 3mm 214mm/.15mm 2mm no-repeat,
+ linear-gradient(#111,#111) 151mm 214mm/.15mm 2mm no-repeat}
+.print-sync-warning{position:sticky;top:70px;z-index:100;width:min(620px,calc(100vw - 32px));margin:0 auto}
+
+/* More fluid digital reader while retaining print proportions. */
+.canvas-book{will-change:opacity,transform}.canvas-book.is-transitioning{opacity:.18;transform:translateX(8px) scale(.997)}
+.canvas-reader-page .canvas-page{background:#fff}
+
+@media(max-width:900px){
+  .print-toolbar{align-items:flex-start;gap:9px;flex-wrap:wrap}.print-toolbar-actions{width:100%;flex-wrap:wrap}.print-toolbar-actions .button{flex:1;justify-content:center}
+  .print-magazine-v7{padding:18px 8px}.proof-a5 .print-sheet-v7,.with-bleed .print-sheet-v7{width:min(100%,620px);height:auto;aspect-ratio:148/210}.with-bleed .print-trim-v7{left:1.95%;top:1.39%;width:96.1%;height:97.22%}
+  .ve-guides{gap:6px}.ve-guides label{font-size:8px}
+}
+
+@media print{
+  html,body{margin:0!important;padding:0!important;background:#fff!important}
+  .print-toolbar,.print-sync-warning{display:none!important}
+  .print-magazine-v7{display:block!important;padding:0!important;margin:0!important;background:#fff!important}
+  .print-sheet-v7{margin:0!important;box-shadow:none!important;break-after:page!important;page-break-after:always!important;overflow:hidden!important}
+  .print-sheet-v7:last-child{break-after:auto!important;page-break-after:auto!important}
+  .proof-a5 .print-sheet-v7{width:148mm!important;height:210mm!important}
+  .with-bleed .print-sheet-v7{width:154mm!important;height:216mm!important}
+  .with-bleed .print-trim-v7{left:3mm!important;top:3mm!important;width:148mm!important;height:210mm!important;box-shadow:none!important}
+  .canvas-text-autofit{overflow:hidden!important}
+}

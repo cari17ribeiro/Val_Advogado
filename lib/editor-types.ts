@@ -1,6 +1,7 @@
 export type ElementType = 'text' | 'image' | 'shape' | 'icon';
 export type TextAlign = 'left' | 'center' | 'right';
 export type ImageFit = 'cover' | 'contain';
+export type ImageFrameStyle = 'none' | 'rounded' | 'polaroid' | 'circle' | 'arch' | 'torn';
 
 export type CanvasBackground = {
   type: 'color' | 'gradient' | 'image';
@@ -24,13 +25,14 @@ export type CanvasElementBase = {
   z: number;
   locked?: boolean;
   hidden?: boolean;
+  allowBleed?: boolean;
 };
 
 export type TextElement = CanvasElementBase & {
   type: 'text';
   text: string;
   color: string;
-  fontFamily: 'Inter' | 'Playfair Display' | 'Georgia' | 'Arial';
+  fontFamily: 'Inter' | 'Playfair Display' | 'Georgia' | 'Arial' | 'Arial Black';
   fontSize: number;
   minFontSize?: number;
   fontWeight: number;
@@ -42,6 +44,8 @@ export type TextElement = CanvasElementBase & {
   background?: string;
   padding?: number;
   borderRadius?: number;
+  strokeColor?: string;
+  strokeWidth?: number;
 };
 
 export type ImageElement = CanvasElementBase & {
@@ -55,6 +59,9 @@ export type ImageElement = CanvasElementBase & {
   borderRadius: number;
   borderColor?: string;
   borderWidth?: number;
+  frameStyle?: ImageFrameStyle;
+  shadow?: string;
+  filter?: string;
 };
 
 export type ShapeElement = CanvasElementBase & {
@@ -64,6 +71,7 @@ export type ShapeElement = CanvasElementBase & {
   borderWidth: number;
   borderRadius: number;
   shadow?: string;
+  clipPath?: string;
 };
 
 export type IconElement = CanvasElementBase & {
@@ -78,10 +86,13 @@ export type IconElement = CanvasElementBase & {
 export type CanvasElement = TextElement | ImageElement | ShapeElement | IconElement;
 
 export type CanvasDocument = {
-  version: 2;
+  version: 3;
   background: CanvasBackground;
   elements: CanvasElement[];
   safeArea: number;
+  bleedMm: number;
+  trim: { widthMm: 148; heightMm: 210 };
+  designFamily?: string;
 };
 
 export type MagazinePage = {
@@ -103,6 +114,13 @@ export type MediaItem = {
   public_url: string;
   storage_path?: string;
   alt_text?: string | null;
+};
+
+export type PreflightIssue = {
+  severity: 'error' | 'warning' | 'info';
+  code: string;
+  message: string;
+  elementId?: string;
 };
 
 export const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));

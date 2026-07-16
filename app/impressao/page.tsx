@@ -1,4 +1,23 @@
 import Link from 'next/link';
-import { DynamicMagazine } from '@/components/DynamicMagazine';
+import { PrintMagazine } from '@/components/PrintMagazine';
 import { PdfButton } from '@/components/PdfButton';
-export default function Impressao(){return <main className="db-print-view"><div className="print-toolbar"><Link href="/">← Site</Link><span>Prévia A5 • 20 páginas</span><PdfButton/></div><DynamicMagazine print/></main>}
+
+type Props = { searchParams: Promise<{ mode?: string; pdf?: string }> };
+
+export default async function Impressao({ searchParams }: Props) {
+  const params = await searchParams;
+  const mode: 'proof' | 'bleed' = params.mode === 'bleed' || params.pdf === 'bleed' ? 'bleed' : 'proof';
+  return (
+    <main className="db-print-view print-view-v7">
+      <div className="print-toolbar">
+        <Link href="/">← Site</Link>
+        <span>Prévia editorial • 20 páginas • A5</span>
+        <div className="print-toolbar-actions">
+          <PdfButton mode="proof" />
+          <PdfButton mode="bleed" />
+        </div>
+      </div>
+      <PrintMagazine mode={mode} />
+    </main>
+  );
+}

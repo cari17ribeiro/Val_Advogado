@@ -1,0 +1,24 @@
+VAL ADVOGADO - V7 EDITORIAL E IMPRESSÃO
+
+O QUE MUDOU
+- A revista recebeu 20 layouts editoriais novos inspirados na organização visual do material de referência, sem copiar sua identidade.
+- A paleta foi adaptada para azul-marinho, azul institucional, ciano e branco.
+- Foram criadas páginas com mosaicos, fotografias em molduras, cards, aberturas de tema, sumário, linha do tempo e contracapa.
+- Escolas de luta e autismo ganharam páginas e componentes próprios.
+- O editor passou a mostrar pré-verificação para impressão.
+
+IMPORTANTE SOBRE LAYOUTS ANTIGOS
+Os layouts V6 salvos usam a versão 2 do canvas. A V7 usa a versão 3 e abre os novos modelos editoriais como padrão. Depois de revisar uma página no painel, clique em salvar para gravar o layout V7 no Supabase.
+
+PDFS
+- Prova A5: /api/pdf?mode=proof
+- Gráfica com sangria de 3 mm: /api/pdf?mode=bleed
+
+FOTOS
+As imagens locais são apenas segurança visual. Para imprimir, envie os arquivos originais em alta resolução pelo painel e use a verificação de enquadramento.
+
+CANVA
+A revista continua sendo editada no painel do projeto. O Canva pode ser usado como acabamento opcional, mas não é recomendado manter duas versões editáveis sem sincronização automática.
+
+COMMIT SUGERIDO
+feat: reconstruir revista com projeto editorial e pre-impressao V7
