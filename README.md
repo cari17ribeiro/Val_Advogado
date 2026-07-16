@@ -1,81 +1,70 @@
-# Val Advogado — Site e Revista Digital
+# Val Advogado — Site, Revista e Editor Visual
 
-Versão 3 do projeto institucional do vereador Val Advogado, com site responsivo, revista digital interativa de 12 páginas e livreto A5 para impressão.
+Projeto Next.js com site institucional, revista digital de 20 páginas, versão A5 para impressão e painel administrativo conectado ao Supabase.
 
-## Destaques da V3
+## V6 — Editor visual A5
 
-- Identidade visual moderna em azul-marinho, azul elétrico e ciano.
-- Cabeçalho flutuante com efeito glass.
-- Hero responsivo com fotografia exibida por inteiro, sem corte de cabeça.
-- Animações e transições com Framer Motion.
-- Destaque especial para escolas de luta e apoio ao autismo.
-- Revista reconstruída com áreas seguras e layouts independentes por página.
-- Página dupla em computadores e página única em celulares e tablets menores.
-- Navegação por botões, teclado, gesto de arrastar e índice por miniaturas.
-- Livreto A5 com 12 páginas e geração de PDF.
-- Respeito à configuração de movimento reduzido do dispositivo.
+A V6 substitui o formulário simples da revista por um editor visual inspirado em ferramentas como Canva:
 
-## Tecnologias
+- canvas A5 com proporção fixa de impressão;
+- elementos de texto, fotografia, forma e ícone;
+- arrastar e redimensionar diretamente na página;
+- posição e tamanho armazenados em porcentagem, mantendo o layout responsivo;
+- escolha de fonte, tamanho, peso, alinhamento, cor e opacidade;
+- controle de camadas, bloqueio, duplicação e exclusão;
+- ajuste individual de fotografia: preencher, imagem inteira, foco horizontal, foco vertical e zoom;
+- cor, degradê ou imagem no fundo da página;
+- margem segura para impressão;
+- desfazer e refazer;
+- movimentação fina pelo teclado;
+- biblioteca com as fotografias enviadas;
+- 20 modelos editoriais iniciais;
+- texto com redução automática para não ser cortado;
+- a mesma composição é usada na revista digital e no PDF.
 
-- Next.js
-- React
-- TypeScript
-- Framer Motion
-- Lucide React
-- Puppeteer e Chromium para geração do PDF
+## Rotas
 
-## Como executar
+- `/` — site institucional
+- `/revista` — revista digital responsiva
+- `/impressao` — prévia A5 para impressão
+- `/api/pdf` — geração do PDF
+- `/admin/login` — acesso administrativo
+- `/admin` — editor visual
+
+## Atalhos do editor
+
+- `Ctrl/Cmd + S` — salvar página
+- `Ctrl/Cmd + Z` — desfazer
+- `Ctrl/Cmd + Shift + Z` — refazer
+- `Ctrl/Cmd + D` — duplicar elemento
+- `Delete` — excluir elemento
+- setas — mover elemento
+- `Shift + setas` — mover com passo maior
+
+## Supabase
+
+O editor usa as tabelas `magazine_pages` e `media_library` e o bucket `val-media`. O documento visual fica em `magazine_pages.elements.canvas`, sem exigir uma nova tabela.
+
+Configure na Vercel:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://suwjmyetnifzeehirpxt.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sua_chave_publicavel
+```
+
+A chave publicável pode ficar no navegador porque as operações administrativas continuam protegidas pelo login e pelas políticas RLS.
+
+## Usuário administrativo
+
+Cadastre no Supabase Authentication um e-mail real que você controle ou crie um usuário com **Auto Confirm User**. Depois adicione o mesmo endereço à tabela `admin_allowlist`.
+
+## Executar localmente
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abra `http://localhost:3000`.
+## Conteúdo
 
-## Rotas
-
-- `/` — site institucional
-- `/revista` — revista digital interativa
-- `/livreto` — prévia do livreto A5
-- `/api/pdf` — geração e download do PDF
-
-## Atualização pelo GitHub
-
-Envie todas as pastas e arquivos deste pacote para a raiz do repositório e confirme a substituição dos arquivos existentes. A Vercel fará um novo deploy automaticamente após o commit.
-
-Mensagem sugerida:
-
-```text
-feat: reconstruir identidade visual e revista na versão 3
-```
-
-## Observação sobre conteúdo
-
-Textos, números, endereço, e-mail e links sociais devem ser revisados com o vereador antes da publicação definitiva. Os dados principais ficam em `content/site.ts`.
-
-
-## Versão 4 — fotografia editorial
-
-- Fundo em mosaico recuperado do projeto original.
-- Galerias e mosaicos fotográficos responsivos.
-- Revista com mais áreas para imagens e enquadramento individual.
-- Ajustes de composição para evitar cortes e sobreposições.
-
-## V5 — Painel editorial e Supabase
-
-Rotas novas:
-
-- `/admin/login`: login e criação do administrador de teste.
-- `/admin`: editor das 20 páginas e enquadramento das fotos.
-- `/revista`: revista digital carregada do Supabase.
-- `/impressao`: versão A5 independente para impressão e PDF.
-
-Usuário de teste previsto:
-
-- E-mail: `admin@valadvogado.com.br`
-- Senha: `ValAdmin@2026`
-
-Na primeira utilização, clique em **Criar usuário de teste**. Dependendo da configuração de autenticação do Supabase, será necessário confirmar o e-mail antes de entrar.
-
-O projeto usa as variáveis públicas descritas em `.env.example`. A chave é publicável e a proteção de escrita é feita pelas políticas RLS do Supabase.
+Revise textos, contatos, números e fotografias antes da publicação definitiva. Os modelos iniciais usam imagens existentes no projeto como demonstração e podem ser substituídos dentro do editor.

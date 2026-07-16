@@ -77,5 +77,24 @@ export async function uploadMedia(file: File, token: string) {
     const body = await response.json().catch(() => ({}));
     throw new Error(body.message || 'Falha no upload.');
   }
-  return { path, publicUrl: `${SUPABASE_URL}/storage/v1/object/public/val-media/${path}` };
+  const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/val-media/${path}`;
+  try {
+    await rest('media_library', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: file.name,
+        storage_path: path,
+        public_url: publicUrl,
+        mime_type: file.type || 'application/octet-stream',
+        alt_text: file.name,
+        focal_x: 50,
+        focal_y: 50,
+        fit: 'cover',
+        metadata: { size: file.size },
+      }),
+    }, token);
+  } catch (error) {
+    console.warn('Imagem enviada, mas não registrada na biblioteca.', error);
+  }
+  return { path, publicUrl };
 }

@@ -1,0 +1,18 @@
+ATUALIZAÇÃO V6 — EDITOR VISUAL DA REVISTA
+
+1. Extraia o ZIP.
+2. Envie as pastas app, components e lib para a raiz do repositório.
+3. Substitua os arquivos existentes quando solicitado.
+4. Envie também o README.md.
+5. Aguarde o deploy da Vercel.
+
+No painel /admin:
+- clique em Título, Texto, Foto, Forma ou Ícone para adicionar;
+- arraste o elemento sobre a página;
+- use o ponto azul no canto inferior direito para redimensionar;
+- selecione cores, fonte, alinhamento e opacidade no painel direito;
+- para fotografias, escolha Preencher ou Mostrar imagem inteira;
+- ajuste a posição horizontal, vertical e o zoom;
+- clique em Salvar após editar cada página.
+
+O botão Modelo restaura o layout editorial inicial da página atual.
