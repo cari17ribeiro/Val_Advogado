@@ -15,7 +15,7 @@ export default function Home() {
           <Link href="/revista" className="button">Abrir revista <ArrowRight size={18}/></Link>
           <a href={site.whatsapp} className="button ghost"><MessageCircle size={18}/> Fale comigo</a>
         </div>
-        <div className="stats"><span><strong>+200</strong> projetos</span><span><strong>+15</strong> anos de luta</span><span><strong>Semanal</strong> gabinete na rua</span></div>
+        <div className="stats"><span><strong>+200</strong> projetos</span><span><strong>+15</strong> anos de luta </span><span><strong>Semanal</strong> gabinete na rua</span></div>
       </div>
       <div className="portrait"><div className="portrait-ring"/><img src="https://i.ibb.co/zc68Yhm/8db8ac81-aff0-4f47-84f3-6929b69dbd04.png" alt="Val Advogado"/></div>
     </section>
