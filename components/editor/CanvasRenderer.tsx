@@ -16,6 +16,14 @@ const ICONS: Record<string, LucideIcon> = {
   Swords, Users,
 };
 
+const PRINT_FONT_STACKS: Record<string, string> = {
+  'Arial Black': 'var(--font-manrope), Arial Black, Arial, sans-serif',
+  Inter: 'var(--font-inter), Arial, sans-serif',
+  Georgia: 'var(--font-playfair), Georgia, serif',
+  Manrope: 'var(--font-manrope), Arial, sans-serif',
+  'DM Sans': 'var(--font-dm-sans), Arial, sans-serif',
+};
+
 export const iconNames = Object.keys(ICONS);
 
 export function backgroundStyle(background: CanvasDocument['background']): React.CSSProperties {
@@ -33,10 +41,11 @@ export function backgroundStyle(background: CanvasDocument['background']): React
 
 export function elementBoxStyle(element: CanvasElement): React.CSSProperties {
   return {
-    left: `${element.x}%`, top: `${element.y}%`, width: `${element.w}%`, height: `${element.h}%`,
+    '--canvas-x': `${element.x}%`, '--canvas-y': `${element.y}%`, '--canvas-w': `${element.w}%`, '--canvas-h': `${element.h}%`,
+    left: 'var(--canvas-x)', top: 'var(--canvas-y)', width: 'var(--canvas-w)', height: 'var(--canvas-h)',
     opacity: element.opacity, transform: `rotate(${element.rotation}deg)`, zIndex: element.z,
     display: element.hidden ? 'none' : undefined,
-  };
+  } as React.CSSProperties;
 }
 
 function AutoFitText({ element }: { element: TextElement }) {
@@ -72,7 +81,7 @@ function AutoFitText({ element }: { element: TextElement }) {
       style={{
         '--fit-scale': scale,
         color: element.color,
-        fontFamily: `'${element.fontFamily}', Arial, sans-serif`,
+        fontFamily: PRINT_FONT_STACKS[element.fontFamily] || `'${element.fontFamily}', Arial, sans-serif`,
         fontSize: `calc(${element.fontSize}cqw * var(--fit-scale))`,
         fontWeight: element.fontWeight,
         lineHeight: element.lineHeight,
@@ -114,6 +123,8 @@ export function CanvasElementView({ element }: { element: CanvasElement }) {
           src={element.src}
           alt={element.alt || ''}
           draggable={false}
+          loading="eager"
+          decoding="async"
           style={{
             objectFit: element.fit,
             objectPosition: `${element.positionX}% ${element.positionY}%`,
@@ -165,6 +176,10 @@ export function CanvasPage({
           className={`canvas-element canvas-element-${element.type} ${selectedId === element.id ? 'is-selected' : ''} ${element.locked ? 'is-locked' : ''}`}
           style={elementBoxStyle(element)}
           data-allow-bleed={element.allowBleed ? 'true' : 'false'}
+          data-bleed-left={element.allowBleed && element.x <= .5 ? 'true' : 'false'}
+          data-bleed-right={element.allowBleed && element.x + element.w >= 99.5 ? 'true' : 'false'}
+          data-bleed-top={element.allowBleed && element.y <= .5 ? 'true' : 'false'}
+          data-bleed-bottom={element.allowBleed && element.y + element.h >= 99.5 ? 'true' : 'false'}
           onPointerDown={(event) => {
             if (!interactive) return;
             event.stopPropagation();

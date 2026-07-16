@@ -32,7 +32,7 @@ export type TextElement = CanvasElementBase & {
   type: 'text';
   text: string;
   color: string;
-  fontFamily: 'Inter' | 'Playfair Display' | 'Georgia' | 'Arial' | 'Arial Black';
+  fontFamily: 'Inter' | 'Manrope' | 'Playfair Display' | 'Georgia' | 'Arial' | 'Arial Black';
   fontSize: number;
   minFontSize?: number;
   fontWeight: number;

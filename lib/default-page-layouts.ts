@@ -10,6 +10,14 @@ export const ASSETS = {
   luvas: '/media/publica.jpg',
   acao: '/media/grupo.jpg',
   familia: '/media/familia.jpg',
+  demoMeeting: '/media/demo/community-meeting.jpg',
+  demoMartialArts: '/media/demo/martial-arts.jpg',
+  demoBoxing: '/media/demo/boxing-training.jpg',
+  demoFamily: '/media/demo/family-support.jpg',
+  demoChild: '/media/demo/child-learning.jpg',
+  demoHealthcare: '/media/demo/healthcare.jpg',
+  demoEducation: '/media/demo/education.jpg',
+  demoAnimalCare: '/media/demo/animal-care.jpg',
 };
 
 const COLORS = {
@@ -139,7 +147,7 @@ const body = (id: string, value: string, x: number, y: number, w: number, h: num
   });
 
 const label = (page: MagazinePage, color = COLORS.blue) => text(
-  `p${page.page_number}-label`, 'Cabeçalho editorial', `VAL ADVOGADO  •  ${String(page.page_number).padStart(2, '0')}`,
+  `p${page.page_number}-label`, 'Cabeçalho editorial', `VAL ADVOGADO  •  DEMONSTRAÇÃO  •  ${String(page.page_number).padStart(2, '0')}`,
   5.5, 3.4, 50, 2.5, 1.05,
   { color, fontFamily: 'Inter', fontWeight: 800, letterSpacing: .14, lineHeight: 1, uppercase: true },
 );
@@ -170,9 +178,12 @@ function page1(page: MagazinePage) {
     image('p1-collage', 'Mosaico de fundo', ASSETS.mosaic, 0, 0, 46, 100, { frameStyle: 'none', borderRadius: 0, filter: 'grayscale(1) contrast(.9)', opacity: .44, allowBleed: true, locked: true, z: 1 }),
     shape('p1-wash', 'Banho azul', 0, 0, 46, 100, 'linear-gradient(180deg,rgba(3,105,161,.86),rgba(7,31,56,.94))', { allowBleed: true, locked: true, z: 2 }),
     shape('p1-white', 'Painel branco', 42, 0, 58, 100, '#f9fcfd', { allowBleed: true, locked: true, z: 2 }),
-    image('p1-portrait', 'Retrato principal', ASSETS.portrait, 2, 35, 63, 65, { fit: 'contain', frameStyle: 'none', borderRadius: 0, positionY: 100, allowBleed: true, z: 8 }),
+    shape('p1-orbit', 'Circulo editorial', 80, -5, 28, 20, 'radial-gradient(circle,rgba(6,182,212,.20) 0 32%,transparent 33%),radial-gradient(circle,transparent 0 51%,rgba(7,89,133,.12) 52% 54%,transparent 55%)', { allowBleed: true, locked: true, z: 3 }),
+    shape('p1-grid', 'Textura editorial', 45, 73, 55, 27, 'linear-gradient(rgba(7,89,133,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(7,89,133,.055) 1px,transparent 1px)', { allowBleed: true, locked: true, z: 3 }),
+    image('p1-portrait', 'Retrato principal', ASSETS.portrait, 2, 35, 63, 65, { fit: 'cover', frameStyle: 'none', borderRadius: 0, positionX: 50, positionY: 50, allowBleed: true, z: 8 }),
     image('p1-logo', 'Logotipo', ASSETS.logo, 56, 6, 31, 10, { fit: 'contain', frameStyle: 'none', z: 15 }),
-    text('p1-kicker', 'Edição', 'INFOJORNAL • EDIÇÃO 01 • 2026', 52, 21, 40, 3, 1.05, { color: COLORS.cyan, fontFamily: 'Inter', fontWeight: 900, letterSpacing: .11 }),
+    text('p1-issue', 'Numero da edicao', '01', 91, 18, 6, 8, 3.9, { color: '#d8eef5', fontFamily: 'Manrope', fontWeight: 800, align: 'right', z: 12 }),
+    text('p1-kicker', 'Edição', 'INFOJORNAL • EDIÇÃO DEMONSTRATIVA • 2026', 52, 21, 40, 4, .94, { color: COLORS.cyan, fontFamily: 'Inter', fontWeight: 900, letterSpacing: .09 }),
     text('p1-title', 'Título da capa', page.title || 'VAL ADVOGADO', 52, 27, 40, 14, 5.7, { color: COLORS.navy, minFontSize: 4.1 }),
     text('p1-slogan', 'Chamada principal', page.body || 'O que eu faço é da sua conta.', 52, 42, 40, 17, 4.25, { color: COLORS.blue, minFontSize: 3.0, lineHeight: .98 }),
     shape('p1-band', 'Faixa editorial', 50, 61, 45, 14, 'linear-gradient(135deg,#0369a1,#06b6d4)', { clipPath: 'polygon(0 0,100% 0,92% 100%,0 100%)', z: 5 }),
@@ -188,11 +199,12 @@ function page2(page: MagazinePage) {
   const elements: CanvasElement[] = [
     shape('p2-index-bg', 'Fundo do sumário', 0, 0, 33, 100, 'linear-gradient(180deg,#075985,#063452)', { allowBleed: true, locked: true }),
     text('p2-index-title', 'Título sumário', 'SUMÁRIO', 6, 8, 22, 7, 3.4, { color: '#fff', lineHeight: 1 }),
+    text('p2-index-kicker', 'Navegacao', 'LEIA  •  DESCUBRA  •  PARTICIPE', 6, 16, 23, 3, .84, { color: '#8fe8f5', fontFamily: 'Inter', fontWeight: 800, letterSpacing: .1 }),
     image('p2-photo', 'Retrato', ASSETS.portrait, 36, 4, 29, 36, { fit: 'contain', frameStyle: 'arch', borderColor: '#dbeafe', borderWidth: 1, positionY: 100 }),
     shape('p2-title-bg', 'Fundo do título', 67, 10, 28, 24, COLORS.navy, { z: 5 }),
     text('p2-title', 'Título', 'QUEM É\nVAL?', 70, 13, 22, 18, 5.2, { color: '#fff', lineHeight: .9, z: 12 }),
     body('p2-body', page.body || 'Advogado por formação e servidor por vocação. Sua história é construída com presença, escuta e trabalho próximo das pessoas.', 37, 45, 56, 17, { color: '#263f55', fontSize: 1.8 }),
-    image('p2-family', 'Família', ASSETS.familia, 37, 65, 30, 26, { frameStyle: 'polaroid', positionY: 42, rotation: -1.2 }),
+    image('p2-family', 'Família demonstrativa', ASSETS.demoFamily, 37, 65, 30, 26, { frameStyle: 'polaroid', positionY: 42, rotation: -1.2 }),
     body('p2-family-text', 'Família, valores e compromisso com uma política mais humana.', 70, 69, 23, 18, { color: '#263f55', fontSize: 1.55 }),
     text('p2-expediente', 'Expediente', 'INFOJORNAL VAL ADVOGADO • PROJETO EDITORIAL • EDIÇÃO 01', 5.5, 91, 23, 6, .92, { color: '#d8f3fc', fontFamily: 'Inter', fontWeight: 500, lineHeight: 1.25, letterSpacing: .04 }),
   ];
@@ -209,10 +221,10 @@ function page3(page: MagazinePage) {
     label(page), rule('p3-rule'),
     text('p3-title', 'Título', page.title || 'História feita de presença.', 6, 11, 55, 13, 4.8, { color: COLORS.navy, minFontSize: 3.2 }),
     body('p3-intro', page.body || 'Família, atuação pública e projetos sociais.', 6, 25, 37, 11, { color: '#29475d', fontSize: 1.62 }),
-    image('p3-photo1', 'Foto família', ASSETS.familia, 6, 39, 38, 25, { frameStyle: 'polaroid', rotation: -2, positionY: 42 }),
-    image('p3-photo2', 'Foto gabinete', ASSETS.gabinete, 52, 10, 40, 28, { frameStyle: 'polaroid', rotation: 1.7, positionY: 36 }),
-    image('p3-photo3', 'Foto ação', ASSETS.acao, 55, 43, 35, 26, { frameStyle: 'polaroid', rotation: -1.3, positionY: 42 }),
-    image('p3-photo4', 'Foto projeto', ASSETS.luvas, 7, 70, 32, 20, { frameStyle: 'polaroid', rotation: 1.6, positionX: 45 }),
+    image('p3-photo1', 'Família demonstrativa', ASSETS.demoFamily, 6, 39, 38, 25, { frameStyle: 'polaroid', rotation: -2, positionY: 42 }),
+    image('p3-photo2', 'Reunião demonstrativa', ASSETS.demoMeeting, 52, 10, 40, 28, { frameStyle: 'polaroid', rotation: 1.7, positionY: 36 }),
+    image('p3-photo3', 'Atendimento demonstrativo', ASSETS.demoHealthcare, 55, 43, 35, 26, { frameStyle: 'polaroid', rotation: -1.3, positionY: 42 }),
+    image('p3-photo4', 'Educação demonstrativa', ASSETS.demoEducation, 7, 70, 32, 20, { frameStyle: 'polaroid', rotation: 1.6, positionX: 45 }),
     ...quote('p3-quote', page.quote || 'A política transforma quando escuta, acolhe e permanece perto das pessoas.', 43, 73, 47, 17, COLORS.blue),
   ], { type: 'image', value: ASSETS.mosaic, fit: 'cover', overlay: 'linear-gradient(rgba(248,251,252,.94),rgba(248,251,252,.96))' }, 'memoria-scrapbook');
 }
@@ -225,8 +237,9 @@ function page4(page: MagazinePage) {
     ['MessageCircle', 'Gabinete aberto', 'Contato permanente, sugestões e participação popular.'],
   ];
   const elements: CanvasElement[] = [
-    image('p4-bg', 'Foto de fundo', ASSETS.acao, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, positionX: 58, positionY: 44, allowBleed: true, locked: true }),
-    shape('p4-overlay', 'Sobreposição', 0, 0, 100, 100, 'linear-gradient(90deg,rgba(3,24,42,.98) 0%,rgba(4,53,80,.92) 54%,rgba(4,31,50,.46) 100%)', { allowBleed: true, locked: true, z: 2 }),
+    image('p4-bg', 'Reunião comunitária demonstrativa', ASSETS.demoMeeting, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, positionX: 52, positionY: 44, allowBleed: true, locked: true }),
+    shape('p4-overlay', 'Sobreposição', 0, 0, 100, 100, 'linear-gradient(110deg,rgba(2,20,38,.99) 0%,rgba(4,65,101,.94) 53%,rgba(6,182,212,.34) 100%)', { allowBleed: true, locked: true, z: 2 }),
+    shape('p4-glow', 'Luz ciano', 62, -12, 50, 45, 'radial-gradient(circle,rgba(103,232,249,.34),rgba(14,116,144,.08) 48%,transparent 72%)', { borderRadius: 50, z: 3 }),
     label(page, '#67e8f9'), rule('p4-rule', 7.2, '#67e8f9'),
     text('p4-title', 'Título', page.title || 'O mandato acontece perto das pessoas.', 6, 13, 57, 25, 5.7, { color: '#fff', minFontSize: 3.5, z: 12 }),
     body('p4-body', page.body || 'Visitas, escuta ativa e fiscalização.', 6, 40, 42, 11, { color: '#d9eef7', fontSize: 1.75, z: 12 }),
@@ -234,7 +247,7 @@ function page4(page: MagazinePage) {
   cards.forEach(([iconName, titleValue, description], i) => {
     const x = i % 2 === 0 ? 6 : 29;
     const y = i < 2 ? 57 : 75;
-    elements.push(shape(`p4-card-${i}`, 'Cartão', x, y, 21, 14, 'rgba(255,255,255,.11)', { borderColor: 'rgba(255,255,255,.22)', borderWidth: 1, borderRadius: 3, z: 6 }));
+    elements.push(shape(`p4-card-${i}`, 'Cartão glass', x, y, 21, 14, 'linear-gradient(145deg,rgba(255,255,255,.20),rgba(255,255,255,.07))', { borderColor: 'rgba(165,243,252,.38)', borderWidth: 1, borderRadius: 3, shadow: '0 12px 32px rgba(0,20,38,.24)', z: 6 }));
     elements.push(icon(`p4-icon-${i}`, titleValue, iconName, x + 2, y + 2, 5, 4.2, '#67e8f9', 'rgba(255,255,255,.09)'));
     elements.push(text(`p4-card-title-${i}`, titleValue, titleValue.toUpperCase(), x + 8, y + 2, 11, 3.2, 1.06, { color: '#fff', fontFamily: 'Arial Black', lineHeight: 1.05, z: 12 }));
     elements.push(body(`p4-card-body-${i}`, description, x + 2, y + 7, 17, 5.5, { color: '#d3e8f2', fontSize: .96, lineHeight: 1.2, z: 12 }));
@@ -246,10 +259,10 @@ function page5(page: MagazinePage) {
   const elements: CanvasElement[] = [label(page), rule('p5-rule'),
     text('p5-title', 'Título', page.title || 'Trabalho de campo', 6, 11, 65, 12, 4.7, { color: COLORS.navy }),
     ...quote('p5-quote', page.quote || 'Resultado começa com escuta, presença e acompanhamento.', 6, 25, 54, 14, COLORS.blue),
-    image('p5-main', 'Foto principal', ASSETS.gabinete, 51, 9, 42, 34, { frameStyle: 'polaroid', rotation: 1, positionY: 32 }),
-    image('p5-a', 'Foto 1', ASSETS.acao, 6, 47, 28, 23, { frameStyle: 'polaroid', rotation: -1.2 }),
-    image('p5-b', 'Foto 2', ASSETS.familia, 37, 47, 26, 23, { frameStyle: 'polaroid', rotation: 1.4, positionY: 40 }),
-    image('p5-c', 'Foto 3', ASSETS.luvas, 67, 47, 26, 23, { frameStyle: 'polaroid', rotation: -1.3 }),
+    image('p5-main', 'Reunião demonstrativa', ASSETS.demoMeeting, 51, 9, 42, 34, { frameStyle: 'polaroid', rotation: 1, positionY: 42 }),
+    image('p5-a', 'Atendimento demonstrativo', ASSETS.demoHealthcare, 6, 47, 28, 23, { frameStyle: 'polaroid', rotation: -1.2 }),
+    image('p5-b', 'Família demonstrativa', ASSETS.demoFamily, 37, 47, 26, 23, { frameStyle: 'polaroid', rotation: 1.4, positionY: 40 }),
+    image('p5-c', 'Educação demonstrativa', ASSETS.demoEducation, 67, 47, 26, 23, { frameStyle: 'polaroid', rotation: -1.3 }),
     body('p5-a-text', 'Fiscalização contínua e diálogo com os bairros.', 6, 73, 27, 8, { fontSize: 1.25, color: '#273f55' }),
     body('p5-b-text', 'Apoio social e fortalecimento das iniciativas locais.', 37, 73, 27, 8, { fontSize: 1.25, color: '#273f55' }),
     body('p5-c-text', 'Projetos que ampliam oportunidades.', 67, 73, 26, 8, { fontSize: 1.25, color: '#273f55' }),
@@ -261,7 +274,7 @@ function page5(page: MagazinePage) {
 
 function page6(page: MagazinePage) {
   return document(page, [
-    image('p6-bg', 'Foto de luta', ASSETS.luvas, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, allowBleed: true, locked: true, positionX: 48, positionY: 48, z: 1 }),
+    image('p6-bg', 'Treino demonstrativo', ASSETS.demoBoxing, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, allowBleed: true, locked: true, positionX: 48, positionY: 48, z: 1 }),
     shape('p6-overlay', 'Degradê de proteção', 0, 0, 100, 100, 'linear-gradient(90deg,rgba(3,31,56,.95),rgba(3,74,105,.74) 54%,rgba(3,31,56,.15))', { allowBleed: true, locked: true, z: 2 }),
     label(page, '#67e8f9'), rule('p6-rule', 7.2, '#67e8f9'),
     text('p6-title', 'Título', page.title || 'Esporte que abre caminhos.', 6, 14, 62, 25, 6.0, { color: '#fff', minFontSize: 3.8, z: 12 }),
@@ -282,9 +295,9 @@ function page7(page: MagazinePage) {
   ];
   const elements: CanvasElement[] = [label(page), rule('p7-rule'),
     text('p7-title', 'Título', page.title || 'Disciplina, pertencimento e oportunidade.', 6, 11, 87, 15, 4.7, { color: COLORS.navy, minFontSize: 3.2 }),
-    image('p7-main', 'Foto principal', ASSETS.luvas, 55, 29, 38, 38, { frameStyle: 'rounded', borderRadius: 1.5, positionX: 46 }),
-    image('p7-small1', 'Foto projeto 1', ASSETS.acao, 55, 70, 18, 17, { frameStyle: 'polaroid', rotation: -1 }),
-    image('p7-small2', 'Foto projeto 2', ASSETS.familia, 75, 70, 18, 17, { frameStyle: 'polaroid', rotation: 1, positionY: 40 }),
+    image('p7-main', 'Artes marciais demonstrativas', ASSETS.demoMartialArts, 55, 29, 38, 38, { frameStyle: 'rounded', borderRadius: 1.5, positionX: 46 }),
+    image('p7-small1', 'Treino demonstrativo', ASSETS.demoBoxing, 55, 70, 18, 17, { frameStyle: 'polaroid', rotation: -1 }),
+    image('p7-small2', 'Educação demonstrativa', ASSETS.demoEducation, 75, 70, 18, 17, { frameStyle: 'polaroid', rotation: 1, positionY: 40 }),
   ];
   cards.forEach(([iconName, titleValue, description], i) => {
     const y = 30 + i * 14.5;
@@ -297,7 +310,7 @@ function page7(page: MagazinePage) {
 
 function page8(page: MagazinePage) {
   return document(page, [
-    image('p8-bg', 'Foto autismo', ASSETS.familia, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, allowBleed: true, positionX: 64, positionY: 45, locked: true }),
+    image('p8-bg', 'Família demonstrativa', ASSETS.demoFamily, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, allowBleed: true, positionX: 67, positionY: 45, locked: true }),
     shape('p8-overlay', 'Proteção', 0, 0, 100, 100, 'linear-gradient(90deg,rgba(238,250,255,.98) 0%,rgba(229,248,254,.94) 56%,rgba(229,248,254,.48) 100%)', { allowBleed: true, locked: true, z: 2 }),
     label(page), rule('p8-rule'),
     text('p8-title', 'Título', page.title || 'Inclusão começa com compreensão.', 6, 13, 62, 26, 5.7, { color: COLORS.navy, minFontSize: 3.5, z: 12 }),
@@ -321,7 +334,9 @@ function page9(page: MagazinePage) {
   ];
   const elements: CanvasElement[] = [label(page), rule('p9-rule'),
     text('p9-title', 'Título', page.title || 'Uma cidade preparada para todas as formas de existir.', 6, 11, 87, 16, 4.4, { color: COLORS.navy, minFontSize: 2.9 }),
-    image('p9-center', 'Foto central', ASSETS.familia, 34, 34, 32, 37, { frameStyle: 'arch', fit: 'cover', positionY: 38, borderColor: '#bce8f5', borderWidth: 2 }),
+    shape('p9-orbit', 'Mapa de conexoes', 27, 29, 46, 46, 'radial-gradient(circle,rgba(6,182,212,.14) 0 32%,transparent 33%),radial-gradient(circle,transparent 0 49%,rgba(7,89,133,.12) 50% 51%,transparent 52%),radial-gradient(circle,transparent 0 69%,rgba(6,182,212,.10) 70% 71%,transparent 72%)', { borderRadius: 50, z: 2 }),
+    image('p9-center', 'Família demonstrativa', ASSETS.demoFamily, 34, 34, 32, 37, { frameStyle: 'arch', fit: 'cover', positionY: 38, borderColor: '#bce8f5', borderWidth: 2 }),
+    text('p9-manifesto', 'Manifesto', 'INCLUSÃO É\nACESSO + ESCUTA\n+ RESPEITO', 35, 77, 30, 11, 1.5, { color: COLORS.blue, fontFamily: 'Manrope', fontWeight: 800, align: 'center', lineHeight: 1.05, letterSpacing: .04, z: 12 }),
   ];
   cards.forEach(([iconName, titleValue, description], i) => {
     const left = i % 2 === 0;
@@ -338,16 +353,19 @@ function page9(page: MagazinePage) {
 
 function page10(page: MagazinePage) {
   const projects = [
-    ['Saúde', 'HeartPulse', ASSETS.acao],
-    ['Educação', 'GraduationCap', ASSETS.familia],
-    ['Proteção animal', 'PawPrint', ASSETS.gabinete],
-    ['Apoio às famílias', 'HeartHandshake', ASSETS.acao],
-    ['Cidadania', 'Scale', ASSETS.familia],
+    ['Saúde', 'HeartPulse', ASSETS.demoHealthcare],
+    ['Educação', 'GraduationCap', ASSETS.demoEducation],
+    ['Proteção animal', 'PawPrint', ASSETS.demoAnimalCare],
+    ['Apoio às famílias', 'HeartHandshake', ASSETS.demoFamily],
+    ['Cidadania', 'Scale', ASSETS.demoMeeting],
   ];
   const elements: CanvasElement[] = [label(page), rule('p10-rule'),
     text('p10-title', 'Título', page.title || 'Projetos que mudam realidades.', 6, 11, 87, 13, 4.8, { color: COLORS.navy }),
     body('p10-body', page.body || 'Saúde, educação, proteção animal e apoio às famílias.', 6, 25, 84, 7, { color: '#29475d', fontSize: 1.55, fontWeight: 600 }),
   ];
+  elements.push(shape('p10-count-bg', 'Indicador de frentes', 78, 11, 15, 16, 'linear-gradient(145deg,#075985,#06b6d4)', { borderRadius: 3, shadow: '0 10px 24px rgba(7,89,133,.16)', z: 5 }));
+  elements.push(text('p10-count', 'Quantidade de frentes', '05', 80, 13, 11, 7, 4.3, { color: '#fff', fontFamily: 'Manrope', align: 'center', lineHeight: .9, z: 12 }));
+  elements.push(text('p10-count-label', 'Legenda', 'FRENTES DE AÇÃO', 79, 21, 13, 3, .8, { color: '#dff9ff', fontFamily: 'Inter', fontWeight: 900, align: 'center', letterSpacing: .08, z: 12 }));
   projects.forEach(([titleValue, iconName, src], i) => {
     const col = i % 3;
     const row = Math.floor(i / 3);
@@ -365,18 +383,25 @@ function page10(page: MagazinePage) {
 }
 
 function page11(page: MagazinePage) {
-  const items = ['Escuta permanente', 'Fiscalização responsável', 'Transparência', 'Projetos com impacto', 'Participação popular'];
+  const items = [
+    ['HeartHandshake', 'Escuta permanente'],
+    ['ShieldCheck', 'Fiscalização responsável'],
+    ['Share2', 'Transparência'],
+    ['Sparkles', 'Projetos com impacto'],
+    ['Users', 'Participação popular'],
+  ];
   const elements: CanvasElement[] = [label(page), rule('p11-rule'),
-    image('p11-hero', 'Foto principal', ASSETS.acao, 43, 8, 57, 46, { frameStyle: 'none', borderRadius: 0, allowBleed: true, positionX: 52, positionY: 38 }),
+    image('p11-hero', 'Reunião comunitária demonstrativa', ASSETS.demoMeeting, 43, 8, 57, 46, { frameStyle: 'none', borderRadius: 0, allowBleed: true, positionX: 52, positionY: 38 }),
     shape('p11-title-bg', 'Painel título', 0, 8, 49, 46, 'linear-gradient(135deg,#072b48,#075985)', { allowBleed: true, z: 4 }),
+    shape('p11-title-glow', 'Luz do painel', 30, 5, 32, 31, 'radial-gradient(circle,rgba(103,232,249,.26),transparent 68%)', { borderRadius: 50, z: 5 }),
     text('p11-title', 'Título', page.title || 'Compromissos em movimento.', 6, 15, 38, 22, 5.4, { color: '#fff', minFontSize: 3.3, z: 12 }),
     body('p11-intro', page.body || 'Ações permanentes, fiscalização e participação popular.', 6, 40, 34, 10, { color: '#d9f5fc', fontSize: 1.55, z: 12 }),
   ];
-  items.forEach((item, i) => {
-    const y = 60 + i * 6.7;
-    elements.push(shape(`p11-dot-${i}`, 'Marcador', 7, y + .8, 2.2, 2.2, COLORS.cyan, { borderRadius: 50, z: 8 }));
-    elements.push(text(`p11-item-${i}`, item, item.toUpperCase(), 11, y, 40, 4, 1.34, { color: COLORS.navy, fontFamily: 'Arial Black', lineHeight: 1, z: 12 }));
-    elements.push(shape(`p11-line-${i}`, 'Linha', 52, y + 1.6, 41, .18, i % 2 ? '#bce7f2' : '#d4eef5', { z: 3 }));
+  items.forEach(([iconName, item], i) => {
+    const y = 58.5 + i * 7.1;
+    elements.push(shape(`p11-card-${i}`, 'Compromisso glass', 6, y - .8, 87, 6.1, 'linear-gradient(90deg,rgba(224,247,252,.86),rgba(255,255,255,.45))', { borderColor: 'rgba(103,232,249,.55)', borderWidth: 1, borderRadius: 2.4, z: 4 }));
+    elements.push(icon(`p11-icon-${i}`, item, iconName, 7.2, y, 4.5, 4, '#fff', i % 2 ? COLORS.blue : COLORS.cyan));
+    elements.push(text(`p11-item-${i}`, item, item.toUpperCase(), 13.5, y + .3, 72, 3.4, 1.25, { color: COLORS.navy, fontFamily: 'Arial Black', lineHeight: 1, z: 12 }));
   });
   shape('dummy','dummy',0,0,1,1,'#fff');
   return document(page, elements, { type: 'color', value: '#f8fcfd' }, 'lista-editorial');
@@ -385,7 +410,7 @@ function page11(page: MagazinePage) {
 function page12(page: MagazinePage) {
   return document(page, [label(page), rule('p12-rule'),
     text('p12-title', 'Título', page.title || 'O gabinete está sempre de portas abertas.', 6, 11, 85, 17, 4.7, { color: COLORS.navy }),
-    image('p12-main', 'Foto do gabinete', ASSETS.gabinete, 6, 32, 53, 43, { frameStyle: 'polaroid', rotation: -1, positionY: 38 }),
+    image('p12-main', 'Atendimento demonstrativo', ASSETS.demoMeeting, 6, 32, 53, 43, { frameStyle: 'polaroid', rotation: -1, positionY: 38 }),
     shape('p12-contact', 'Painel de contato', 63, 31, 30, 44, 'linear-gradient(160deg,#075985,#063452)', { borderRadius: 3, z: 5 }),
     icon('p12-qr', 'QR Code', 'QrCode', 69, 37, 18, 16, '#fff', 'rgba(255,255,255,.1)'),
     text('p12-contact-title', 'Chamada', 'FALE COM\nO GABINETE', 67, 57, 22, 10, 2.8, { color: '#fff', lineHeight: .95, align: 'center', z: 12 }),
@@ -397,7 +422,7 @@ function page12(page: MagazinePage) {
 function page13(page: MagazinePage) {
   return document(page, [label(page), rule('p13-rule'),
     text('p13-title', 'Título', page.title || 'Uma rede que transforma pelo esporte.', 6, 11, 87, 14, 4.8, { color: COLORS.navy }),
-    image('p13-main', 'Foto escolas de luta', ASSETS.luvas, 6, 31, 43, 51, { frameStyle: 'rounded', borderRadius: 2, positionX: 45 }),
+    image('p13-main', 'Artes marciais demonstrativas', ASSETS.demoMartialArts, 6, 31, 43, 51, { frameStyle: 'rounded', borderRadius: 2, positionX: 45 }),
     shape('p13-panel', 'Painel de dados', 53, 31, 40, 51, COLORS.navy, { borderRadius: 3, z: 5 }),
     icon('p13-school', 'Escolas', 'School', 58, 36, 8, 7, '#67e8f9', 'rgba(255,255,255,.08)'),
     text('p13-school-title', 'Escolas título', 'ESCOLAS E ACADEMIAS', 68, 38, 20, 4, 1.25, { color: '#fff', fontFamily: 'Arial Black', z: 12 }),
@@ -412,12 +437,12 @@ function page13(page: MagazinePage) {
 function page14(page: MagazinePage) {
   return document(page, [label(page), rule('p14-rule'),
     text('p14-title', 'Título', page.title || 'Histórias que começam no tatame.', 6, 11, 87, 13, 4.8, { color: COLORS.navy }),
-    image('p14-a', 'Foto história 1', ASSETS.luvas, 6, 29, 40, 29, { frameStyle: 'polaroid', rotation: -1.5 }),
-    image('p14-b', 'Foto história 2', ASSETS.acao, 54, 23, 38, 31, { frameStyle: 'polaroid', rotation: 1.7 }),
+    image('p14-a', 'Artes marciais demonstrativas', ASSETS.demoMartialArts, 6, 29, 40, 29, { frameStyle: 'polaroid', rotation: -1.5 }),
+    image('p14-b', 'Treino demonstrativo', ASSETS.demoBoxing, 54, 23, 38, 31, { frameStyle: 'polaroid', rotation: 1.7 }),
     shape('p14-tape1', 'Fita 1', 21, 26, 11, 3, 'rgba(125,211,252,.62)', { rotation: -3, z: 15 }),
     shape('p14-tape2', 'Fita 2', 67, 20, 11, 3, 'rgba(103,232,249,.58)', { rotation: 3, z: 15 }),
     ...quote('p14-quote', page.quote || 'Disciplina não é apenas seguir regras. É descobrir força, foco e confiança.', 6, 63, 48, 20, COLORS.blue),
-    image('p14-c', 'Foto história 3', ASSETS.familia, 58, 61, 34, 26, { frameStyle: 'polaroid', rotation: -1, positionY: 42 }),
+    image('p14-c', 'Educação demonstrativa', ASSETS.demoEducation, 58, 61, 34, 26, { frameStyle: 'polaroid', rotation: -1, positionY: 42 }),
     body('p14-body', page.body || 'Disciplina e pertencimento abrindo novos caminhos.', 6, 88, 86, 5, { color: '#29475d', fontSize: 1.45, fontWeight: 600, align: 'center' }),
   ], { type: 'image', value: ASSETS.mosaic, fit: 'cover', overlay: 'linear-gradient(rgba(248,252,253,.95),rgba(248,252,253,.95))' }, 'historias-tatame');
 }
@@ -430,7 +455,7 @@ function page15(page: MagazinePage) {
     body('p15-body', page.body || 'Informação e orientação para fortalecer as famílias.', 6, 33, 44, 12, { color: '#29475d', fontSize: 1.72, fontWeight: 600 }),
     shape('p15-quote-bg', 'Destaque', 6, 51, 45, 18, COLORS.blue, { clipPath: 'polygon(0 0,100% 0,93% 100%,0 100%)', z: 5 }),
     text('p15-quote', 'Frase', page.quote || 'Famílias acolhidas constroem caminhos com mais segurança, informação e esperança.', 10, 55, 34, 11, 1.8, { color: '#fff', fontFamily: 'Georgia', fontWeight: 700, italic: true, lineHeight: 1.2, letterSpacing: 0, z: 12 }),
-    image('p15-portrait', 'Foto da família', ASSETS.familia, 51, 18, 49, 82, { frameStyle: 'none', borderRadius: 0, positionX: 52, positionY: 40, allowBleed: true, z: 4 }),
+    image('p15-portrait', 'Família demonstrativa', ASSETS.demoFamily, 51, 18, 49, 82, { frameStyle: 'none', borderRadius: 0, positionX: 52, positionY: 40, allowBleed: true, z: 4 }),
     shape('p15-bubbles', 'Elementos inclusivos', 5, 76, 41, 14, 'radial-gradient(circle at 12% 50%,rgba(6,182,212,.45) 0 7%,transparent 8%),radial-gradient(circle at 32% 25%,rgba(3,105,161,.25) 0 10%,transparent 11%),radial-gradient(circle at 58% 62%,rgba(34,211,238,.35) 0 8%,transparent 9%)', { z: 3 }),
   ], { type: 'color', value: '#e9f9fd' }, 'familias-inclusao');
 }
@@ -442,7 +467,9 @@ function page16(page: MagazinePage) {
     ['Download', 'Materiais', 'Conteúdos para famílias, escolas e profissionais.'],
     ['PhoneCall', 'Atendimento', 'Canais de orientação e acolhimento.'],
   ];
-  const elements: CanvasElement[] = [label(page), rule('p16-rule'),
+  const elements: CanvasElement[] = [
+    shape('p16-rail', 'Trilho editorial', 0, 0, 2.2, 100, 'linear-gradient(180deg,#075985,#06b6d4)', { allowBleed: true, locked: true, z: 3 }),
+    label(page), rule('p16-rule'),
     text('p16-title', 'Título', page.title || 'Direitos, serviços e informação acessível.', 6, 11, 87, 15, 4.7, { color: COLORS.navy }),
     body('p16-body', page.body || 'Conteúdos úteis para famílias e profissionais.', 6, 27, 55, 8, { color: '#29475d', fontSize: 1.55, fontWeight: 600 }),
     shape('p16-qr', 'Área QR Code', 70, 12, 22, 22, '#fff', { borderColor: COLORS.blue, borderWidth: 1, shadow: '0 8px 20px rgba(7,89,133,.1)', z: 6 }),
@@ -469,13 +496,15 @@ function page17(page: MagazinePage) {
   ];
   const elements: CanvasElement[] = [label(page), rule('p17-rule'),
     text('p17-title', 'Título', page.title || 'Presença que pode ser acompanhada.', 6, 11, 87, 14, 4.8, { color: COLORS.navy }),
-    image('p17-strip1', 'Foto 1', ASSETS.acao, 6, 29, 27, 18, { frameStyle: 'polaroid', rotation: -1 }),
-    image('p17-strip2', 'Foto 2', ASSETS.gabinete, 36, 29, 27, 18, { frameStyle: 'polaroid', rotation: 1 }),
-    image('p17-strip3', 'Foto 3', ASSETS.familia, 66, 29, 27, 18, { frameStyle: 'polaroid', rotation: -1, positionY: 40 }),
+    image('p17-strip1', 'Reunião demonstrativa', ASSETS.demoMeeting, 6, 29, 27, 18, { frameStyle: 'polaroid', rotation: -1 }),
+    image('p17-strip2', 'Saúde demonstrativa', ASSETS.demoHealthcare, 36, 29, 27, 18, { frameStyle: 'polaroid', rotation: 1 }),
+    image('p17-strip3', 'Atendimento demonstrativo', ASSETS.demoHealthcare, 66, 29, 27, 18, { frameStyle: 'polaroid', rotation: -1, positionY: 40 }),
+    text('p17-kicker', 'Metodo', 'DA ESCUTA AO RESULTADO', 66, 23, 27, 3, .95, { color: COLORS.cyan, fontFamily: 'Inter', fontWeight: 900, align: 'right', letterSpacing: .1 }),
     shape('p17-line', 'Linha do tempo', 10, 59, 80, 1, 'linear-gradient(90deg,#06b6d4,#075985)', { borderRadius: 99 }),
   ];
   steps.forEach(([titleValue, description], i) => {
     const x = 7 + i * 22.5;
+    elements.push(shape(`p17-step-bg-${i}`, 'Cartao da etapa', x - 4.5, 65, 19, 22, i % 2 ? '#eef9fc' : '#f5fbfd', { borderColor: '#c6e6ee', borderWidth: 1, borderRadius: 3, z: 3 }));
     elements.push(shape(`p17-dot-${i}`, 'Marcador', x, 55.8, 8, 8, '#fff', { borderColor: i % 2 ? COLORS.blue : COLORS.cyan, borderWidth: 2, borderRadius: 50, z: 8 }));
     elements.push(text(`p17-no-${i}`, 'Etapa', String(i + 1), x, 58.1, 8, 3, 1.25, { color: COLORS.blue, fontFamily: 'Arial Black', align: 'center', z: 12 }));
     elements.push(text(`p17-title-${i}`, titleValue, titleValue.toUpperCase(), x - 3, 67, 14, 4, 1.15, { color: COLORS.navy, fontFamily: 'Arial Black', align: 'center', z: 12 }));
@@ -487,10 +516,10 @@ function page17(page: MagazinePage) {
 function page18(page: MagazinePage) {
   return document(page, [label(page), rule('p18-rule'),
     text('p18-title', 'Título', page.title || 'Fotos que contam o trabalho.', 6, 11, 87, 12, 4.8, { color: COLORS.navy }),
-    image('p18-1', 'Foto grande', ASSETS.acao, 6, 28, 45, 38, { frameStyle: 'rounded', borderRadius: 1.5, positionY: 43 }),
-    image('p18-2', 'Foto 2', ASSETS.familia, 54, 28, 19, 25, { frameStyle: 'polaroid', rotation: -1, positionY: 40 }),
-    image('p18-3', 'Foto 3', ASSETS.gabinete, 76, 28, 18, 25, { frameStyle: 'polaroid', rotation: 1 }),
-    image('p18-4', 'Foto 4', ASSETS.luvas, 54, 57, 40, 29, { frameStyle: 'polaroid', rotation: -.8 }),
+    image('p18-1', 'Reunião demonstrativa', ASSETS.demoMeeting, 6, 28, 45, 38, { frameStyle: 'rounded', borderRadius: 1.5, positionY: 43 }),
+    image('p18-2', 'Família demonstrativa', ASSETS.demoFamily, 54, 28, 19, 25, { frameStyle: 'polaroid', rotation: -1, positionY: 40 }),
+    image('p18-3', 'Saúde demonstrativa', ASSETS.demoHealthcare, 76, 28, 18, 25, { frameStyle: 'polaroid', rotation: 1 }),
+    image('p18-4', 'Educação demonstrativa', ASSETS.demoEducation, 54, 57, 40, 29, { frameStyle: 'polaroid', rotation: -.8 }),
     image('p18-5', 'Foto 5', ASSETS.portrait, 6, 70, 20, 19, { fit: 'contain', frameStyle: 'polaroid', rotation: 1 }),
     body('p18-body', page.body || 'Um mosaico de encontros, projetos e ações.', 29, 72, 21, 14, { color: '#29475d', fontSize: 1.55, fontWeight: 700 }),
     shape('p18-tag', 'Etiqueta', 6, 91, 88, 4, 'linear-gradient(90deg,#075985,#06b6d4)', { z: 5 }),
@@ -516,11 +545,15 @@ function page20(page: MagazinePage) {
   return document(page, [
     image('p20-bg', 'Fundo escuro', ASSETS.mosaic, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, filter: 'grayscale(1)', allowBleed: true, locked: true, z: 1 }),
     shape('p20-overlay', 'Sobreposição escura', 0, 0, 100, 100, 'linear-gradient(135deg,rgba(3,18,35,.98),rgba(4,54,78,.88))', { allowBleed: true, locked: true, z: 2 }),
-    image('p20-portrait', 'Retrato', ASSETS.portrait, 43, 10, 57, 90, { fit: 'contain', frameStyle: 'none', borderRadius: 0, positionY: 100, allowBleed: true, z: 5 }),
+    shape('p20-right-panel', 'Painel de encerramento', 43, 0, 57, 100, 'linear-gradient(160deg,#eefaff 0%,#c9f0f7 58%,#58c8dc 100%)', { allowBleed: true, locked: true, z: 3 }),
+    shape('p20-right-stripe', 'Faixa de compromisso', 43, 0, 57, 20, 'linear-gradient(135deg,#075985,#06b6d4)', { allowBleed: true, locked: true, z: 4 }),
+    text('p20-pledge', 'Mensagem final', 'TRANSPARÊNCIA\nPRESENÇA\nAÇÃO', 48, 5, 45, 12, 3.3, { color: '#fff', fontFamily: 'Manrope', fontWeight: 800, lineHeight: .9, letterSpacing: .02, z: 12 }),
+    image('p20-portrait', 'Retrato', ASSETS.portrait, 43, 28, 57, 72, { fit: 'cover', frameStyle: 'none', borderRadius: 0, positionX: 50, positionY: 50, allowBleed: true, z: 5 }),
     text('p20-title', 'Título', 'MANDE\nUM ZAP', 7, 12, 42, 23, 7.2, { color: '#fff', lineHeight: .85, minFontSize: 4.8, z: 12 }),
     shape('p20-qr', 'QR Code', 9, 41, 31, 28, '#fff', { borderColor: COLORS.cyan, borderWidth: 2, shadow: '0 14px 35px rgba(0,0,0,.25)', z: 8 }),
     icon('p20-qr-icon', 'QR Code', 'QrCode', 15, 46, 19, 18, COLORS.navy, '#fff'),
     body('p20-body', page.body || 'Acompanhe, participe e cobre resultados.', 7, 75, 35, 12, { color: '#d8f4fc', fontSize: 1.85, fontWeight: 700, z: 12 }),
+    text('p20-social', 'Redes sociais', '@VALADVOGADO  •  GABINETE ABERTO', 48, 22, 44, 3, 1.0, { color: COLORS.blue, fontFamily: 'Inter', fontWeight: 900, letterSpacing: .07, z: 12 }),
     image('p20-logo', 'Logotipo', ASSETS.logo, 7, 89, 29, 8, { fit: 'contain', frameStyle: 'none', z: 12 }),
   ], { type: 'color', value: COLORS.navy }, 'contracapa-cta', false);
 }

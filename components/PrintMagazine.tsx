@@ -26,7 +26,11 @@ export function PrintMagazine({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) 
   if (loading) return <div className="db-loading"><LoaderCircle className="spin" /> Preparando páginas para impressão…</div>;
 
   return (
-    <div className={`print-magazine-v7 ${bleed ? 'with-bleed' : 'proof-a5'}`}>
+    <div
+      className={`print-magazine-v7 ${bleed ? 'with-bleed' : 'proof-a5'}`}
+      data-print-ready={documents.length > 0 ? 'true' : 'false'}
+      data-page-count={documents.length}
+    >
       {warning && <div className="db-sync-warning print-sync-warning"><AlertTriangle size={16} />{warning}</div>}
       {documents.map(({ page, document }) => (
         <section

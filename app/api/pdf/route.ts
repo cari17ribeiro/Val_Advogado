@@ -16,8 +16,18 @@ export async function GET(request: NextRequest) {
       headless: true,
     });
     const page = await browser.newPage();
+    await page.setViewport({ width: 1748, height: 2480, deviceScaleFactor: 1 });
     const origin = new URL(request.url).origin;
-    await page.goto(`${origin}/impressao?pdf=${mode}&mode=${mode}`, { waitUntil: 'networkidle0' });
+    await page.goto(`${origin}/impressao?pdf=${mode}&mode=${mode}`, { waitUntil: 'networkidle0', timeout: 45_000 });
+    await page.waitForSelector('[data-print-ready="true"]', { timeout: 45_000 });
+    await page.waitForFunction(
+      () => document.querySelectorAll('.print-sheet-v7').length > 0 && [...document.images].every((image) => image.complete),
+      { timeout: 45_000 },
+    );
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await Promise.all([...document.images].map((image) => image.decode?.().catch(() => undefined)));
+    });
     await page.emulateMediaType('print');
     const pdf = await page.pdf({
       width: mode === 'bleed' ? '154mm' : '148mm',
@@ -25,6 +35,8 @@ export async function GET(request: NextRequest) {
       printBackground: true,
       preferCSSPageSize: true,
       margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      tagged: true,
+      outline: true,
     });
     const filename = mode === 'bleed' ? 'val-advogado-grafica-a5-sangria-3mm.pdf' : 'val-advogado-prova-a5.pdf';
     return new Response(Buffer.from(pdf), {
