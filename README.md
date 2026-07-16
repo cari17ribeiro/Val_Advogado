@@ -1,36 +1,55 @@
 # Val Advogado — Site e Revista Digital
 
-Projeto institucional desenvolvido em Next.js com uma experiência editorial interativa, revista digital de 12 páginas e versão preparada para impressão em A5.
+Versão 3 do projeto institucional do vereador Val Advogado, com site responsivo, revista digital interativa de 12 páginas e livreto A5 para impressão.
 
-## Destaques
+## Destaques da V3
 
-- Home institucional responsiva e moderna
-- Revista digital com páginas duplas no desktop e página única no celular
-- Navegação por teclado, miniaturas e modo tela cheia
-- Destaque para escolas de luta e apoio ao autismo
-- Geração de PDF pela rota `/api/pdf`
-- Estrutura preparada para integração com Supabase e deploy na Vercel
+- Identidade visual moderna em azul-marinho, azul elétrico e ciano.
+- Cabeçalho flutuante com efeito glass.
+- Hero responsivo com fotografia exibida por inteiro, sem corte de cabeça.
+- Animações e transições com Framer Motion.
+- Destaque especial para escolas de luta e apoio ao autismo.
+- Revista reconstruída com áreas seguras e layouts independentes por página.
+- Página dupla em computadores e página única em celulares e tablets menores.
+- Navegação por botões, teclado, gesto de arrastar e índice por miniaturas.
+- Livreto A5 com 12 páginas e geração de PDF.
+- Respeito à configuração de movimento reduzido do dispositivo.
 
-## Executar localmente
+## Tecnologias
+
+- Next.js
+- React
+- TypeScript
+- Framer Motion
+- Lucide React
+- Puppeteer e Chromium para geração do PDF
+
+## Como executar
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Build
-
-```bash
-npm run build
-```
+Abra `http://localhost:3000`.
 
 ## Rotas
 
 - `/` — site institucional
-- `/revista` — revista digital
-- `/livreto` — versão para impressão
-- `/api/pdf` — geração do PDF
+- `/revista` — revista digital interativa
+- `/livreto` — prévia do livreto A5
+- `/api/pdf` — geração e download do PDF
 
-## Status
+## Atualização pelo GitHub
 
-Versão 2 em desenvolvimento. Textos, números, contatos e fotografias devem ser validados antes da publicação oficial.
+Envie todas as pastas e arquivos deste pacote para a raiz do repositório e confirme a substituição dos arquivos existentes. A Vercel fará um novo deploy automaticamente após o commit.
+
+Mensagem sugerida:
+
+```text
+feat: reconstruir identidade visual e revista na versão 3
+```
+
+## Observação sobre conteúdo
+
+Textos, números, endereço, e-mail e links sociais devem ser revisados com o vereador antes da publicação definitiva. Os dados principais ficam em `content/site.ts`.
