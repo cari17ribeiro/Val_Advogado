@@ -61,3 +61,21 @@ Textos, números, endereço, e-mail e links sociais devem ser revisados com o ve
 - Galerias e mosaicos fotográficos responsivos.
 - Revista com mais áreas para imagens e enquadramento individual.
 - Ajustes de composição para evitar cortes e sobreposições.
+
+## V5 — Painel editorial e Supabase
+
+Rotas novas:
+
+- `/admin/login`: login e criação do administrador de teste.
+- `/admin`: editor das 20 páginas e enquadramento das fotos.
+- `/revista`: revista digital carregada do Supabase.
+- `/impressao`: versão A5 independente para impressão e PDF.
+
+Usuário de teste previsto:
+
+- E-mail: `admin@valadvogado.com.br`
+- Senha: `ValAdmin@2026`
+
+Na primeira utilização, clique em **Criar usuário de teste**. Dependendo da configuração de autenticação do Supabase, será necessário confirmar o e-mail antes de entrar.
+
+O projeto usa as variáveis públicas descritas em `.env.example`. A chave é publicável e a proteção de escrita é feita pelas políticas RLS do Supabase.

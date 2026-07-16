@@ -13,11 +13,11 @@ export function PdfButton() {
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement('a');
       anchor.href = url;
-      anchor.download = 'val-advogado-livreto-a5.pdf';
+      anchor.download = 'val-advogado-revista-20-paginas-a5.pdf';
       anchor.click();
       URL.revokeObjectURL(url);
     } catch {
-      window.location.href = '/downloads/val-advogado-livreto-a5.pdf';
+      window.location.href = '/downloads/val-advogado-revista-20-paginas-a5.pdf';
     } finally { setLoading(false); }
   }
   return <button className="button" onClick={download} disabled={loading}><Download size={18}/>{loading ? 'Gerando PDF…' : 'Gerar e baixar PDF'}</button>;

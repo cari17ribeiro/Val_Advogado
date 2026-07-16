@@ -1,5 +1,3 @@
 import Link from 'next/link';
-import { Magazine } from '@/components/Magazine';
-import { PdfButton } from '@/components/PdfButton';
-
-export default function RevistaPage(){return <main className="reader"><div className="readerbar"><Link href="/">← Voltar ao site</Link><span>Revista Digital • Edição 01</span><div className="actions"><PdfButton/><Link className="button ghost" href="/livreto">Modo impressão</Link></div></div><Magazine interactive/></main>}
+import { DynamicMagazine } from '@/components/DynamicMagazine';
+export default function RevistaPage(){return <main className="reader"><div className="readerbar"><Link href="/">← Voltar ao site</Link><span>Revista Digital • Edição 01 • 20 páginas</span><div className="actions"><Link className="button ghost" href="/impressao">Modo impressão</Link><Link className="button" href="/admin">Área administrativa</Link></div></div><DynamicMagazine/></main>}
