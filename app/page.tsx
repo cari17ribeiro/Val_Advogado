@@ -177,7 +177,7 @@ export default function Home() {
         <div className="magazine-feature-copy"><span className="section-kicker">Revista digital</span><h2>Doze páginas para folhear, compartilhar e imprimir.</h2><p>Uma experiência editorial com virada de páginas, leitura em tela cheia e uma versão A5 preparada para apresentação e impressão.</p><div className="hero-actions"><Link href="/revista" className="primary-action"><BookOpen size={19}/> Abrir revista</Link><Link href="/livreto" className="secondary-action">Visualizar livreto</Link></div></div>
       </motion.section>
 
-      <section className="contact-banner content-section"><div className="contact-glow" aria-hidden="true"/><div><span className="section-kicker">Participação popular</span><h2>O gabinete está de portas abertas.</h2><p>Envie sugestões, acompanhe projetos e participe das decisões que impactam a cidade.</p></div><a href={site.whatsapp} className="primary-action"><MessageCircle size={19}/> Falar no WhatsApp</a></section>
+      <section className="contact-banner content-section"><div className="contact-glow" aria-hidden="true"/><div><span className="section-kicker">Participação popular</span><h2>O gabinete está de portas abertas.</h2><p>Envie sugestões,acompanhe projetos e participe das decisões que impactam a cidade.</p></div><a href={site.whatsapp} className="primary-action"><MessageCircle size={19}/> Falar no WhatsApp</a></section>
 
       <footer className="site-footer-v3"><div className="footer-brand"><img src={photos.logo} alt="Logo Val Advogado"/><span>Transparência • Presença • Ação</span></div><div className="footer-links"><a href="#sobre">Quem é Val</a><a href="#causas">Causas</a><Link href="/revista">Revista</Link></div><small>Infojornal Digital © 2026</small></footer>
     </main>
