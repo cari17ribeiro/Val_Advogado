@@ -1,8 +1,8 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import { CanvasPage, backgroundStyle } from '@/components/editor/CanvasRenderer';
-import { mergeWithFallback, readLocalMagazinePages } from '@/lib/client-magazine-pages';
+import { mergeWithFallback } from '@/lib/client-magazine-pages';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
 import { fallbackPages } from '@/lib/fallback-pages';
 import { readSession, rest } from '@/lib/supabase-rest';
@@ -13,12 +13,10 @@ export function PrintMagazine({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) 
   const [pages, setPages] = useState<MagazinePage[]>(fallbackPages);
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    const localPages = readLocalMagazinePages();
-    if (localPages.length) setPages(mergeWithFallback([], localPages));
     const token = new URLSearchParams(window.location.search).get('token') || readSession()?.access_token;
     rest<MagazinePage[]>('magazine_pages?select=*&order=page_number.asc', {}, token)
-      .then((pageData) => setPages(mergeWithFallback(pageData, readLocalMagazinePages())))
-      .catch(() => setPages(mergeWithFallback([], readLocalMagazinePages())))
+      .then((pageData) => setPages(mergeWithFallback(pageData)))
+      .catch(() => setPages(fallbackPages))
       .finally(() => setLoaded(true));
   }, []);
   const documents = useMemo(() => pages.map((page) => ({ page, document: getCanvasDocument(page) })), [pages]);
@@ -45,3 +43,4 @@ export function PrintMagazine({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) 
     </div>
   );
 }
+

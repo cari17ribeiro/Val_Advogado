@@ -26,38 +26,6 @@ function completePages(remotePages: MagazinePage[]) {
   });
 }
 
-function readFileAsDataUrl(file: File) {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
-}
-
-async function makeLocalImageUrl(file: File) {
-  if (file.type === 'image/png' && file.size < 1_200_000) return readFileAsDataUrl(file);
-
-  const objectUrl = URL.createObjectURL(file);
-  try {
-    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-      img.src = objectUrl;
-    });
-    const maxSide = 1800;
-    const scale = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
-    const canvas = document.createElement('canvas');
-    canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
-    canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
-    canvas.getContext('2d')?.drawImage(image, 0, 0, canvas.width, canvas.height);
-    return canvas.toDataURL('image/jpeg', 0.88);
-  } finally {
-    URL.revokeObjectURL(objectUrl);
-  }
-}
-
 export function AdminApp() {
   const [pages, setPages] = useState<MagazinePage[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -156,26 +124,13 @@ export function AdminApp() {
   }, [pages, selectedIndex, session?.access_token]);
 
   const handleUpload = async (file: File) => {
-    let publicUrl = '';
-    let storagePath: string | undefined;
-    if (session?.access_token) {
-      try {
-        const uploaded = await uploadMedia(file, session.access_token);
-        publicUrl = uploaded.publicUrl;
-        storagePath = uploaded.path;
-      } catch {
-        publicUrl = await makeLocalImageUrl(file);
-        setStatus('Imagem aplicada localmente. Clique em Salvar para atualizar a revista.'); setStatusType('success');
-      }
-    } else {
-      publicUrl = await makeLocalImageUrl(file);
-      setStatus('Imagem aplicada localmente. Entre novamente para salvar no banco.'); setStatusType('error');
-    }
-    const item: MediaItem = { name: file.name, public_url: publicUrl, storage_path: storagePath, alt_text: file.name };
+    if (!session?.access_token) throw new Error('Sessão expirada. Entre novamente para enviar imagens.');
+    const uploaded = await uploadMedia(file, session.access_token);
+    const item: MediaItem = { name: file.name, public_url: uploaded.publicUrl, storage_path: uploaded.path, alt_text: file.name };
     setMedia((current) => [item, ...current]);
-    return publicUrl;
+    setStatus('Imagem enviada. Clique em Salvar para publicar a alteração.'); setStatusType('success');
+    return uploaded.publicUrl;
   };
-
   const choosePage = (index: number) => {
     if (dirty && !confirm('Há alterações ainda não salvas. Deseja mudar de página mesmo assim?')) return;
     setSelectedIndex(index); setDirty(false); setStatusType('idle');
@@ -209,7 +164,7 @@ export function AdminApp() {
       />
 
       <footer className="canva-page-strip">
-        <div className="canva-page-strip-title"><Settings /><span><b>20 páginas</b><small>Clique para editar</small></span></div>
+        <div className="canva-page-strip-title"><Settings /><span><b>{pages.length} páginas</b><small>Clique para editar</small></span></div>
         <div className="canva-page-thumbnails">
           {pages.map((item, index) => <button type="button" key={item.id} className={selectedIndex === index ? 'active' : ''} onClick={() => choosePage(index)}><span>{String(item.page_number).padStart(2, '0')}</span><b>{item.title || item.template}</b></button>)}
         </div>
@@ -221,5 +176,6 @@ export function AdminApp() {
     </main>
   );
 }
+
 
 

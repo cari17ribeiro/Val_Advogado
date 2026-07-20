@@ -617,7 +617,8 @@ const BUILDERS: Record<number, (page: MagazinePage) => CanvasDocument> = {
   1: page1, 2: page2, 3: page3, 4: page4, 5: page5,
   6: page6, 7: page7, 8: page8, 9: page9, 10: page10,
   11: page11, 12: page12, 13: page13, 14: page14, 15: page15,
-  16: page16, 17: page17, 18: page18, 19: page19, 20: page20,
+  16: page16, 17: page17, 18: page18, 19: page19, 20: page10,
+  21: page18, 22: page11, 23: page16, 24: page17, 25: page19, 26: page20,
 };
 
 export function defaultCanvasForPage(page: MagazinePage): CanvasDocument {
