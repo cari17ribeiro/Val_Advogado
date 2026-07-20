@@ -3,16 +3,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { CanvasPage } from '@/components/editor/CanvasRenderer';
+import { mergeWithFallback, readLocalMagazinePages } from '@/lib/client-magazine-pages';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
 import { fallbackPages } from '@/lib/fallback-pages';
-import { rest } from '@/lib/supabase-rest';
+import { readSession, rest } from '@/lib/supabase-rest';
 import type { MagazinePage } from '@/lib/editor-types';
-
-function completePages(remotePages: MagazinePage[]) {
-  if (!remotePages.length) return fallbackPages;
-  const byNumber = new Map(remotePages.filter((page) => page.is_published).map((page) => [page.page_number, page]));
-  return fallbackPages.map((fallback) => byNumber.get(fallback.page_number) || fallback);
-}
 
 export function DynamicMagazine({ print = false }: { print?: boolean }) {
   const [pages, setPages] = useState<MagazinePage[]>(fallbackPages);
@@ -21,9 +16,12 @@ export function DynamicMagazine({ print = false }: { print?: boolean }) {
   const [transitioning, setTransitioning] = useState(false);
 
   useEffect(() => {
-    rest<MagazinePage[]>('magazine_pages?select=*&is_published=eq.true&order=page_number.asc')
-      .then((pageData) => setPages(completePages(pageData)))
-      .catch(() => setPages(fallbackPages));
+    const localPages = readLocalMagazinePages();
+    if (localPages.length) setPages(mergeWithFallback([], localPages));
+    const token = readSession()?.access_token;
+    rest<MagazinePage[]>('magazine_pages?select=*&order=page_number.asc', {}, token)
+      .then((pageData) => setPages(mergeWithFallback(pageData, readLocalMagazinePages())))
+      .catch(() => setPages(mergeWithFallback([], readLocalMagazinePages())));
   }, []);
 
   useEffect(() => {

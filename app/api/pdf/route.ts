@@ -7,7 +7,9 @@ export const maxDuration = 60;
 
 export async function GET(request: NextRequest) {
   let browser;
-  const mode = new URL(request.url).searchParams.get('mode') === 'bleed' ? 'bleed' : 'proof';
+  const params = new URL(request.url).searchParams;
+  const mode = params.get('mode') === 'bleed' ? 'bleed' : 'proof';
+  const token = params.get('token');
   try {
     browser = await puppeteer.launch({
       args: chromium.args,
@@ -18,7 +20,9 @@ export async function GET(request: NextRequest) {
     const page = await browser.newPage();
     await page.setViewport({ width: 1748, height: 2480, deviceScaleFactor: 1 });
     const origin = new URL(request.url).origin;
-    await page.goto(`${origin}/impressao?pdf=${mode}&mode=${mode}`, { waitUntil: 'networkidle0', timeout: 45_000 });
+    const previewParams = new URLSearchParams({ pdf: mode, mode });
+    if (token) previewParams.set('token', token);
+    await page.goto(`${origin}/impressao?${previewParams.toString()}`, { waitUntil: 'networkidle0', timeout: 45_000 });
     await page.waitForSelector('[data-print-ready="true"]', { timeout: 45_000 });
     await page.waitForFunction(
       () => document.querySelectorAll('.print-sheet-v7').length > 0 && [...document.images].every((image) => image.complete),

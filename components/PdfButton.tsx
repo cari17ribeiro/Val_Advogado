@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Download, Printer } from 'lucide-react';
+import { readSession } from '@/lib/supabase-rest';
 
 export function PdfButton({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) {
   const [loading, setLoading] = useState(false);
@@ -10,7 +11,10 @@ export function PdfButton({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) {
   async function download() {
     setLoading(true);
     try {
-      const response = await fetch(`/api/pdf?mode=${mode}`);
+      const token = readSession()?.access_token;
+      const query = new URLSearchParams({ mode });
+      if (token) query.set('token', token);
+      const response = await fetch(`/api/pdf?${query.toString()}`);
       if (!response.ok) throw new Error('Falha ao gerar PDF');
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);

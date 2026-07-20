@@ -6,6 +6,7 @@ import {
   Settings, ShieldCheck,
 } from 'lucide-react';
 import { VisualEditor } from '@/components/editor/VisualEditor';
+import { writeLocalMagazinePages } from '@/lib/client-magazine-pages';
 import { defaultCanvasForPage, getCanvasDocument } from '@/lib/default-page-layouts';
 import { fallbackPages } from '@/lib/fallback-pages';
 import type { CanvasDocument, MagazinePage, MediaItem } from '@/lib/editor-types';
@@ -43,7 +44,9 @@ export function AdminApp() {
       rest<MagazinePage[]>('magazine_pages?select=*&order=page_number.asc', {}, session.access_token),
       rest<MediaItem[]>('media_library?select=id,name,public_url,storage_path,alt_text&order=created_at.desc&limit=40', {}, session.access_token).catch(() => []),
     ]).then(([pageData, mediaData]) => {
-      setPages(completePages(pageData));
+      const nextPages = completePages(pageData);
+      setPages(nextPages);
+      writeLocalMagazinePages(nextPages);
       setMedia(mediaData);
     }).catch((error: Error) => {
       setStatus(error.message);
@@ -63,9 +66,13 @@ export function AdminApp() {
   });
 
   const updateCanvas = useCallback((next: CanvasDocument) => {
-    setPages((current) => current.map((item, index) => index === selectedIndex
-      ? { ...item, elements: { ...(item.elements || {}), canvas: next } }
-      : item));
+    setPages((current) => {
+      const nextPages = current.map((item, index) => index === selectedIndex
+        ? { ...item, elements: { ...(item.elements || {}), canvas: next } }
+        : item);
+      writeLocalMagazinePages(nextPages);
+      return nextPages;
+    });
     setDirty(true);
   }, [selectedIndex]);
 
@@ -88,7 +95,7 @@ export function AdminApp() {
         quote: current.quote,
         background: current.background,
         elements: current.elements,
-        is_published: current.is_published,
+        is_published: true,
         updated_at: new Date().toISOString(),
       };
       const saved = current.id.startsWith('fallback-')
@@ -101,7 +108,13 @@ export function AdminApp() {
           body: JSON.stringify(payload),
         }, session.access_token);
       if (saved?.[0]) {
-        setPages((currentPages) => currentPages.map((item, index) => index === selectedIndex ? saved[0] : item));
+        setPages((currentPages) => {
+          const nextPages = currentPages.map((item, index) => index === selectedIndex ? saved[0] : item);
+          writeLocalMagazinePages(nextPages);
+          return nextPages;
+        });
+      } else {
+        writeLocalMagazinePages(pages);
       }
       setDirty(false); setStatus('Página salva e sincronizada.'); setStatusType('success');
       setTimeout(() => setStatusType('idle'), 2600);
@@ -135,7 +148,7 @@ export function AdminApp() {
           <a href="/" target="_blank"><Home /> Site</a>
           <a href="/revista" target="_blank"><BookOpen /> Visualizar</a>
           <a href="/impressao" target="_blank"><FileDown /> PDF</a>
-          <button type="button" className="canva-save" onClick={() => void savePage()}><Save /> Salvar</button>
+          <button type="button" className="canva-save" onClick={() => void savePage()} disabled={statusType === 'saving'}><Save /> {statusType === 'saving' ? 'Salvando...' : 'Salvar'}</button>
           <button type="button" className="canva-logout" onClick={() => { clearSession(); location.href = '/admin/login'; }} title="Sair"><LogOut /></button>
         </nav>
       </header>
