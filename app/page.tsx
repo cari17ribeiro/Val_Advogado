@@ -23,6 +23,7 @@ import {
   Users,
 } from 'lucide-react';
 import { Header } from '@/components/Header';
+import { HomeMagazinePreview } from '@/components/HomeMagazinePreview';
 import { causes, photos, priorityProjects, site } from '@/content/site';
 
 const causeIcons = [Stethoscope, GraduationCap, PawPrint, ShieldCheck, Building2, Landmark];
@@ -164,8 +165,8 @@ export default function Home() {
       </section>
 
       <motion.section className="content-section magazine-feature" variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.75 }}>
-        <div className="magazine-preview-v3" aria-hidden="true"><div className="preview-page preview-page-left"><img src={photos.hero} alt="" /><span>VAL</span></div><div className="preview-spine" /><div className="preview-page preview-page-right"><small>EDIÇÃO 01</small><h3>Inclusão.<br />Esporte.<br />Resultados.</h3><div className="preview-lines"><i /><i /><i /></div></div></div>
-        <div className="magazine-feature-copy"><span className="section-kicker">Revista digital</span><h2>Vinte páginas para folhear, compartilhar e imprimir.</h2><p>Uma experiência editorial com o briefing real do mandato, emendas impositivas, parceria com Renata Abreu e versão A5 preparada para apresentação e impressão.</p><div className="hero-actions"><Link href="/revista" className="primary-action"><BookOpen size={19} /> Abrir revista</Link><Link href="/livreto" className="secondary-action">Visualizar livreto</Link></div></div>
+        <HomeMagazinePreview />
+        <div className="magazine-feature-copy"><span className="section-kicker">Revista digital</span><h2>Vinte e seis páginas para folhear, compartilhar e imprimir.</h2><p>A prévia da capa e do sumário usa o mesmo conteúdo salvo no painel administrativo, com briefing real do mandato, emendas impositivas, parceria com Renata Abreu e versão A5 preparada para apresentação e impressão.</p><div className="hero-actions"><Link href="/revista" className="primary-action"><BookOpen size={19} /> Abrir revista</Link><Link href="/livreto" className="secondary-action">Visualizar livreto</Link></div></div>
       </motion.section>
 
       <section className="contact-banner content-section"><div className="contact-glow" aria-hidden="true" /><div><span className="section-kicker">Participação popular</span><h2>O gabinete está de portas abertas.</h2><p>Envie sugestões, acompanhe projetos e participe das decisões que impactam a cidade.</p></div><a href={site.whatsapp} className="primary-action"><MessageCircle size={19} /> Falar no WhatsApp</a></section>

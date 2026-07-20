@@ -175,6 +175,13 @@ img{display:block;max-width:100%}
 .preview-page-right h3{margin:16% 0 12%;font:700 clamp(28px,4.1vw,58px)/.92 'Playfair Display'}
 .preview-lines{display:grid;gap:8px}.preview-lines i{height:7px;border-radius:999px;background:rgba(255,255,255,.15)}.preview-lines i:nth-child(2){width:82%}.preview-lines i:nth-child(3){width:64%}
 .preview-spine{position:absolute;z-index:6;left:50%;top:0;bottom:0;width:2px;background:linear-gradient(to right,rgba(0,0,0,.3),rgba(255,255,255,.55),rgba(0,0,0,.3));box-shadow:0 0 18px rgba(0,0,0,.35)}
+.home-magazine-live-preview{position:relative;width:100%;aspect-ratio:1.41;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);perspective:1500px;filter:drop-shadow(0 38px 55px rgba(15,23,42,.24))}
+.home-live-page{position:relative;min-width:0;overflow:hidden;background:#fff;box-shadow:0 1px 0 rgba(255,255,255,.7) inset}
+.home-live-page-left{transform:rotateY(5.5deg);transform-origin:right}
+.home-live-page-right{transform:rotateY(-5.5deg);transform-origin:left}
+.home-live-page .canvas-page{width:100%;height:100%;aspect-ratio:auto;box-shadow:none;border-radius:0}
+.home-live-page .canvas-element{pointer-events:none}
+.home-live-spine{position:absolute;z-index:30;left:50%;top:0;bottom:0;width:12px;transform:translateX(-50%);background:linear-gradient(90deg,rgba(0,0,0,.24),rgba(255,255,255,.34),rgba(0,0,0,.18));box-shadow:0 0 18px rgba(7,31,56,.18)}
 .magazine-feature-copy>p{max-width:570px}
 
 /* Contact and footer */
@@ -384,7 +391,7 @@ img{display:block;max-width:100%}
   .home-hero-copy{margin:auto}.glass-chip{margin:auto}.home-hero-copy>p{margin-inline:auto}.hero-actions,.hero-trust{justify-content:center}
   .home-hero-visual{min-height:620px}.portrait-glass{height:600px;width:min(540px,90%)}.card-top{left:8%}.card-bottom{right:8%}
   .story-section,.street-section,.magazine-feature{grid-template-columns:1fr}.story-copy,.street-copy,.magazine-feature-copy{max-width:760px}
-  .story-media{order:2}.street-gallery{height:560px}.magazine-preview-v3{max-width:780px;margin:auto}
+  .story-media{order:2}.street-gallery{height:560px}.magazine-preview-v3,.home-magazine-live-preview{max-width:780px;margin:auto}
   .cause-panel,.cause-panel:nth-child(even){grid-template-columns:1fr}.cause-panel{min-height:auto}.cause-image{min-height:420px}.autism-panel .glass-panel,.autism-visual{grid-column:1;grid-row:auto}.autism-visual{min-height:400px;order:1}.autism-panel .glass-panel{order:2;margin:0 20px 20px}
 }
 
