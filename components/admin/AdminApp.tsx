@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   BookOpen, CheckCircle2, ExternalLink, FileDown, Home, LogOut, Save,
   Settings, ShieldCheck,
@@ -33,9 +33,14 @@ export function AdminApp() {
   const [statusType, setStatusType] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
   const [dirty, setDirty] = useState(false);
   const [loading, setLoading] = useState(true);
+  const pagesRef = useRef<MagazinePage[]>([]);
+  const selectedIndexRef = useRef(0);
   const session = useMemo(() => readSession(), []);
   const page = pages[selectedIndex];
   const canvas = page ? getCanvasDocument(page) : null;
+
+  useEffect(() => { pagesRef.current = pages; }, [pages]);
+  useEffect(() => { selectedIndexRef.current = selectedIndex; }, [selectedIndex]);
 
   useEffect(() => {
     if (!session?.access_token) { location.href = '/admin/login'; return; }
@@ -44,6 +49,7 @@ export function AdminApp() {
       rest<MediaItem[]>('media_library?select=id,name,public_url,storage_path,alt_text&order=created_at.desc&limit=40', {}, session.access_token).catch(() => []),
     ]).then(([pageData, mediaData]) => {
       const nextPages = completePages(pageData);
+      pagesRef.current = nextPages;
       setPages(nextPages);
       setMedia(mediaData);
     }).catch((error: Error) => {
@@ -68,6 +74,7 @@ export function AdminApp() {
       const nextPages = current.map((item, index) => index === selectedIndex
         ? { ...item, elements: { ...(item.elements || {}), canvas: next } }
         : item);
+      pagesRef.current = nextPages;
       return nextPages;
     });
     setDirty(true);
@@ -79,7 +86,8 @@ export function AdminApp() {
   };
 
   const savePage = useCallback(async () => {
-    const current = pages[selectedIndex];
+    const activeIndex = selectedIndexRef.current;
+    const current = pagesRef.current[activeIndex];
     if (!current) return;
     if (!session?.access_token) {
       setStatus('Sessão expirada. Entre novamente para salvar no Supabase.');
@@ -129,8 +137,10 @@ export function AdminApp() {
         throw new Error('O Supabase não atualizou nenhuma linha. Verifique as policies de INSERT/UPDATE/SELECT da tabela magazine_pages para usuários autenticados.');
       }
       if (saved?.[0]) {
+        const savedPage = saved[0];
         setPages((currentPages) => {
-          const nextPages = currentPages.map((item, index) => index === selectedIndex ? saved[0] : item);
+          const nextPages = currentPages.map((item, index) => index === activeIndex ? savedPage : item);
+          pagesRef.current = nextPages;
           return nextPages;
         });
       }
@@ -139,7 +149,7 @@ export function AdminApp() {
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'Não foi possível salvar.'); setStatusType('error');
     }
-  }, [pages, selectedIndex, session?.access_token]);
+  }, [session?.access_token]);
 
   const handleUpload = async (file: File) => {
     if (!session?.access_token) throw new Error('Sessão expirada. Entre novamente para enviar imagens.');
