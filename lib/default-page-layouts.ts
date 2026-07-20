@@ -311,20 +311,37 @@ function page4(page: MagazinePage) {
 }
 
 function page5(page: MagazinePage) {
-  const elements: CanvasElement[] = [label(page), rule('p5-rule'),
-    text('p5-title', 'Título', page.title || 'Trabalho de campo', 6, 11, 65, 12, 4.7, { color: COLORS.navy }),
-    ...quote('p5-quote', page.quote || 'Resultado começa com escuta, presença e acompanhamento.', 6, 25, 54, 14, COLORS.blue),
-    image('p5-main', 'Reunião demonstrativa', ASSETS.demoMeeting, 51, 9, 42, 34, { frameStyle: 'polaroid', rotation: 1, positionY: 42 }),
-    image('p5-a', 'Atendimento demonstrativo', ASSETS.demoHealthcare, 6, 47, 28, 23, { frameStyle: 'polaroid', rotation: -1.2 }),
-    image('p5-b', 'Família demonstrativa', ASSETS.demoFamily, 37, 47, 26, 23, { frameStyle: 'polaroid', rotation: 1.4, positionY: 40 }),
-    image('p5-c', 'Educação demonstrativa', ASSETS.demoEducation, 67, 47, 26, 23, { frameStyle: 'polaroid', rotation: -1.3 }),
-    body('p5-a-text', 'Fiscalização contínua e diálogo com os bairros.', 6, 73, 27, 8, { fontSize: 1.25, color: '#273f55' }),
-    body('p5-b-text', 'Apoio social e fortalecimento das iniciativas locais.', 37, 73, 27, 8, { fontSize: 1.25, color: '#273f55' }),
-    body('p5-c-text', 'Projetos que ampliam oportunidades.', 67, 73, 26, 8, { fontSize: 1.25, color: '#273f55' }),
-    shape('p5-footer', 'Faixa inferior', 0, 87, 100, 13, 'linear-gradient(90deg,#075985,#06b6d4)', { allowBleed: true }),
-    text('p5-footer-text', 'Chamada', (page.body || 'Fiscalização contínua, ouvidoria móvel e apoio comunitário.').toUpperCase(), 7, 90.5, 86, 5, 1.35, { color: '#fff', fontFamily: 'Arial Black', align: 'center', lineHeight: 1.05, z: 12 }),
+  const paragraphOne = 'A inclusão não acontece somente quando uma criança consegue uma vaga na escola. Ela acontece quando encontra professores preparados, ambiente adequado, tratamento contínuo, acesso a medicamentos e uma rede capaz de acolher também sua família.';
+  const paragraphTwo = 'Por isso, a defesa das pessoas com Transtorno do Espectro Autista não aparece no mandato de Val como uma ação isolada. Ela está presente em projetos voltados à educação, saúde, assistência social, acessibilidade e planejamento das políticas públicas.';
+  const paragraphThree = 'O objetivo é construir uma cidade que reconheça as diferentes necessidades existentes dentro do espectro e ofereça condições para que cada pessoa desenvolva suas potencialidades com dignidade.';
+  const highlight = page.quote || 'Inclusão de verdade exige acolhimento, conhecimento, estrutura e investimento.';
+  const elements: CanvasElement[] = [
+    shape('p5-orb-blue', 'Luz azul', -13, -8, 58, 42, 'radial-gradient(circle,rgba(72,187,255,.42),rgba(36,99,235,.08) 57%,transparent 72%)', { borderRadius: 50, allowBleed: true, locked: true, z: 1 }),
+    shape('p5-orb-gold', 'Luz dourada', 68, 72, 45, 40, 'radial-gradient(circle,rgba(250,204,21,.28),rgba(245,158,11,.06) 55%,transparent 72%)', { borderRadius: 50, allowBleed: true, locked: true, z: 1 }),
+    shape('p5-spectrum', 'Faixa do espectro', 0, 0, 100, 1.25, 'linear-gradient(90deg,#38bdf8 0%,#6366f1 25%,#a855f7 46%,#f59e0b 70%,#22c55e 86%,#06b6d4 100%)', { allowBleed: true, locked: true, z: 4 }),
+    label(page, '#dff8ff'),
+    rule('p5-rule', 7.2, 'rgba(186,230,253,.72)'),
+    text('p5-kicker', 'Tema', 'AUTISMO  •  INCLUSÃO  •  DIREITOS', 6, 10.2, 58, 3, 1.05, { color: '#9eeaff', fontFamily: 'Inter', fontWeight: 900, letterSpacing: .12, z: 12 }),
+    text('p5-title', 'Título', page.title || 'Autismo: uma causa permanente do mandato', 6, 14, 82, 14, 4.55, { color: '#fff', minFontSize: 3.1, lineHeight: .92, z: 12 }),
+    text('p5-infinity', 'Símbolo da neurodiversidade', '∞', 79, 7.5, 16, 17, 10, { color: 'rgba(255,255,255,.17)', fontFamily: 'Georgia', fontWeight: 700, align: 'center', lineHeight: .82, locked: true, z: 5 }),
+    shape('p5-card-education', 'Cartão glass educação', 6, 31, 88, 16.5, 'linear-gradient(110deg,rgba(255,255,255,.20),rgba(255,255,255,.09))', { borderColor: 'rgba(186,230,253,.42)', borderWidth: 1, borderRadius: 3.2, shadow: '0 12px 30px rgba(3,18,48,.18)', z: 5 }),
+    icon('p5-icon-education', 'Educação inclusiva', 'GraduationCap', 8, 34, 8, 7, '#ffffff', 'rgba(56,189,248,.24)'),
+    text('p5-heading-education', 'Título do bloco', 'INCLUSÃO QUE ACOMPANHA', 18, 33.2, 69, 3, 1.16, { color: '#b9f2ff', fontFamily: 'Inter', fontWeight: 900, letterSpacing: .08, z: 12 }),
+    body('p5-body-education', paragraphOne, 18, 37, 70, 8.2, { color: '#f4fbff', fontSize: 1.24, fontWeight: 560, lineHeight: 1.25, z: 12 }),
+    shape('p5-card-policy', 'Cartão glass políticas públicas', 6, 50, 88, 18.5, 'linear-gradient(110deg,rgba(255,255,255,.18),rgba(255,255,255,.07))', { borderColor: 'rgba(196,181,253,.46)', borderWidth: 1, borderRadius: 3.2, shadow: '0 12px 30px rgba(3,18,48,.16)', z: 5 }),
+    icon('p5-icon-policy', 'Rede de políticas públicas', 'HeartPulse', 8, 54, 8, 7, '#ffffff', 'rgba(168,85,247,.24)'),
+    text('p5-heading-policy', 'Título do bloco', 'UMA POLÍTICA PÚBLICA PERMANENTE', 18, 52.3, 69, 3, 1.16, { color: '#e4d8ff', fontFamily: 'Inter', fontWeight: 900, letterSpacing: .07, z: 12 }),
+    body('p5-body-policy', paragraphTwo, 18, 56.2, 70, 10, { color: '#f7f4ff', fontSize: 1.2, fontWeight: 560, lineHeight: 1.25, z: 12 }),
+    shape('p5-card-dignity', 'Cartão glass dignidade', 6, 71, 88, 13.5, 'linear-gradient(110deg,rgba(255,255,255,.18),rgba(255,255,255,.08))', { borderColor: 'rgba(153,246,228,.46)', borderWidth: 1, borderRadius: 3.2, shadow: '0 12px 30px rgba(3,18,48,.15)', z: 5 }),
+    icon('p5-icon-dignity', 'Dignidade e autonomia', 'Accessibility', 8, 74, 8, 7, '#ffffff', 'rgba(20,184,166,.25)'),
+    text('p5-heading-dignity', 'Título do bloco', 'DIGNIDADE EM TODO O ESPECTRO', 18, 72.8, 69, 3, 1.16, { color: '#baf7ed', fontFamily: 'Inter', fontWeight: 900, letterSpacing: .07, z: 12 }),
+    body('p5-body-dignity', paragraphThree, 18, 76.5, 70, 6.5, { color: '#f1fffc', fontSize: 1.18, fontWeight: 560, lineHeight: 1.24, z: 12 }),
+    shape('p5-highlight', 'Frase de destaque', 6, 87, 88, 8.3, 'linear-gradient(100deg,#f9c74f 0%,#f59e0b 38%,#22c55e 100%)', { borderColor: 'rgba(255,255,255,.48)', borderWidth: 1, borderRadius: 3.2, shadow: '0 13px 30px rgba(3,18,48,.24)', z: 7 }),
+    icon('p5-highlight-icon', 'Acolhimento', 'HeartHandshake', 8, 88.6, 6, 5, '#ffffff', 'rgba(7,31,56,.22)'),
+    text('p5-highlight-text', 'Frase de destaque', highlight, 16, 88.5, 73, 5, 1.48, { color: '#071f38', fontFamily: 'Georgia', fontWeight: 800, italic: true, lineHeight: 1.14, letterSpacing: 0, z: 12 }),
+    pageNumber(page, 'rgba(255,255,255,.72)'),
   ];
-  return document(page, elements, { type: 'image', value: ASSETS.mosaic, fit: 'cover', overlay: 'linear-gradient(rgba(247,250,251,.95),rgba(247,250,251,.95))' }, 'mural-fotografico');
+  return document(page, elements, { type: 'gradient', value: 'linear-gradient(145deg,#061936 0%,#0b4f8a 34%,#5146a8 65%,#087f8c 100%)' }, 'autismo-permanente', false);
 }
 
 function page6(page: MagazinePage) {

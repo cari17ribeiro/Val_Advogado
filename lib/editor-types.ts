@@ -106,6 +106,7 @@ export type MagazinePage = {
   background: string | null;
   elements: Record<string, unknown> | null;
   is_published: boolean;
+  updated_at?: string;
 };
 
 export type MediaItem = {

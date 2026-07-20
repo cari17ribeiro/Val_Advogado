@@ -6,7 +6,7 @@ import { CanvasPage } from '@/components/editor/CanvasRenderer';
 import { mergeWithFallback } from '@/lib/client-magazine-pages';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
 import { fallbackPages } from '@/lib/fallback-pages';
-import { readSession, rest } from '@/lib/supabase-rest';
+import { fetchPublishedPages, subscribeToMagazineUpdates } from '@/lib/magazine-sync';
 import type { MagazinePage } from '@/lib/editor-types';
 
 export function DynamicMagazine({ print = false }: { print?: boolean }) {
@@ -16,10 +16,13 @@ export function DynamicMagazine({ print = false }: { print?: boolean }) {
   const [transitioning, setTransitioning] = useState(false);
 
   useEffect(() => {
-    const token = readSession()?.access_token;
-    rest<MagazinePage[]>('magazine_pages?select=*&order=page_number.asc', {}, token)
-      .then((pageData) => setPages(mergeWithFallback(pageData)))
-      .catch(() => setPages(fallbackPages));
+    let active = true;
+    const refresh = () => fetchPublishedPages()
+      .then((pageData) => { if (active) setPages(mergeWithFallback(pageData, true)); })
+      .catch(() => { if (active) setPages(fallbackPages); });
+    void refresh();
+    const unsubscribe = subscribeToMagazineUpdates(refresh);
+    return () => { active = false; unsubscribe(); };
   }, []);
 
   useEffect(() => {

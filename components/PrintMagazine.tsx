@@ -5,7 +5,7 @@ import { CanvasPage, backgroundStyle } from '@/components/editor/CanvasRenderer'
 import { mergeWithFallback } from '@/lib/client-magazine-pages';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
 import { fallbackPages } from '@/lib/fallback-pages';
-import { readSession, rest } from '@/lib/supabase-rest';
+import { fetchPublishedPages } from '@/lib/magazine-sync';
 import type { MagazinePage } from '@/lib/editor-types';
 
 export function PrintMagazine({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) {
@@ -13,9 +13,8 @@ export function PrintMagazine({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) 
   const [pages, setPages] = useState<MagazinePage[]>(fallbackPages);
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    const token = new URLSearchParams(window.location.search).get('token') || readSession()?.access_token;
-    rest<MagazinePage[]>('magazine_pages?select=*&order=page_number.asc', {}, token)
-      .then((pageData) => setPages(mergeWithFallback(pageData)))
+    fetchPublishedPages()
+      .then((pageData) => setPages(mergeWithFallback(pageData, true)))
       .catch(() => setPages(fallbackPages))
       .finally(() => setLoaded(true));
   }, []);

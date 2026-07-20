@@ -13,13 +13,15 @@
 alter table public.magazine_pages enable row level security;
 
 grant select on public.magazine_pages to anon;
+revoke insert, update, delete on public.magazine_pages from anon;
 grant select, insert, update, delete on public.magazine_pages to authenticated;
 
 drop policy if exists "magazine_pages public read published" on public.magazine_pages;
+drop policy if exists "public read published pages" on public.magazine_pages;
 create policy "magazine_pages public read published"
 on public.magazine_pages
 for select
-to anon, authenticated
+to anon
 using (is_published = true);
 
 drop policy if exists "magazine_pages authenticated read all" on public.magazine_pages;

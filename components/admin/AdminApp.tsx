@@ -8,6 +8,7 @@ import {
 import { VisualEditor } from '@/components/editor/VisualEditor';
 import { defaultCanvasForPage, getCanvasDocument } from '@/lib/default-page-layouts';
 import { fallbackPages } from '@/lib/fallback-pages';
+import { notifyMagazineUpdated } from '@/lib/magazine-sync';
 import type { CanvasDocument, MagazinePage, MediaItem } from '@/lib/editor-types';
 import { clearSession, readSession, rest, uploadMedia } from '@/lib/supabase-rest';
 
@@ -143,6 +144,7 @@ export function AdminApp() {
           pagesRef.current = nextPages;
           return nextPages;
         });
+        notifyMagazineUpdated(savedPage);
       }
       setDirty(false); setStatus('Página salva e sincronizada.'); setStatusType('success');
       setTimeout(() => setStatusType('idle'), 2600);
