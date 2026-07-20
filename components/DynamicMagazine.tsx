@@ -5,12 +5,26 @@ import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { CanvasPage } from '@/components/editor/CanvasRenderer';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
 import { fallbackPages } from '@/lib/fallback-pages';
+import { rest } from '@/lib/supabase-rest';
+import type { MagazinePage } from '@/lib/editor-types';
+
+function completePages(remotePages: MagazinePage[]) {
+  if (!remotePages.length) return fallbackPages;
+  const byNumber = new Map(remotePages.filter((page) => page.is_published).map((page) => [page.page_number, page]));
+  return fallbackPages.map((fallback) => byNumber.get(fallback.page_number) || fallback);
+}
 
 export function DynamicMagazine({ print = false }: { print?: boolean }) {
-  const [pages] = useState(fallbackPages);
+  const [pages, setPages] = useState<MagazinePage[]>(fallbackPages);
   const [index, setIndex] = useState(0);
   const [single, setSingle] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
+
+  useEffect(() => {
+    rest<MagazinePage[]>('magazine_pages?select=*&is_published=eq.true&order=page_number.asc')
+      .then((pageData) => setPages(completePages(pageData)))
+      .catch(() => setPages(fallbackPages));
+  }, []);
 
   useEffect(() => {
     const update = () => setSingle(window.innerWidth < 900);

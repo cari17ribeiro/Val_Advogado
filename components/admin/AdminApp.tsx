@@ -7,8 +7,15 @@ import {
 } from 'lucide-react';
 import { VisualEditor } from '@/components/editor/VisualEditor';
 import { defaultCanvasForPage, getCanvasDocument } from '@/lib/default-page-layouts';
+import { fallbackPages } from '@/lib/fallback-pages';
 import type { CanvasDocument, MagazinePage, MediaItem } from '@/lib/editor-types';
 import { clearSession, readSession, rest, uploadMedia } from '@/lib/supabase-rest';
+
+function completePages(remotePages: MagazinePage[]) {
+  if (!remotePages.length) return fallbackPages;
+  const byNumber = new Map(remotePages.map((page) => [page.page_number, page]));
+  return fallbackPages.map((fallback) => byNumber.get(fallback.page_number) || fallback);
+}
 
 export function AdminApp() {
   const [pages, setPages] = useState<MagazinePage[]>([]);
@@ -28,7 +35,7 @@ export function AdminApp() {
       rest<MagazinePage[]>('magazine_pages?select=*&order=page_number.asc', {}, session.access_token),
       rest<MediaItem[]>('media_library?select=id,name,public_url,storage_path,alt_text&order=created_at.desc&limit=40', {}, session.access_token).catch(() => []),
     ]).then(([pageData, mediaData]) => {
-      setPages(pageData);
+      setPages(completePages(pageData));
       setMedia(mediaData);
     }).catch((error: Error) => {
       setStatus(error.message);
@@ -61,17 +68,33 @@ export function AdminApp() {
 
   const savePage = useCallback(async () => {
     const current = pages[selectedIndex];
-    if (!current || !session?.access_token || current.id.startsWith('fallback-')) return;
-    setStatus('Salvando páginaâ€¦'); setStatusType('saving');
+    if (!current || !session?.access_token) return;
+    setStatus('Salvando página...'); setStatusType('saving');
     try {
-      await rest(`magazine_pages?id=eq.${current.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          title: current.title, subtitle: current.subtitle, body: current.body, quote: current.quote,
-          background: current.background, elements: current.elements, is_published: current.is_published,
-          updated_at: new Date().toISOString(),
-        }),
-      }, session.access_token);
+      const payload = {
+        page_number: current.page_number,
+        template: current.template,
+        title: current.title,
+        subtitle: current.subtitle,
+        body: current.body,
+        quote: current.quote,
+        background: current.background,
+        elements: current.elements,
+        is_published: current.is_published,
+        updated_at: new Date().toISOString(),
+      };
+      const saved = current.id.startsWith('fallback-')
+        ? await rest<MagazinePage[]>('magazine_pages', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        }, session.access_token)
+        : await rest<MagazinePage[]>(`magazine_pages?id=eq.${current.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify(payload),
+        }, session.access_token);
+      if (saved?.[0]) {
+        setPages((currentPages) => currentPages.map((item, index) => index === selectedIndex ? saved[0] : item));
+      }
       setDirty(false); setStatus('Página salva e sincronizada.'); setStatusType('success');
       setTimeout(() => setStatusType('idle'), 2600);
     } catch (error) {
@@ -92,7 +115,7 @@ export function AdminApp() {
     setSelectedIndex(index); setDirty(false); setStatusType('idle');
   };
 
-  if (loading) return <div className="admin-loading"><span className="ve-loader" /> Carregando editor visualâ€¦</div>;
+  if (loading) return <div className="admin-loading"><span className="ve-loader" /> Carregando editor visual...</div>;
   if (!page || !canvas) return <div className="admin-loading">Não foi possível carregar as páginas da revista.</div>;
 
   return (
@@ -131,4 +154,5 @@ export function AdminApp() {
     </main>
   );
 }
+
 
