@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { PrintMagazine } from '@/components/PrintMagazine';
 import { PdfButton } from '@/components/PdfButton';
 
@@ -11,7 +11,7 @@ export default async function Impressao({ searchParams }: Props) {
   return (
     <main className="db-print-view print-view-v7">
       <div className="print-toolbar">
-        <Link href="/">← Site</Link>
+        <Link href="/">â† Site</Link>
         <span>Prévia editorial • 20 páginas • A5</span>
         <div className="print-toolbar-actions">
           <PdfButton mode="proof" />
@@ -22,3 +22,4 @@ export default async function Impressao({ searchParams }: Props) {
     </main>
   );
 }
+

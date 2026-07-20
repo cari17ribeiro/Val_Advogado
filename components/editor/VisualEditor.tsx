@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -342,7 +342,7 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
             <input ref={replaceInputRef} hidden type="file" accept="image/*" onChange={(event) => replaceImage(event.target.files?.[0])} />
           </>
         )}
-        {uploading && <div className="ve-uploading"><Upload className="spin" /> Enviando imagem…</div>}
+        {uploading && <div className="ve-uploading"><Upload className="spin" /> Enviando imagemâ€¦</div>}
       </aside>
     </div>
   );
@@ -362,7 +362,7 @@ function TextInspector({ element, onChange }: { element: TextElement; onChange: 
 function ImageInspector({ element, onChange, onReplace, uploading }: { element: ImageElement; onChange: (element: ImageElement) => void; onReplace: () => void; uploading: boolean }) {
   const patch = (value: Partial<ImageElement>) => onChange({ ...element, ...value });
   return <div className="ve-type-inspector">
-    <button type="button" className="ve-replace-button" onClick={onReplace}><Upload /> {uploading ? 'Enviando…' : 'Substituir fotografia'}</button>
+    <button type="button" className="ve-replace-button" onClick={onReplace}><Upload /> {uploading ? 'Enviandoâ€¦' : 'Substituir fotografia'}</button>
     <label className="ve-field"><span>URL</span><textarea rows={3} value={element.src} onChange={(event) => patch({ src: event.target.value })} /></label>
     <label className="ve-field"><span>Ajuste</span><select value={element.fit} onChange={(event) => patch({ fit: event.target.value as ImageElement['fit'] })}><option value="cover">Preencher moldura</option><option value="contain">Mostrar imagem inteira</option></select></label>
     <label className="ve-field"><span>Estilo da foto</span><select value={element.frameStyle || 'rounded'} onChange={(event) => patch({ frameStyle: event.target.value as ImageElement['frameStyle'] })}><option value="none">Sem moldura</option><option value="rounded">Editorial arredondada</option><option value="polaroid">Foto impressa</option><option value="circle">Circular</option><option value="arch">Arco</option><option value="torn">Papel rasgado</option></select></label>
@@ -383,3 +383,5 @@ function IconInspector({ element, onChange }: { element: IconElement; onChange: 
   const patch = (value: Partial<IconElement>) => onChange({ ...element, ...value });
   return <div className="ve-type-inspector"><label className="ve-field"><span>Ícone</span><select value={element.icon} onChange={(event) => patch({ icon: event.target.value })}>{iconNames.map((name) => <option key={name}>{name}</option>)}</select></label><ColorControl label="Cor do ícone" value={element.color} onChange={(color) => patch({ color })} /><ColorControl label="Fundo" value={element.background} onChange={(background) => patch({ background })} /><div className="ve-grid-2"><NumberControl label="Espaço interno" value={element.padding} min={0} max={45} onChange={(padding) => patch({ padding })} /><NumberControl label="Cantos" value={element.borderRadius} min={0} max={50} onChange={(borderRadius) => patch({ borderRadius })} /></div></div>;
 }
+
+

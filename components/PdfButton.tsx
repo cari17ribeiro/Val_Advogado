@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { Download, Printer } from 'lucide-react';
@@ -27,7 +27,8 @@ export function PdfButton({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) {
   return (
     <button className={`button pdf-mode-${mode}`} onClick={download} disabled={loading}>
       {isBleed ? <Printer size={18} /> : <Download size={18} />}
-      {loading ? 'Gerando…' : isBleed ? 'PDF gráfica + sangria' : 'PDF prova A5'}
+      {loading ? 'Gerandoâ€¦' : isBleed ? 'PDF gráfica + sangria' : 'PDF prova A5'}
     </button>
   );
 }
+

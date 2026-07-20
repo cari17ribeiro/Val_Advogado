@@ -1,4 +1,4 @@
-export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://suwjmyetnifzeehirpxt.supabase.co';
+﻿export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://suwjmyetnifzeehirpxt.supabase.co';
 export const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_6W70-4_IK1zKaT6fr8J2vg_FL8D_RWq';
 
 export type AuthSession = {
@@ -98,3 +98,4 @@ export async function uploadMedia(file: File, token: string) {
   }
   return { path, publicUrl };
 }
+

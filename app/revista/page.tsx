@@ -1,11 +1,11 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { DynamicMagazine } from '@/components/DynamicMagazine';
 
 export default function RevistaPage() {
   return (
     <main className="reader">
       <div className="readerbar">
-        <Link href="/">← Voltar ao site</Link>
+        <Link href="/">â† Voltar ao site</Link>
         <span>Revista Digital • Edição 01 • 20 páginas</span>
         <div className="actions">
           <Link className="button ghost" href="/impressao">Modo impressão</Link>
@@ -16,3 +16,4 @@ export default function RevistaPage() {
     </main>
   );
 }
+

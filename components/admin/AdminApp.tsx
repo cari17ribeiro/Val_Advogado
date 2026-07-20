@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
@@ -62,7 +62,7 @@ export function AdminApp() {
   const savePage = useCallback(async () => {
     const current = pages[selectedIndex];
     if (!current || !session?.access_token || current.id.startsWith('fallback-')) return;
-    setStatus('Salvando página…'); setStatusType('saving');
+    setStatus('Salvando páginaâ€¦'); setStatusType('saving');
     try {
       await rest(`magazine_pages?id=eq.${current.id}`, {
         method: 'PATCH',
@@ -92,7 +92,7 @@ export function AdminApp() {
     setSelectedIndex(index); setDirty(false); setStatusType('idle');
   };
 
-  if (loading) return <div className="admin-loading"><span className="ve-loader" /> Carregando editor visual…</div>;
+  if (loading) return <div className="admin-loading"><span className="ve-loader" /> Carregando editor visualâ€¦</div>;
   if (!page || !canvas) return <div className="admin-loading">Não foi possível carregar as páginas da revista.</div>;
 
   return (
@@ -131,3 +131,4 @@ export function AdminApp() {
     </main>
   );
 }
+

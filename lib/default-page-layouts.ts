@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   CanvasDocument, CanvasElement, ImageElement, MagazinePage, ShapeElement, TextElement,
 } from './editor-types';
 
@@ -58,7 +58,7 @@ const text = (
   minFontSize: options.minFontSize ?? Math.max(1.45, fontSize * 0.72),
   fontWeight: options.fontWeight ?? 800,
   lineHeight: options.lineHeight ?? .94,
-  letterSpacing: options.letterSpacing ?? -.025,
+  letterSpacing: options.letterSpacing ?? 0,
   align: options.align ?? 'left',
   italic: options.italic ?? false,
   uppercase: options.uppercase ?? false,
@@ -144,8 +144,8 @@ const icon = (
 });
 
 const body = (id: string, value: string, x: number, y: number, w: number, h: number, options: Partial<TextElement> = {}) =>
-  text(id, 'Texto', value, x, y, w, h, options.fontSize ?? 2.05, {
-    fontFamily: 'Inter', fontWeight: 650, lineHeight: 1.26, letterSpacing: 0, color: COLORS.muted, minFontSize: options.minFontSize ?? 1.55, ...options,
+  text(id, 'Texto', value, x, y, w, h, options.fontSize ?? 2.28, {
+    fontFamily: 'Inter', fontWeight: 650, lineHeight: 1.3, letterSpacing: 0, color: COLORS.muted, minFontSize: options.minFontSize ?? 1.82, ...options,
   });
 
 const label = (page: MagazinePage, color = COLORS.blue) => text(
@@ -171,11 +171,35 @@ const document = (page: MagazinePage, elements: CanvasElement[], background: Can
 });
 
 const quote = (id: string, value: string, x: number, y: number, w: number, h: number, color = COLORS.blue) => [
-  text(`${id}-mark`, 'Aspas', '“', x, y - 1, 8, 8, 6.5, { color, fontFamily: 'Georgia', fontWeight: 900, lineHeight: .9 }),
+  text(`${id}-mark`, 'Aspas', 'â€œ', x, y - 1, 8, 8, 6.5, { color, fontFamily: 'Georgia', fontWeight: 900, lineHeight: .9 }),
   text(id, 'Frase de destaque', value, x + 5, y, w - 5, h, 2.45, { color, fontFamily: 'Georgia', fontWeight: 800, lineHeight: 1.12, italic: true, letterSpacing: 0, minFontSize: 1.75 }),
 ];
 
 function page1(page: MagazinePage) {
+  return document(page, [
+    shape('p1-bg-new', 'Fundo da capa', 0, 0, 100, 100, 'linear-gradient(145deg,#06172a 0%,#0b3458 55%,#0784a7 100%)', { allowBleed: true, locked: true, z: 1 }),
+    image('p1-texture-new', 'Foto de textura editorial', ASSETS.mosaic, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, fit: 'cover', filter: 'grayscale(1) contrast(1.05)', opacity: .16, allowBleed: true, locked: true, z: 2 }),
+    shape('p1-cut-top-new', 'Plano claro superior', 0, 0, 100, 21, '#f8fcfd', { allowBleed: true, locked: true, z: 4, clipPath: 'polygon(0 0,100% 0,100% 62%,0 100%)' }),
+    shape('p1-cut-bottom-new', 'Plano editorial inferior', 0, 70, 100, 30, '#f8fcfd', { allowBleed: true, locked: true, z: 4, clipPath: 'polygon(0 26%,100% 0,100% 100%,0 100%)' }),
+    shape('p1-cyan-bar-new', 'Barra de capa', 5.5, 23.5, 3.2, 34, COLORS.cyan, { z: 8 }),
+    image('p1-portrait-new', 'Retrato principal em destaque', ASSETS.portrait, 37, 17, 61, 83, { fit: 'contain', frameStyle: 'none', borderRadius: 0, positionX: 52, positionY: 100, allowBleed: true, z: 12, shadow: '0 24px 42px rgba(0,0,0,.28)' }),
+    shape('p1-name-plate-new', 'Faixa do nome', 5.5, 8.4, 63, 10.6, '#ffffff', { borderRadius: 1.8, shadow: '0 14px 30px rgba(7,31,56,.16)', z: 15 }),
+    image('p1-logo-new', 'Logotipo', ASSETS.logo, 7.5, 10, 29, 6.8, { fit: 'contain', frameStyle: 'none', z: 18 }),
+    text('p1-issue-new', 'Edição', 'INFOJORNAL 01 | 2026', 39, 11.4, 27, 4.1, 1.35, { color: COLORS.blue, fontFamily: 'Inter', fontWeight: 900, align: 'right', letterSpacing: .04, z: 18 }),
+    text('p1-title-new', 'Título da capa', 'VAL\nADVOGADO', 11.5, 25, 43, 18, 6.15, { color: '#ffffff', minFontSize: 4.7, lineHeight: .88, z: 18 }),
+    text('p1-slogan-new', 'Chamada principal', page.body || 'Presença que cuida. Trabalho que transforma.', 11.5, 45.5, 43, 15, 3.8, { color: '#bff4ff', minFontSize: 3.15, lineHeight: 1, z: 18 }),
+    body('p1-deck-new', 'Uma vida transformada pela educação. Um mandato dedicado a ouvir, fiscalizar e buscar recursos para melhorar a vida de quem mora em Guarujá.', 11.7, 61.8, 36, 10.8, { color: '#e7fbff', fontSize: 1.6, minFontSize: 1.35, lineHeight: 1.26, fontWeight: 700, z: 18 }),
+    shape('p1-metric-a-new', 'Destaque inclusão', 6, 79, 25, 10.2, '#ffffff', { borderRadius: 2.2, z: 18, shadow: '0 10px 24px rgba(7,31,56,.16)' }),
+    shape('p1-metric-b-new', 'Destaque esporte', 33, 79, 25, 10.2, '#ffffff', { borderRadius: 2.2, z: 18, shadow: '0 10px 24px rgba(7,31,56,.16)' }),
+    shape('p1-metric-c-new', 'Destaque segurança', 60, 79, 28, 10.2, '#ffffff', { borderRadius: 2.2, z: 18, shadow: '0 10px 24px rgba(7,31,56,.16)' }),
+    text('p1-metric-a-no-new', 'Valor inclusão', 'R$ 1 mi+', 8, 81, 19, 3.4, 1.85, { color: COLORS.blue, fontFamily: 'Arial Black', fontWeight: 900, z: 20 }),
+    text('p1-metric-a-txt-new', 'Legenda inclusão', 'Inclusão e TEA', 8, 85, 19, 2.3, 1.05, { color: COLORS.muted, fontFamily: 'Inter', fontWeight: 800, z: 20 }),
+    text('p1-metric-b-no-new', 'Valor esporte', 'R$ 710 mil+', 35, 81, 20, 3.4, 1.85, { color: COLORS.blue, fontFamily: 'Arial Black', fontWeight: 900, z: 20 }),
+    text('p1-metric-b-txt-new', 'Legenda esporte', 'Esporte social', 35, 85, 19, 2.3, 1.05, { color: COLORS.muted, fontFamily: 'Inter', fontWeight: 800, z: 20 }),
+    text('p1-metric-c-no-new', 'Valor segurança', 'R$ 2 mi', 62, 81, 20, 3.4, 1.85, { color: COLORS.blue, fontFamily: 'Arial Black', fontWeight: 900, z: 20 }),
+    text('p1-metric-c-txt-new', 'Legenda segurança', 'Segurança pública', 62, 85, 22, 2.3, 1.05, { color: COLORS.muted, fontFamily: 'Inter', fontWeight: 800, z: 20 }),
+  ], { type: 'color', value: '#06172a' }, 'capa-infojornal-moderna', false);
+
   return document(page, [
     image('p1-collage', 'Mosaico de fundo', ASSETS.mosaic, 0, 0, 46, 100, { frameStyle: 'none', borderRadius: 0, filter: 'grayscale(1) contrast(.9)', opacity: .44, allowBleed: true, locked: true, z: 1 }),
     shape('p1-wash', 'Banho azul', 0, 0, 46, 100, 'linear-gradient(180deg,rgba(3,105,161,.86),rgba(7,31,56,.94))', { allowBleed: true, locked: true, z: 2 }),
@@ -187,7 +211,7 @@ function page1(page: MagazinePage) {
     text('p1-issue', 'Numero da edicao', '01', 91, 18, 6, 8, 3.9, { color: '#d8eef5', fontFamily: 'Manrope', fontWeight: 800, align: 'right', z: 12 }),
     text('p1-kicker', 'Edição', 'INFOJORNAL • EDIÇÃO 01 • 2026', 52, 21, 40, 4, .94, { color: COLORS.cyan, fontFamily: 'Inter', fontWeight: 900, letterSpacing: .09 }),
     text('p1-title', 'Título da capa', page.title || 'VAL ADVOGADO', 52, 27, 40, 14, 5.7, { color: COLORS.navy, minFontSize: 4.1 }),
-    text('p1-slogan', 'Chamada principal', page.body || 'O que eu faço é da sua conta.', 52, 42, 40, 17, 4.25, { color: COLORS.blue, minFontSize: 3.0, lineHeight: .98 }),
+    text('p1-slogan', 'Chamada principal', page.body || 'Presença que cuida. Trabalho que transforma.', 52, 42, 40, 17, 4.25, { color: COLORS.blue, minFontSize: 3.0, lineHeight: .98 }),
     shape('p1-band', 'Faixa editorial', 50, 61, 45, 14, 'linear-gradient(135deg,#0369a1,#06b6d4)', { clipPath: 'polygon(0 0,100% 0,92% 100%,0 100%)', z: 5 }),
     text('p1-band-text', 'Resumo da capa', 'PRESENÇA, TRANSPARÊNCIA E AÇÃO PARA TRANSFORMAR VIDAS.', 54, 64.2, 34, 8, 1.55, { color: '#fff', fontFamily: 'Arial Black', fontWeight: 900, lineHeight: 1.05, letterSpacing: .02, z: 12 }),
     shape('p1-qr', 'Área QR Code', 68, 80, 20, 14, '#ffffff', { borderColor: COLORS.blue, borderWidth: 2, shadow: '0 8px 18px rgba(7,31,56,.16)', z: 10 }),
@@ -197,6 +221,35 @@ function page1(page: MagazinePage) {
 }
 
 function page2(page: MagazinePage) {
+  const newItems = [
+    ['03', 'Trajetória', 'Origem em Guarujá, educação como virada de vida e experiência acumulada no serviço público.'],
+    ['04', 'Guarujá e Brasília', 'Parceria institucional que aproxima demandas locais de recursos e decisões federais.'],
+    ['06', 'Inclusão e TEA', 'Emendas, atendimento especializado, famílias atípicas, acessibilidade e educação inclusiva.'],
+    ['11', 'Esporte social', 'Projetos, atletas e entidades que usam disciplina e convivência como política pública.'],
+    ['14', 'Serviços públicos', 'Saúde, proteção animal, água, saneamento, segurança e desenvolvimento econômico.'],
+    ['19', 'Participação', 'Como a demanda chega, vira encaminhamento e volta para a população em prestação de contas.'],
+  ];
+  const newElements: CanvasElement[] = [
+    shape('p2-bg-new', 'Fundo do sumário', 0, 0, 100, 100, '#f6fbfd', { allowBleed: true, locked: true }),
+    shape('p2-top-new', 'Faixa superior', 0, 0, 100, 25, COLORS.navy, { allowBleed: true, locked: true, z: 2, clipPath: 'polygon(0 0,100% 0,100% 76%,0 100%)' }),
+    image('p2-photo-new', 'Retrato em destaque', ASSETS.portrait, 60, 0, 38, 40, { fit: 'contain', frameStyle: 'none', borderRadius: 0, positionY: 100, z: 7 }),
+    image('p2-logo-new', 'Logotipo', ASSETS.logo, 6, 5.8, 24, 6.5, { fit: 'contain', frameStyle: 'none', z: 8 }),
+    text('p2-index-title-new', 'Título sumário', 'NESTA\nEDIÇÃO', 6, 16, 44, 17, 5.2, { color: '#ffffff', lineHeight: .9, minFontSize: 4.1, z: 8 }),
+    body('p2-editorial-new', page.body || 'Esta edição reúne trajetória, prioridades, emendas e ações do mandato em formato de jornal informativo: leitura clara, números em destaque e prestação de contas para a população de Guarujá.', 6, 35, 38, 19, { color: COLORS.ink, fontSize: 1.85, minFontSize: 1.55, lineHeight: 1.3, z: 8 }),
+    shape('p2-note-new', 'Nota editorial', 6, 58, 38, 20, '#ffffff', { borderColor: '#bdeaf4', borderWidth: 1, borderRadius: 2.2, shadow: '0 10px 26px rgba(7,89,133,.10)', z: 5 }),
+    text('p2-note-title-new', 'Nota título', 'INFOJORNAL DO MANDATO', 9, 62, 31, 3, 1.25, { color: COLORS.blue, fontFamily: 'Inter', fontWeight: 900, letterSpacing: .04, z: 8 }),
+    body('p2-note-body-new', 'O objetivo é mostrar não só o que foi proposto, mas por que cada pauta importa na vida real: inclusão, saúde, esporte, segurança, proteção animal, serviços públicos e desenvolvimento local.', 9, 66, 31, 8.5, { color: '#304c63', fontSize: 1.34, minFontSize: 1.18, lineHeight: 1.28, z: 8 }),
+    text('p2-expediente-new', 'Expediente', 'VAL ADVOGADO | GUARUJÁ | EDIÇÃO 01 | 2026', 6, 91.8, 38, 3, 1.0, { color: COLORS.blue, fontFamily: 'Inter', fontWeight: 900, letterSpacing: .04, z: 8 }),
+  ];
+  newItems.forEach((item, i) => {
+    const y = 31 + i * 10.1;
+    newElements.push(shape(`p2-index-card-new-${i}`, 'Linha do sumário', 49, y, 42, 8.3, i % 2 === 0 ? '#ffffff' : '#e8f6fb', { borderColor: '#caeaf3', borderWidth: 1, borderRadius: 1.6, z: 5 }));
+    newElements.push(text(`p2-index-no-new-${i}`, `Página ${item[0]}`, item[0], 51.2, y + 1.45, 6, 4.3, 2.05, { color: COLORS.cyan, fontFamily: 'Arial Black', fontWeight: 900, align: 'center', z: 8 }));
+    newElements.push(text(`p2-index-title-new-${i}`, item[1], item[1].toUpperCase(), 59, y + 1.1, 28, 2.2, 1.23, { color: COLORS.navy, fontFamily: 'Inter', fontWeight: 900, letterSpacing: .03, z: 8 }));
+    newElements.push(body(`p2-index-desc-new-${i}`, item[2], 59, y + 3.8, 28.6, 3.1, { color: '#3d596d', fontSize: .98, minFontSize: .86, lineHeight: 1.15, z: 8 }));
+  });
+  return document(page, newElements, { type: 'color', value: COLORS.paper }, 'sumario-infojornal-moderno', false);
+
   const items = ['Quem é Val', 'Mandato presente', 'Escolas de luta', 'Autismo e famílias', 'Projetos e compromissos'];
   const elements: CanvasElement[] = [
     shape('p2-index-bg', 'Fundo do sumário', 0, 0, 33, 100, 'linear-gradient(180deg,#075985,#063452)', { allowBleed: true, locked: true }),
@@ -576,3 +629,8 @@ export function getCanvasDocument(page: MagazinePage): CanvasDocument {
   if (canvas?.version === 3 && Array.isArray(canvas.elements)) return canvas;
   return defaultCanvasForPage(page);
 }
+
+
+
+
+

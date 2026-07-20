@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
@@ -70,3 +70,4 @@ export function DynamicMagazine({ print = false }: { print?: boolean }) {
     </div>
   );
 }
+

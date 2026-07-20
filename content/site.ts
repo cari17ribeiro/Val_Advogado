@@ -1,12 +1,12 @@
-export const site = {
+﻿export const site = {
   name: 'Val Advogado',
   eyebrow: 'Mandato presente, transparente e humano',
-  headline: 'O que eu faço é da sua conta.',
+  headline: 'Presença que cuida. Trabalho que transforma.',
   description:
     'Uma vida transformada pela educação. Um mandato dedicado a transformar outras vidas, com inclusão, esporte, saúde, segurança e presença nos bairros.',
   whatsapp: 'https://wa.me/5513996023101',
   instagram: 'https://instagram.com/',
-  email: 'contato@valadvogado.com.br',
+  email: 'vereador_val_adv@camaraguaruja.sp.gov.br',
   address: 'Guarujá, São Paulo',
 };
 
@@ -51,3 +51,5 @@ export const causes = [
   { title: 'Água e saneamento', text: "Cobrança de soluções para falta d'água, baixa pressão, vazamentos e desassoreamento." },
   { title: 'Desenvolvimento', text: 'Incentivo ao empreendedorismo, comércio eletrônico municipal e geração de renda.' },
 ];
+
+

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -41,7 +41,7 @@ export default function Home() {
 
         <motion.div className="home-hero-copy" initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}>
           <span className="glass-chip"><Sparkles size={15} /> {site.eyebrow}</span>
-          <h1 id="hero-title">O que eu faço<br /><em>é da sua conta.</em></h1>
+          <h1 id="hero-title">Presença que cuida.<br /><em>Trabalho que transforma.</em></h1>
           <p>{site.description}</p>
           <div className="hero-actions">
             <Link href="/revista" className="primary-action"><BookOpen size={19} /> Folhear revista <ArrowRight size={18} /></Link>
@@ -174,3 +174,6 @@ export default function Home() {
     </main>
   );
 }
+
+
+

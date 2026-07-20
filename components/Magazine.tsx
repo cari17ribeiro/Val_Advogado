@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -58,7 +58,7 @@ const pages: Page[] = [
           <div>
             <span className="mag-overline">INFOJORNAL • EDIÇÃO 01 • 2026</span>
             <h1>VAL <em>ADVOGADO</em></h1>
-            <p>O que eu faço<br/>é da sua conta.</p>
+            <p>Presença que cuida<br/>trabalho que transforma.</p>
           </div>
           <div className="mag-cover-tags"><span>Esporte</span><span>Inclusão</span><span>Presença</span></div>
         </div>
@@ -76,9 +76,9 @@ const pages: Page[] = [
     className: 'mag-page mag-about-page',
     content: (
       <div className="mag-safe mag-column-layout">
-        <header><span className="mag-overline">02 — QUEM É VAL?</span><h2>Uma vida dedicada a servir.</h2></header>
+        <header><span className="mag-overline">02 - QUEM É VAL?</span><h2>Uma vida dedicada a servir.</h2></header>
         <p className="mag-lead">Advogado por formação e servidor por vocação. Uma trajetória construída perto das famílias e na defesa de quem precisa ser ouvido.</p>
-        <blockquote>“A política é uma ferramenta de transformação social.”</blockquote>
+        <blockquote>â€œA política é uma ferramenta de transformação social.â€</blockquote>
         <div className="mag-three-values">
           <span><Users/>Comunidade</span><span><ShieldCheck/>Direitos</span><span><Home/>Família</span>
         </div>
@@ -93,7 +93,7 @@ const pages: Page[] = [
     className: 'mag-page mag-story-page',
     content: (
       <div className="mag-safe mag-story-grid">
-        <header><span className="mag-overline">03 — TRAJETÓRIA</span><h2>História feita de presença.</h2></header>
+        <header><span className="mag-overline">03 - TRAJETÓRIA</span><h2>História feita de presença.</h2></header>
         <div className="mag-story-photos mag-story-mosaic-v4">
           <figure className="mag-photo-card mag-photo-large"><img src={photos.familia} alt="Val com sua família"/><figcaption>Família e valores</figcaption></figure>
           <figure className="mag-photo-card"><img src={photos.gabinete} alt="Val no gabinete"/><figcaption>Atuação pública</figcaption></figure>
@@ -113,7 +113,7 @@ const pages: Page[] = [
       <div className="mag-safe mag-split-page">
         <div className="mag-contained-photo"><img src={photos.acao} alt="Ação nos bairros"/></div>
         <div className="mag-split-copy">
-          <span className="mag-overline">04 — PRESENÇA</span>
+          <span className="mag-overline">04 - PRESENÇA</span>
           <h2>O mandato acontece perto das pessoas.</h2>
           <p>Visitas, escuta ativa e fiscalização transformam demandas dos bairros em ações concretas.</p>
           <div className="mag-inline-pills"><span><MapPin/>Bairros</span><span><Users/>Escuta</span></div>
@@ -128,7 +128,7 @@ const pages: Page[] = [
     className: 'mag-page mag-process-page',
     content: (
       <div className="mag-safe mag-process-layout">
-        <header><span className="mag-overline">05 — TRABALHO DE CAMPO</span><h2>Ouvir, fiscalizar e agir.</h2></header>
+        <header><span className="mag-overline">05 - TRABALHO DE CAMPO</span><h2>Ouvir, fiscalizar e agir.</h2></header>
         <div className="mag-process-list">
           <article><b>01</b><div><h3>Ouvir</h3><p>Receber demandas e entender a realidade local.</p></div></article>
           <article><b>02</b><div><h3>Fiscalizar</h3><p>Acompanhar serviços públicos e cobrar respostas.</p></div></article>
@@ -147,11 +147,11 @@ const pages: Page[] = [
       <div className="mag-safe mag-cause-intro-layout">
         <div className="mag-cause-icon"><Swords/></div>
         <div>
-          <span className="mag-overline">06 — PROJETO DE DESTAQUE</span>
+          <span className="mag-overline">06 - PROJETO DE DESTAQUE</span>
           <h2>Esporte que abre caminhos.</h2>
           <p>O apadrinhamento de escolas de luta fortalece projetos que oferecem disciplina, saúde, proteção e novas oportunidades.</p>
         </div>
-        <blockquote>“Cada tatame pode ser uma porta para um futuro melhor.”</blockquote>
+        <blockquote>â€œCada tatame pode ser uma porta para um futuro melhor.â€</blockquote>
         <div className="mag-cause-pill-row"><span>Disciplina</span><span>Pertencimento</span><span>Futuro</span></div>
         <div className="mag-fight-photo-strip"><img src={photos.luvas} alt="Escolas de luta"/><img src={photos.acao} alt="Ação comunitária"/></div>
         <span className="mag-page-number">06</span>
@@ -166,7 +166,7 @@ const pages: Page[] = [
       <div className="mag-safe mag-photo-story-layout">
         <div className="mag-sport-mosaic"><img className="sport-main" src={photos.luvas} alt="Projeto de escolas de luta"/><img className="sport-detail" src={photos.luvas} alt="Detalhe do projeto esportivo"/><img className="sport-action" src={photos.acao} alt="Ação comunitária"/></div>
         <div className="mag-photo-story-copy">
-          <span className="mag-overline">07 — ESPORTE SOCIAL</span>
+          <span className="mag-overline">07 - ESPORTE SOCIAL</span>
           <h2>Mais que treino: oportunidade.</h2>
           <div className="mag-mini-grid"><span><b>01</b>Convivência</span><span><b>02</b>Autoconfiança</span><span><b>03</b>Proteção social</span></div>
         </div>
@@ -182,7 +182,7 @@ const pages: Page[] = [
       <div className="mag-safe mag-autism-layout">
         <div className="mag-autism-art mag-autism-photo-v4"><img src={photos.familia} alt="Família e acolhimento"/><div/><div/><HeartHandshake/></div>
         <div className="mag-autism-copy">
-          <span className="mag-overline">08 — PROJETO DE DESTAQUE</span>
+          <span className="mag-overline">08 - PROJETO DE DESTAQUE</span>
           <h2>Inclusão começa com compreensão.</h2>
           <p>Apoiar pessoas autistas e suas famílias significa ampliar informação, acolhimento, atendimento digno e participação social.</p>
           <div className="mag-cause-pill-row"><span>Acolhimento</span><span>Acessibilidade</span><span>Respeito</span></div>
@@ -197,7 +197,7 @@ const pages: Page[] = [
     className: 'mag-page mag-inclusion-page',
     content: (
       <div className="mag-safe mag-inclusion-layout">
-        <header><span className="mag-overline">09 — CIDADE INCLUSIVA</span><h2>Uma cidade preparada para todas as formas de existir.</h2></header>
+        <header><span className="mag-overline">09 - CIDADE INCLUSIVA</span><h2>Uma cidade preparada para todas as formas de existir.</h2></header>
         <div className="mag-inclusion-grid">
           <article><HeartHandshake/><h3>Acolher</h3><p>Orientação e apoio às famílias.</p></article>
           <article><Accessibility/><h3>Incluir</h3><p>Ambientes e serviços acessíveis.</p></article>
@@ -215,7 +215,7 @@ const pages: Page[] = [
     className: 'mag-page mag-other-causes',
     content: (
       <div className="mag-safe mag-other-layout">
-        <header><span className="mag-overline">10 — OUTRAS BANDEIRAS</span><h2>Trabalho que alcança toda a cidade.</h2></header>
+        <header><span className="mag-overline">10 - OUTRAS BANDEIRAS</span><h2>Trabalho que alcança toda a cidade.</h2></header>
         <div className="mag-other-grid">
           {otherCauses.map(({ icon: Icon, title, text }, index) => (
             <article key={title}><span>0{index + 1}</span><Icon/><div><h3>{title}</h3><p>{text}</p></div></article>
@@ -231,7 +231,7 @@ const pages: Page[] = [
     className: 'mag-page mag-commitments',
     content: (
       <div className="mag-safe mag-commitments-layout">
-        <header><span className="mag-overline">11 — PRÓXIMOS PASSOS</span><h2>Compromissos em movimento.</h2></header>
+        <header><span className="mag-overline">11 - PRÓXIMOS PASSOS</span><h2>Compromissos em movimento.</h2></header>
         <ol>
           <li><b>01</b><span>Ampliar a rede de projetos esportivos apoiados.</span></li>
           <li><b>02</b><span>Fortalecer ações permanentes de inclusão.</span></li>
@@ -367,7 +367,7 @@ export function Magazine({ interactive = false }: MagazineProps) {
       </div>
 
       <div className="reader-status-v4">
-        <span>{singlePage ? `Página ${firstPage.id} de 12` : `Páginas ${firstPage.id}–${lastPage.id} de 12`}</span>
+        <span>{singlePage ? `Página ${firstPage.id} de 12` : `Páginas ${firstPage.id}-${lastPage.id} de 12`}</span>
         <div className="reader-progress-v4"><i style={{ width: `${((index + 1) / totalSteps) * 100}%` }}/></div>
         <button type="button" onClick={() => document.documentElement.requestFullscreen?.()}><Maximize2 size={16}/> Tela cheia</button>
       </div>
@@ -391,3 +391,8 @@ export function Magazine({ interactive = false }: MagazineProps) {
     </div>
   );
 }
+
+
+
+
+

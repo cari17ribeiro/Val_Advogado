@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { BookOpen, Download, Menu, X } from 'lucide-react';
@@ -44,3 +44,4 @@ export function Header() {
     </header>
   );
 }
+
