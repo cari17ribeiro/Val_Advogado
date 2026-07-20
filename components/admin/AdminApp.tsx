@@ -14,7 +14,15 @@ import { clearSession, readSession, rest, uploadMedia } from '@/lib/supabase-res
 function completePages(remotePages: MagazinePage[]) {
   if (!remotePages.length) return fallbackPages;
   const byNumber = new Map(remotePages.map((page) => [page.page_number, page]));
-  return fallbackPages.map((fallback) => byNumber.get(fallback.page_number) || fallback);
+  return fallbackPages.map((fallback) => {
+    const page = byNumber.get(fallback.page_number) || fallback;
+    const canvas = (page.elements as { canvas?: CanvasDocument } | null)?.canvas;
+    const expectedFamily = page.page_number === 1 ? 'capa-infojornal-moderna' : page.page_number === 2 ? 'sumario-infojornal-moderno' : null;
+    if (expectedFamily && canvas?.designFamily !== expectedFamily) {
+      return { ...page, elements: { ...(page.elements || {}), canvas: defaultCanvasForPage(page) } };
+    }
+    return page;
+  });
 }
 
 export function AdminApp() {

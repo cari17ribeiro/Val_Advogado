@@ -182,7 +182,7 @@ function page1(page: MagazinePage) {
     shape('p1-cut-top-new', 'Plano claro superior', 0, 0, 100, 21, '#f8fcfd', { allowBleed: true, locked: true, z: 4, clipPath: 'polygon(0 0,100% 0,100% 62%,0 100%)' }),
     shape('p1-cut-bottom-new', 'Plano editorial inferior', 0, 70, 100, 30, '#f8fcfd', { allowBleed: true, locked: true, z: 4, clipPath: 'polygon(0 26%,100% 0,100% 100%,0 100%)' }),
     shape('p1-cyan-bar-new', 'Barra de capa', 5.5, 23.5, 3.2, 34, COLORS.cyan, { z: 8 }),
-    image('p1-portrait-new', 'Retrato principal em destaque', ASSETS.portrait, 37, 17, 61, 83, { fit: 'contain', frameStyle: 'none', borderRadius: 0, positionX: 52, positionY: 100, allowBleed: true, z: 12, shadow: '0 24px 42px rgba(0,0,0,.28)' }),
+    image('p1-portrait-new', 'Retrato principal em destaque', ASSETS.portrait, 35, 16, 63, 84, { fit: 'contain', frameStyle: 'none', borderRadius: 0, positionX: 52, positionY: 100, allowBleed: true, z: 12 }),
     shape('p1-name-plate-new', 'Faixa do nome', 5.5, 8.4, 63, 10.6, '#ffffff', { borderRadius: 1.8, shadow: '0 14px 30px rgba(7,31,56,.16)', z: 15 }),
     image('p1-logo-new', 'Logotipo', ASSETS.logo, 7.5, 10, 29, 6.8, { fit: 'contain', frameStyle: 'none', z: 18 }),
     text('p1-issue-new', 'Edição', 'INFOJORNAL 01 | 2026', 39, 11.4, 27, 4.1, 1.35, { color: COLORS.blue, fontFamily: 'Inter', fontWeight: 900, align: 'right', letterSpacing: .04, z: 18 }),
@@ -626,6 +626,13 @@ export function defaultCanvasForPage(page: MagazinePage): CanvasDocument {
 
 export function getCanvasDocument(page: MagazinePage): CanvasDocument {
   const canvas = (page.elements as { canvas?: CanvasDocument } | null)?.canvas;
+  const modernLayouts: Record<number, string> = {
+    1: 'capa-infojornal-moderna',
+    2: 'sumario-infojornal-moderno',
+  };
+  if (modernLayouts[page.page_number] && canvas?.designFamily !== modernLayouts[page.page_number]) {
+    return defaultCanvasForPage(page);
+  }
   if (canvas?.version === 3 && Array.isArray(canvas.elements)) return canvas;
   return defaultCanvasForPage(page);
 }

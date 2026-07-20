@@ -606,6 +606,7 @@ img{display:block;max-width:100%}
 .canvas-image-frame.frame-circle img{border-radius:50%}
 .canvas-image-frame.frame-arch img{border-radius:inherit}
 .canvas-image-frame.frame-torn img{border-radius:0}
+.canvas-image-frame.frame-none{background:transparent!important}
 .canvas-text-autofit{-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;font-kerning:normal;font-variant-ligatures:common-ligatures}
 .canvas-trim-guide{position:absolute;inset:1.35%;border:1px dotted rgba(239,68,68,.52);z-index:9998;pointer-events:none}
 .canvas-trim-guide::before{content:'linha de corte';position:absolute;top:-16px;left:0;padding:2px 5px;border-radius:4px;background:rgba(239,68,68,.9);color:#fff;font:700 8px/1 Inter,Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em}
