@@ -54,7 +54,7 @@ function AutoFitText({ element, disabled = false }: { element: TextElement; disa
 
   useLayoutEffect(() => {
     if (disabled) {
-      setScale(1);
+      setScale((current) => (current === 1 ? current : 1));
       return;
     }
     const node = ref.current;
@@ -70,7 +70,7 @@ function AutoFitText({ element, disabled = false }: { element: TextElement; disa
         next = Math.max(min, next - .035);
         node.style.setProperty('--fit-scale', String(next));
       }
-      setScale(next);
+      setScale((current) => (Math.abs(current - next) < .01 ? current : next));
     };
     frame = requestAnimationFrame(fit);
     const observer = new ResizeObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(fit); });

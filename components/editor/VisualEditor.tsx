@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Component, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   AlignCenter, AlignLeft, AlignRight, AlertTriangle, ArrowDown, ArrowUp, CheckCircle2, Copy, ImagePlus,
   Info, Layers3, Lock, Maximize, MousePointer2, Palette, Plus, Redo2, RotateCcw,
@@ -11,6 +11,10 @@ import { clamp, makeId, type CanvasDocument, type CanvasElement, type IconElemen
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const round = (value: number) => Math.round(value * 100) / 100;
+const normalizeLayers = (elements: CanvasElement[]) =>
+  [...elements]
+    .sort((a, b) => a.z - b.z)
+    .map((element, index) => ({ ...element, z: index + 1 } as CanvasElement));
 const hasTransparencyFormat = (file?: File | string) => {
   const value = typeof file === 'string' ? file : `${file?.name || ''} ${file?.type || ''}`;
   return /\.(png|webp)(?:$|\?)/i.test(value) || /image\/(png|webp)/i.test(value);
@@ -36,6 +40,36 @@ type Gesture = {
   rect: DOMRect;
 };
 
+type EditorErrorBoundaryProps = {
+  resetKey: string;
+  children: ReactNode;
+};
+
+class EditorErrorBoundary extends Component<EditorErrorBoundaryProps, { hasError: boolean }> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidUpdate(previous: EditorErrorBoundaryProps) {
+    if (previous.resetKey !== this.props.resetKey && this.state.hasError) {
+      this.setState({ hasError: false });
+    }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="ve-render-error">
+          <b>Não foi possível renderizar esta página.</b>
+          <span>Volte uma ação, troque de página ou recarregue o editor se a alteração ainda estiver aberta.</span>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function analyzeDocument(document: CanvasDocument): PreflightIssue[] {
   const issues: PreflightIssue[] = [];
@@ -190,7 +224,13 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
 
   const layer = (direction: 'up' | 'down') => {
     if (!selected) return;
-    updateSelected({ z: Math.max(0, selected.z + (direction === 'up' ? 1 : -1)) });
+    const ordered = normalizeLayers(docRef.current.elements);
+    const selectedLayer = ordered.find((element) => element.id === selected.id);
+    if (!selectedLayer) return;
+    const nextElements = direction === 'up'
+      ? [...ordered.filter((element) => element.id !== selected.id), selectedLayer]
+      : [selectedLayer, ...ordered.filter((element) => element.id !== selected.id)];
+    emit({ ...docRef.current, elements: nextElements.map((element, index) => ({ ...element, z: index + 1 } as CanvasElement)) });
   };
 
   const undo = useCallback(() => {
@@ -323,17 +363,19 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
         <div className="ve-stage" ref={canvasHostRef}>
           <div className="ve-page-scale" style={{ width: 744 * zoom / 100, height: 1052 * zoom / 100 }}>
             <div style={{ width: 744, height: 1052, transform: `scale(${zoom / 100})`, transformOrigin: 'top left' }}>
-              <CanvasPage
-                document={document}
-                interactive
-                selectedId={selectedId}
-                showSafeArea={showSafeArea}
-                showTrimGuide={showTrimGuide}
-                performanceMode
-                onSelect={setSelectedId}
-                onElementPointerDown={startGesture}
-                onElementDoubleClick={(element) => { setSelectedId(element.id); setTimeout(() => window.document.getElementById('ve-text-content')?.focus(), 30); }}
-              />
+              <EditorErrorBoundary resetKey={`${pageKey}-${document.elements.length}`}>
+                <CanvasPage
+                  document={document}
+                  interactive
+                  selectedId={selectedId}
+                  showSafeArea={showSafeArea}
+                  showTrimGuide={showTrimGuide}
+                  performanceMode
+                  onSelect={setSelectedId}
+                  onElementPointerDown={startGesture}
+                  onElementDoubleClick={(element) => { setSelectedId(element.id); setTimeout(() => window.document.getElementById('ve-text-content')?.focus(), 30); }}
+                />
+              </EditorErrorBoundary>
             </div>
           </div>
         </div>
