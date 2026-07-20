@@ -23,7 +23,7 @@ export function PrintMagazine({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) 
 
   const documents = useMemo(() => pages.map((page) => ({ page, document: getCanvasDocument(page) })), [pages]);
 
-  if (loading) return <div className="db-loading"><LoaderCircle className="spin" /> Preparando páginas para impressão…</div>;
+  if (loading) return <div className="db-loading"><LoaderCircle className="spin" /> Preparando páginas para impressão...</div>;
 
   return (
     <div

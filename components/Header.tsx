@@ -38,8 +38,8 @@ export function Header() {
         <a href="#sobre" onClick={close}>Quem é Val</a>
         <a href="#causas" onClick={close}>Causas</a>
         <a href="#trabalho" onClick={close}>Mandato</a>
-        <Link href="/revista" onClick={close}><BookOpen size={16}/> Revista</Link>
-        <a className="header-download" href="/api/pdf" onClick={close}><Download size={16}/> PDF</a>
+        <Link href="/revista" onClick={close}><BookOpen size={16} /> Revista</Link>
+        <a className="header-download" href="/api/pdf" onClick={close}><Download size={16} /> PDF</a>
       </nav>
     </header>
   );

@@ -31,7 +31,8 @@ export function DynamicMagazine({ print = false }: { print?: boolean }) {
 
   useEffect(() => {
     const update = () => setSingle(window.innerWidth < 900);
-    update(); window.addEventListener('resize', update);
+    update();
+    window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, []);
 
@@ -51,7 +52,10 @@ export function DynamicMagazine({ print = false }: { print?: boolean }) {
     const next = Math.max(0, Math.min(max, index + direction));
     if (next === index || transitioning) return;
     setTransitioning(true);
-    window.setTimeout(() => { setIndex(next); window.setTimeout(() => setTransitioning(false), 40); }, 120);
+    window.setTimeout(() => {
+      setIndex(next);
+      window.setTimeout(() => setTransitioning(false), 40);
+    }, 120);
   };
 
   useEffect(() => {
@@ -63,7 +67,7 @@ export function DynamicMagazine({ print = false }: { print?: boolean }) {
     return () => window.removeEventListener('keydown', keyboard);
   });
 
-  if (loading) return <div className="db-loading"><LoaderCircle className="spin" /> Carregando revista…</div>;
+  if (loading) return <div className="db-loading"><LoaderCircle className="spin" /> Carregando revista...</div>;
   if (print) return <div className="canvas-print-magazine">{documents.map(({ page, document }) => <CanvasPage key={page.id} document={document} className="canvas-page-print" />)}</div>;
 
   return (
@@ -77,7 +81,7 @@ export function DynamicMagazine({ print = false }: { print?: boolean }) {
         <button type="button" className="reader-arrow next" onClick={() => go(1)} disabled={index === max} aria-label="Próxima página"><ChevronRight /></button>
       </div>
       <div className="canvas-reader-controls">
-        <span>{single ? `Página ${visible[0]?.page.page_number} de ${pages.length}` : `Páginas ${visible[0]?.page.page_number}–${visible.at(-1)?.page.page_number} de ${pages.length}`}</span>
+        <span>{single ? `Página ${visible[0]?.page.page_number} de ${pages.length}` : `Páginas ${visible[0]?.page.page_number}-${visible.at(-1)?.page.page_number} de ${pages.length}`}</span>
         <div className="canvas-reader-progress"><i style={{ width: `${((index + 1) / (max + 1)) * 100}%` }} /></div>
         <button type="button" onClick={() => document.documentElement.requestFullscreen?.()}><Maximize2 /> Tela cheia</button>
       </div>

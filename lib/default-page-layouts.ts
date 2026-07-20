@@ -3,21 +3,23 @@ import type {
 } from './editor-types';
 
 export const ASSETS = {
-  portrait: '/media/val-portrait.jpg',
-  mosaic: '/media/val-mosaic.jpg',
-  logo: '/media/val-logo.jpg',
-  gabinete: '/media/gabinete.jpg',
-  luvas: '/media/publica.jpg',
-  acao: '/media/grupo.jpg',
-  familia: '/media/familia.jpg',
-  demoMeeting: '/media/demo/community-meeting.jpg',
-  demoMartialArts: '/media/demo/martial-arts.jpg',
-  demoBoxing: '/media/demo/boxing-training.jpg',
-  demoFamily: '/media/demo/family-support.jpg',
-  demoChild: '/media/demo/child-learning.jpg',
-  demoHealthcare: '/media/demo/healthcare.jpg',
-  demoEducation: '/media/demo/education.jpg',
-  demoAnimalCare: '/media/demo/animal-care.jpg',
+  portrait: 'https://drive.google.com/thumbnail?id=1sGUGialjaXCmqFSfPemKoSVwrNs8-4uz&sz=w1800',
+  mosaic: 'https://drive.google.com/thumbnail?id=1X1VayZJwrpsAXgJUUoiLhj3HSE1Iw7XK&sz=w1600',
+  logo: 'https://drive.google.com/thumbnail?id=1aDmEvDBwnIDjoj8DLebs02Bo1TtmuQ_e&sz=w900',
+  gabinete: 'https://drive.google.com/thumbnail?id=18CN1dCySJupMd3Lh52qtodqOs8Vjr_iV&sz=w1400',
+  luvas: 'https://drive.google.com/thumbnail?id=11xbMhMMR1URa1F7KThvwYz9isZl-vb7l&sz=w1400',
+  acao: 'https://drive.google.com/thumbnail?id=18CN1dCySJupMd3Lh52qtodqOs8Vjr_iV&sz=w1400',
+  familia: 'https://drive.google.com/thumbnail?id=1UlXqmcoDLPGKImKiHErLi3MI9cuarkZH&sz=w1400',
+  inclusao: 'https://drive.google.com/thumbnail?id=1qr3P1o4SA6nM3n5Aaz-b2ffzulfHFHvL&sz=w1400',
+  renata: 'https://drive.google.com/thumbnail?id=1wniEqONORqqaievZICltIekekKHeHmDM&sz=w1400',
+  demoMeeting: 'https://drive.google.com/thumbnail?id=18CN1dCySJupMd3Lh52qtodqOs8Vjr_iV&sz=w1400',
+  demoMartialArts: 'https://drive.google.com/thumbnail?id=11xbMhMMR1URa1F7KThvwYz9isZl-vb7l&sz=w1400',
+  demoBoxing: 'https://drive.google.com/thumbnail?id=11xbMhMMR1URa1F7KThvwYz9isZl-vb7l&sz=w1400',
+  demoFamily: 'https://drive.google.com/thumbnail?id=1UlXqmcoDLPGKImKiHErLi3MI9cuarkZH&sz=w1400',
+  demoChild: 'https://drive.google.com/thumbnail?id=1qr3P1o4SA6nM3n5Aaz-b2ffzulfHFHvL&sz=w1400',
+  demoHealthcare: 'https://drive.google.com/thumbnail?id=1wniEqONORqqaievZICltIekekKHeHmDM&sz=w1400',
+  demoEducation: 'https://drive.google.com/thumbnail?id=1qr3P1o4SA6nM3n5Aaz-b2ffzulfHFHvL&sz=w1400',
+  demoAnimalCare: 'https://drive.google.com/thumbnail?id=18CN1dCySJupMd3Lh52qtodqOs8Vjr_iV&sz=w1400',
 };
 
 const COLORS = {
@@ -147,7 +149,7 @@ const body = (id: string, value: string, x: number, y: number, w: number, h: num
   });
 
 const label = (page: MagazinePage, color = COLORS.blue) => text(
-  `p${page.page_number}-label`, 'Cabeçalho editorial', `VAL ADVOGADO  •  DEMONSTRAÇÃO  •  ${String(page.page_number).padStart(2, '0')}`,
+  `p${page.page_number}-label`, 'Cabeçalho editorial', `VAL ADVOGADO  •  INFOJORNAL  •  ${String(page.page_number).padStart(2, '0')}`,
   5.5, 3.4, 50, 2.5, 1.05,
   { color, fontFamily: 'Inter', fontWeight: 800, letterSpacing: .14, lineHeight: 1, uppercase: true },
 );
@@ -183,7 +185,7 @@ function page1(page: MagazinePage) {
     image('p1-portrait', 'Retrato principal', ASSETS.portrait, 2, 35, 63, 65, { fit: 'cover', frameStyle: 'none', borderRadius: 0, positionX: 50, positionY: 50, allowBleed: true, z: 8 }),
     image('p1-logo', 'Logotipo', ASSETS.logo, 56, 6, 31, 10, { fit: 'contain', frameStyle: 'none', z: 15 }),
     text('p1-issue', 'Numero da edicao', '01', 91, 18, 6, 8, 3.9, { color: '#d8eef5', fontFamily: 'Manrope', fontWeight: 800, align: 'right', z: 12 }),
-    text('p1-kicker', 'Edição', 'INFOJORNAL • EDIÇÃO DEMONSTRATIVA • 2026', 52, 21, 40, 4, .94, { color: COLORS.cyan, fontFamily: 'Inter', fontWeight: 900, letterSpacing: .09 }),
+    text('p1-kicker', 'Edição', 'INFOJORNAL • EDIÇÃO 01 • 2026', 52, 21, 40, 4, .94, { color: COLORS.cyan, fontFamily: 'Inter', fontWeight: 900, letterSpacing: .09 }),
     text('p1-title', 'Título da capa', page.title || 'VAL ADVOGADO', 52, 27, 40, 14, 5.7, { color: COLORS.navy, minFontSize: 4.1 }),
     text('p1-slogan', 'Chamada principal', page.body || 'O que eu faço é da sua conta.', 52, 42, 40, 17, 4.25, { color: COLORS.blue, minFontSize: 3.0, lineHeight: .98 }),
     shape('p1-band', 'Faixa editorial', 50, 61, 45, 14, 'linear-gradient(135deg,#0369a1,#06b6d4)', { clipPath: 'polygon(0 0,100% 0,92% 100%,0 100%)', z: 5 }),
