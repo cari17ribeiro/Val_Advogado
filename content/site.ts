@@ -11,17 +11,17 @@ export const site = {
 };
 
 export const photos = {
-  hero: '/media/val-portrait.jpg',
+  hero: '/media/val/capa-sem-fundo.png',
   logo: '/media/val-logo.jpg',
-  gabinete: '/media/gabinete.jpg',
-  esporte: '/media/publica.jpg',
-  inclusao: '/media/projetos.jpg',
-  familia: '/media/familia.jpg',
-  renata: '/media/grupo.jpg',
-  referenciaAzul: '/media/val-mosaic.jpg',
-  mosaic: '/media/val-mosaic.jpg',
-  luvas: '/media/publica.jpg',
-  acao: '/media/gabinete.jpg',
+  gabinete: '/media/val/val-gabinete.jpg',
+  esporte: '/media/val/esporte-01.jpg',
+  inclusao: '/media/val/inclusao-01.jpg',
+  familia: '/media/val/familia-01.jpg',
+  renata: '/media/val/renata-01.jpg',
+  referenciaAzul: '/media/val/referencia-capa.png',
+  mosaic: '/media/val/referencia-capa.png',
+  luvas: '/media/val/esporte-02.jpg',
+  acao: '/media/val/val-rua.jpg',
 };
 
 export const priorityProjects = [
