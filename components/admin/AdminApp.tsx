@@ -80,7 +80,12 @@ export function AdminApp() {
 
   const savePage = useCallback(async () => {
     const current = pages[selectedIndex];
-    if (!current || !session?.access_token) return;
+    if (!current) return;
+    if (!session?.access_token) {
+      setStatus('Sessão expirada. Entre novamente para salvar no Supabase.');
+      setStatusType('error');
+      return;
+    }
     setStatus('Salvando página...'); setStatusType('saving');
     try {
       const payload = {
@@ -95,15 +100,34 @@ export function AdminApp() {
         is_published: true,
         updated_at: new Date().toISOString(),
       };
-      const saved = current.id.startsWith('fallback-')
-        ? await rest<MagazinePage[]>('magazine_pages', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-        }, session.access_token)
-        : await rest<MagazinePage[]>(`magazine_pages?id=eq.${current.id}`, {
+      let saved: MagazinePage[] | null = null;
+      if (current.id.startsWith('fallback-')) {
+        try {
+          saved = await rest<MagazinePage[]>('magazine_pages', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+          }, session.access_token);
+        } catch {
+          saved = await rest<MagazinePage[]>(`magazine_pages?page_number=eq.${current.page_number}`, {
+            method: 'PATCH',
+            body: JSON.stringify(payload),
+          }, session.access_token);
+        }
+      } else {
+        saved = await rest<MagazinePage[]>(`magazine_pages?id=eq.${current.id}`, {
           method: 'PATCH',
           body: JSON.stringify(payload),
         }, session.access_token);
+      }
+      if (!saved?.[0] && !current.id.startsWith('fallback-')) {
+        saved = await rest<MagazinePage[]>(`magazine_pages?page_number=eq.${current.page_number}`, {
+          method: 'PATCH',
+          body: JSON.stringify(payload),
+        }, session.access_token);
+      }
+      if (!saved?.[0]) {
+        throw new Error('O Supabase não atualizou nenhuma linha. Verifique as policies de INSERT/UPDATE/SELECT da tabela magazine_pages para usuários autenticados.');
+      }
       if (saved?.[0]) {
         setPages((currentPages) => {
           const nextPages = currentPages.map((item, index) => index === selectedIndex ? saved[0] : item);
