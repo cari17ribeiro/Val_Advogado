@@ -6,7 +6,6 @@ import {
   Settings, ShieldCheck,
 } from 'lucide-react';
 import { VisualEditor } from '@/components/editor/VisualEditor';
-import { writeLocalMagazinePages } from '@/lib/client-magazine-pages';
 import { defaultCanvasForPage, getCanvasDocument } from '@/lib/default-page-layouts';
 import { fallbackPages } from '@/lib/fallback-pages';
 import type { CanvasDocument, MagazinePage, MediaItem } from '@/lib/editor-types';
@@ -46,7 +45,6 @@ export function AdminApp() {
     ]).then(([pageData, mediaData]) => {
       const nextPages = completePages(pageData);
       setPages(nextPages);
-      writeLocalMagazinePages(nextPages);
       setMedia(mediaData);
     }).catch((error: Error) => {
       setStatus(error.message);
@@ -70,7 +68,6 @@ export function AdminApp() {
       const nextPages = current.map((item, index) => index === selectedIndex
         ? { ...item, elements: { ...(item.elements || {}), canvas: next } }
         : item);
-      writeLocalMagazinePages(nextPages);
       return nextPages;
     });
     setDirty(true);
@@ -110,11 +107,8 @@ export function AdminApp() {
       if (saved?.[0]) {
         setPages((currentPages) => {
           const nextPages = currentPages.map((item, index) => index === selectedIndex ? saved[0] : item);
-          writeLocalMagazinePages(nextPages);
           return nextPages;
         });
-      } else {
-        writeLocalMagazinePages(pages);
       }
       setDirty(false); setStatus('Página salva e sincronizada.'); setStatusType('success');
       setTimeout(() => setStatusType('idle'), 2600);
