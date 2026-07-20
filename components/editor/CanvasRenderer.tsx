@@ -48,11 +48,15 @@ export function elementBoxStyle(element: CanvasElement): React.CSSProperties {
   } as React.CSSProperties;
 }
 
-function AutoFitText({ element }: { element: TextElement }) {
+function AutoFitText({ element, disabled = false }: { element: TextElement; disabled?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
   useLayoutEffect(() => {
+    if (disabled) {
+      setScale(1);
+      return;
+    }
     const node = ref.current;
     if (!node) return;
     let frame = 0;
@@ -72,7 +76,7 @@ function AutoFitText({ element }: { element: TextElement }) {
     const observer = new ResizeObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(fit); });
     observer.observe(node);
     return () => { cancelAnimationFrame(frame); observer.disconnect(); };
-  }, [element.text, element.fontSize, element.minFontSize, element.fontFamily, element.fontWeight, element.lineHeight, element.letterSpacing, element.w, element.h]);
+  }, [disabled, element.text, element.fontSize, element.minFontSize, element.fontFamily, element.fontWeight, element.lineHeight, element.letterSpacing, element.w, element.h]);
 
   return (
     <div
@@ -113,8 +117,8 @@ function imageFrameStyle(element: ImageElement): React.CSSProperties {
   return base;
 }
 
-export function CanvasElementView({ element }: { element: CanvasElement }) {
-  if (element.type === 'text') return <AutoFitText element={element} />;
+export function CanvasElementView({ element, performanceMode = false }: { element: CanvasElement; performanceMode?: boolean }) {
+  if (element.type === 'text') return <AutoFitText element={element} disabled={performanceMode} />;
   if (element.type === 'image') {
     return (
       <div className={`canvas-image-frame frame-${element.frameStyle || 'rounded'}`} style={imageFrameStyle(element)}>
@@ -157,11 +161,12 @@ export type CanvasPageProps = {
   onSelect?: (id: string | null) => void;
   onElementPointerDown?: (event: React.PointerEvent<HTMLElement>, element: CanvasElement, action: 'move' | 'resize') => void;
   onElementDoubleClick?: (element: CanvasElement) => void;
+  performanceMode?: boolean;
 };
 
 export function CanvasPage({
   document, className = '', selectedId, interactive = false, showSafeArea = false, showTrimGuide = false,
-  onSelect, onElementPointerDown, onElementDoubleClick,
+  onSelect, onElementPointerDown, onElementDoubleClick, performanceMode = false,
 }: CanvasPageProps) {
   const sorted = useMemo(() => [...document.elements].sort((a, b) => a.z - b.z), [document.elements]);
   return (
@@ -188,7 +193,7 @@ export function CanvasPage({
           }}
           onDoubleClick={(event) => { event.stopPropagation(); onElementDoubleClick?.(element); }}
         >
-          <CanvasElementView element={element} />
+          <CanvasElementView element={element} performanceMode={performanceMode} />
           {interactive && selectedId === element.id && !element.locked && (
             <>
               <span className="canvas-selection-label">{element.name}</span>

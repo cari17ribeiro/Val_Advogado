@@ -11,6 +11,10 @@ import { clamp, makeId, type CanvasDocument, type CanvasElement, type IconElemen
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const round = (value: number) => Math.round(value * 100) / 100;
+const hasTransparencyFormat = (file?: File | string) => {
+  const value = typeof file === 'string' ? file : `${file?.name || ''} ${file?.type || ''}`;
+  return /\.(png|webp)(?:$|\?)/i.test(value) || /image\/(png|webp)/i.test(value);
+};
 
 const DEFAULT_IMAGE = 'https://i.ibb.co/gZQkNzDq/Capturar.png';
 
@@ -82,6 +86,8 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
   const fileInputRef = useRef<HTMLInputElement>(null);
   const replaceInputRef = useRef<HTMLInputElement>(null);
   const gestureRef = useRef<Gesture | null>(null);
+  const pendingDocRef = useRef<CanvasDocument | null>(null);
+  const frameRef = useRef<number | null>(null);
   const docRef = useRef(document);
 
   useEffect(() => { docRef.current = document; }, [document]);
@@ -142,23 +148,30 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
     id: makeId('icon'), type: 'icon', name: 'Novo ícone', x: 12, y: 16, w: 10, h: 7,
     rotation: 0, opacity: 1, z: 1, icon: 'Sparkles', color: '#0284c7', background: '#e0f2fe', padding: 18, borderRadius: 24,
   });
-  const addImage = (src: string, name = 'Nova fotografia') => addElement({
+  const addImage = (src: string, name = 'Nova fotografia', transparent = hasTransparencyFormat(src) || hasTransparencyFormat(name)) => addElement({
     id: makeId('image'), type: 'image', name, x: 18, y: 18, w: 45, h: 42,
-    rotation: 0, opacity: 1, z: 1, src, alt: name, fit: 'cover', positionX: 50, positionY: 50,
-    zoom: 100, borderRadius: 3, borderColor: 'transparent', borderWidth: 0, frameStyle: 'rounded', shadow: '0 10px 24px rgba(15,23,42,.12)',
+    rotation: 0, opacity: 1, z: 1, src, alt: name, fit: transparent ? 'contain' : 'cover', positionX: 50, positionY: 50,
+    zoom: 100, borderRadius: transparent ? 0 : 3, borderColor: 'transparent', borderWidth: 0, frameStyle: transparent ? 'none' : 'rounded', shadow: transparent ? '' : '0 10px 24px rgba(15,23,42,.12)',
   });
 
   const uploadNew = async (file?: File) => {
     if (!file) return;
     setUploading(true);
-    try { addImage(await onUpload(file), file.name); }
+    try { addImage(await onUpload(file), file.name, hasTransparencyFormat(file)); }
     catch (error) { onUploadError?.(error instanceof Error ? error.message : 'Não foi possível carregar a imagem.'); }
     finally { setUploading(false); if (fileInputRef.current) fileInputRef.current.value = ''; }
   };
   const replaceImage = async (file?: File) => {
     if (!file || selected?.type !== 'image') return;
     setUploading(true);
-    try { updateSelected({ src: await onUpload(file), name: file.name } as Partial<ImageElement>); }
+    try {
+      const transparent = hasTransparencyFormat(file);
+      updateSelected({
+        src: await onUpload(file),
+        name: file.name,
+        ...(transparent ? { fit: 'contain', frameStyle: 'none', borderRadius: 0, shadow: '' } : {}),
+      } as Partial<ImageElement>);
+    }
     catch (error) { onUploadError?.(error instanceof Error ? error.message : 'Não foi possível substituir a imagem.'); }
     finally { setUploading(false); if (replaceInputRef.current) replaceInputRef.current.value = ''; }
   };
@@ -198,9 +211,8 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
   const startGesture = (event: React.PointerEvent<HTMLElement>, element: CanvasElement, action: 'move' | 'resize') => {
     const page = canvasHostRef.current?.querySelector('.canvas-page');
     if (!page) return;
-    emit(clone(docRef.current));
-    // The snapshot above is only for undo. Restore the visual document immediately.
-    onChange(docRef.current);
+    setUndoStack((stack) => [...stack.slice(-29), clone(docRef.current)]);
+    setRedoStack([]);
     gestureRef.current = { action, element: clone(element), startX: event.clientX, startY: event.clientY, rect: page.getBoundingClientRect() };
     (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
   };
@@ -218,13 +230,39 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
         patch = { w: round(clamp(gesture.element.w + dx, 2, 100 - gesture.element.x)), h: round(clamp(gesture.element.h + dy, 2, 100 - gesture.element.y)) };
       }
       const next = { ...docRef.current, elements: docRef.current.elements.map((element) => element.id === gesture.element.id ? ({ ...element, ...patch } as CanvasElement) : element) };
-      docRef.current = next; onChange(next);
+      docRef.current = next;
+      pendingDocRef.current = next;
+      if (frameRef.current !== null) return;
+      frameRef.current = window.requestAnimationFrame(() => {
+        frameRef.current = null;
+        const pending = pendingDocRef.current;
+        if (!pending) return;
+        pendingDocRef.current = null;
+        onChange(pending);
+      });
     };
-    const stop = () => { gestureRef.current = null; };
+    const stop = () => {
+      gestureRef.current = null;
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
+      const pending = pendingDocRef.current;
+      pendingDocRef.current = null;
+      if (pending) onChange(pending);
+    };
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', stop);
     window.addEventListener('pointercancel', stop);
-    return () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', stop); window.removeEventListener('pointercancel', stop); };
+    return () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', stop);
+      window.removeEventListener('pointercancel', stop);
+      if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+      pendingDocRef.current = null;
+      gestureRef.current = null;
+    };
   }, [onChange]);
 
   useEffect(() => {
@@ -291,6 +329,7 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
                 selectedId={selectedId}
                 showSafeArea={showSafeArea}
                 showTrimGuide={showTrimGuide}
+                performanceMode
                 onSelect={setSelectedId}
                 onElementPointerDown={startGesture}
                 onElementDoubleClick={(element) => { setSelectedId(element.id); setTimeout(() => window.document.getElementById('ve-text-content')?.focus(), 30); }}

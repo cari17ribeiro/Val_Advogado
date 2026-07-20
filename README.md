@@ -96,3 +96,9 @@ Antes da tiragem definitiva:
 - faÃ§a uma prova fÃ­sica;
 - confirme com a grÃ¡fica se ela exige conversÃ£o CMYK e um perfil ICC especÃ­fico.
 
+# Correção de upload no Supabase
+
+Se ao substituir imagens aparecer `new row violates row-level security policy`, aplique o arquivo
+`SUPABASE_RLS_UPLOAD_FIX.sql` no SQL Editor do Supabase. Ele cria/ajusta as políticas do bucket
+`val-media` e da tabela `media_library` para permitir upload, substituição e leitura das imagens
+usadas pelo painel administrativo.

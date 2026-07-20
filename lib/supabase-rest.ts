@@ -75,7 +75,11 @@ export async function uploadMedia(file: File, token: string) {
   });
   if (!response.ok) {
     const body = await response.json().catch(() => ({}));
-    throw new Error(body.message || 'Falha no upload.');
+    const message = body.message || 'Falha no upload.';
+    if (/row-level security|policy|403/i.test(message)) {
+      throw new Error('O Supabase bloqueou o upload pela política RLS. Aplique o arquivo SUPABASE_RLS_UPLOAD_FIX.sql no SQL Editor do Supabase e tente novamente.');
+    }
+    throw new Error(message);
   }
   const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/val-media/${path}`;
   try {
@@ -94,7 +98,7 @@ export async function uploadMedia(file: File, token: string) {
       }),
     }, token);
   } catch (error) {
-    console.warn('Imagem enviada, mas não registrada na biblioteca.', error);
+    console.warn('Imagem enviada, mas não registrada na biblioteca. Verifique as policies da tabela media_library.', error);
   }
   return { path, publicUrl };
 }
