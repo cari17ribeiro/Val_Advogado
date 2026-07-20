@@ -21,6 +21,7 @@ export type VisualEditorProps = {
   onUpload: (file: File) => Promise<string>;
   media: MediaItem[];
   onResetTemplate: () => void;
+  onUploadError?: (message: string) => void;
 };
 
 type Gesture = {
@@ -69,7 +70,7 @@ function NumberControl({ label, value, min, max, step = 1, onChange }: { label: 
   return <label className="ve-field"><span>{label}</span><input type="number" value={Number.isFinite(value) ? value : 0} min={min} max={max} step={step} onChange={(event) => onChange(Number(event.target.value))} /></label>;
 }
 
-export function VisualEditor({ pageKey, document, onChange, onUpload, media, onResetTemplate }: VisualEditorProps) {
+export function VisualEditor({ pageKey, document, onChange, onUpload, media, onResetTemplate, onUploadError }: VisualEditorProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [zoom, setZoom] = useState(62);
   const [showSafeArea, setShowSafeArea] = useState(true);
@@ -151,12 +152,14 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
     if (!file) return;
     setUploading(true);
     try { addImage(await onUpload(file), file.name); }
+    catch (error) { onUploadError?.(error instanceof Error ? error.message : 'Não foi possível carregar a imagem.'); }
     finally { setUploading(false); if (fileInputRef.current) fileInputRef.current.value = ''; }
   };
   const replaceImage = async (file?: File) => {
     if (!file || selected?.type !== 'image') return;
     setUploading(true);
     try { updateSelected({ src: await onUpload(file), name: file.name } as Partial<ImageElement>); }
+    catch (error) { onUploadError?.(error instanceof Error ? error.message : 'Não foi possível substituir a imagem.'); }
     finally { setUploading(false); if (replaceInputRef.current) replaceInputRef.current.value = ''; }
   };
 

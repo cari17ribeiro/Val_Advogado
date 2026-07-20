@@ -26,6 +26,38 @@ function completePages(remotePages: MagazinePage[]) {
   });
 }
 
+function readFileAsDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function makeLocalImageUrl(file: File) {
+  if (file.type === 'image/png' && file.size < 1_200_000) return readFileAsDataUrl(file);
+
+  const objectUrl = URL.createObjectURL(file);
+  try {
+    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = objectUrl;
+    });
+    const maxSide = 1800;
+    const scale = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+    canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+    canvas.getContext('2d')?.drawImage(image, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', 0.88);
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
 export function AdminApp() {
   const [pages, setPages] = useState<MagazinePage[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -124,11 +156,24 @@ export function AdminApp() {
   }, [pages, selectedIndex, session?.access_token]);
 
   const handleUpload = async (file: File) => {
-    if (!session?.access_token) throw new Error('Sessão expirada.');
-    const uploaded = await uploadMedia(file, session.access_token);
-    const item: MediaItem = { name: file.name, public_url: uploaded.publicUrl, storage_path: uploaded.path, alt_text: file.name };
+    let publicUrl = '';
+    let storagePath: string | undefined;
+    if (session?.access_token) {
+      try {
+        const uploaded = await uploadMedia(file, session.access_token);
+        publicUrl = uploaded.publicUrl;
+        storagePath = uploaded.path;
+      } catch {
+        publicUrl = await makeLocalImageUrl(file);
+        setStatus('Imagem aplicada localmente. Clique em Salvar para atualizar a revista.'); setStatusType('success');
+      }
+    } else {
+      publicUrl = await makeLocalImageUrl(file);
+      setStatus('Imagem aplicada localmente. Entre novamente para salvar no banco.'); setStatusType('error');
+    }
+    const item: MediaItem = { name: file.name, public_url: publicUrl, storage_path: storagePath, alt_text: file.name };
     setMedia((current) => [item, ...current]);
-    return uploaded.publicUrl;
+    return publicUrl;
   };
 
   const choosePage = (index: number) => {
@@ -160,6 +205,7 @@ export function AdminApp() {
         onUpload={handleUpload}
         media={media}
         onResetTemplate={resetTemplate}
+        onUploadError={(message) => { setStatus(message); setStatusType('error'); }}
       />
 
       <footer className="canva-page-strip">
