@@ -3,23 +3,23 @@ import type {
 } from './editor-types';
 
 export const ASSETS = {
-  portrait: 'https://drive.google.com/thumbnail?id=1sGUGialjaXCmqFSfPemKoSVwrNs8-4uz&sz=w1800',
-  mosaic: 'https://drive.google.com/thumbnail?id=1X1VayZJwrpsAXgJUUoiLhj3HSE1Iw7XK&sz=w1600',
-  logo: 'https://drive.google.com/thumbnail?id=1aDmEvDBwnIDjoj8DLebs02Bo1TtmuQ_e&sz=w900',
-  gabinete: 'https://drive.google.com/thumbnail?id=18CN1dCySJupMd3Lh52qtodqOs8Vjr_iV&sz=w1400',
-  luvas: 'https://drive.google.com/thumbnail?id=11xbMhMMR1URa1F7KThvwYz9isZl-vb7l&sz=w1400',
-  acao: 'https://drive.google.com/thumbnail?id=18CN1dCySJupMd3Lh52qtodqOs8Vjr_iV&sz=w1400',
-  familia: 'https://drive.google.com/thumbnail?id=1UlXqmcoDLPGKImKiHErLi3MI9cuarkZH&sz=w1400',
-  inclusao: 'https://drive.google.com/thumbnail?id=1qr3P1o4SA6nM3n5Aaz-b2ffzulfHFHvL&sz=w1400',
-  renata: 'https://drive.google.com/thumbnail?id=1wniEqONORqqaievZICltIekekKHeHmDM&sz=w1400',
-  demoMeeting: 'https://drive.google.com/thumbnail?id=18CN1dCySJupMd3Lh52qtodqOs8Vjr_iV&sz=w1400',
-  demoMartialArts: 'https://drive.google.com/thumbnail?id=11xbMhMMR1URa1F7KThvwYz9isZl-vb7l&sz=w1400',
-  demoBoxing: 'https://drive.google.com/thumbnail?id=11xbMhMMR1URa1F7KThvwYz9isZl-vb7l&sz=w1400',
-  demoFamily: 'https://drive.google.com/thumbnail?id=1UlXqmcoDLPGKImKiHErLi3MI9cuarkZH&sz=w1400',
-  demoChild: 'https://drive.google.com/thumbnail?id=1qr3P1o4SA6nM3n5Aaz-b2ffzulfHFHvL&sz=w1400',
-  demoHealthcare: 'https://drive.google.com/thumbnail?id=1wniEqONORqqaievZICltIekekKHeHmDM&sz=w1400',
-  demoEducation: 'https://drive.google.com/thumbnail?id=1qr3P1o4SA6nM3n5Aaz-b2ffzulfHFHvL&sz=w1400',
-  demoAnimalCare: 'https://drive.google.com/thumbnail?id=18CN1dCySJupMd3Lh52qtodqOs8Vjr_iV&sz=w1400',
+  portrait: '/media/val-portrait.jpg',
+  mosaic: '/media/val-mosaic.jpg',
+  logo: '/media/val-logo.jpg',
+  gabinete: '/media/gabinete.jpg',
+  luvas: '/media/publica.jpg',
+  acao: '/media/grupo.jpg',
+  familia: '/media/familia.jpg',
+  inclusao: '/media/projetos.jpg',
+  renata: '/media/grupo.jpg',
+  demoMeeting: '/media/demo/community-meeting.jpg',
+  demoMartialArts: '/media/demo/martial-arts.jpg',
+  demoBoxing: '/media/demo/boxing-training.jpg',
+  demoFamily: '/media/demo/family-support.jpg',
+  demoChild: '/media/demo/child-learning.jpg',
+  demoHealthcare: '/media/demo/healthcare.jpg',
+  demoEducation: '/media/demo/education.jpg',
+  demoAnimalCare: '/media/demo/animal-care.jpg',
 };
 
 const COLORS = {
@@ -30,7 +30,7 @@ const COLORS = {
   light: '#edf8fc',
   paper: '#f8fbfc',
   ink: '#0b2745',
-  muted: '#536b80',
+  muted: '#263f55',
   green: '#16a34a',
 };
 
@@ -55,7 +55,7 @@ const text = (
   color: options.color ?? COLORS.ink,
   fontFamily: options.fontFamily ?? 'Arial Black',
   fontSize,
-  minFontSize: options.minFontSize ?? Math.max(1.1, fontSize * 0.54),
+  minFontSize: options.minFontSize ?? Math.max(1.45, fontSize * 0.72),
   fontWeight: options.fontWeight ?? 800,
   lineHeight: options.lineHeight ?? .94,
   letterSpacing: options.letterSpacing ?? -.025,
@@ -144,20 +144,20 @@ const icon = (
 });
 
 const body = (id: string, value: string, x: number, y: number, w: number, h: number, options: Partial<TextElement> = {}) =>
-  text(id, 'Texto', value, x, y, w, h, options.fontSize ?? 1.72, {
-    fontFamily: 'Inter', fontWeight: 500, lineHeight: 1.34, letterSpacing: 0, color: COLORS.muted, ...options,
+  text(id, 'Texto', value, x, y, w, h, options.fontSize ?? 2.05, {
+    fontFamily: 'Inter', fontWeight: 650, lineHeight: 1.26, letterSpacing: 0, color: COLORS.muted, minFontSize: options.minFontSize ?? 1.55, ...options,
   });
 
 const label = (page: MagazinePage, color = COLORS.blue) => text(
   `p${page.page_number}-label`, 'Cabeçalho editorial', `VAL ADVOGADO  •  INFOJORNAL  •  ${String(page.page_number).padStart(2, '0')}`,
-  5.5, 3.4, 50, 2.5, 1.05,
-  { color, fontFamily: 'Inter', fontWeight: 800, letterSpacing: .14, lineHeight: 1, uppercase: true },
+  5.5, 3.4, 58, 2.8, 1.22,
+  { color, fontFamily: 'Inter', fontWeight: 900, letterSpacing: .08, lineHeight: 1, uppercase: true },
 );
 
 const rule = (id: string, y = 7.2, fill = COLORS.blue) => shape(id, 'Linha editorial', 5.5, y, 89, .35, fill, { locked: true, z: 30 });
 const pageNumber = (page: MagazinePage, color = '#64748b') => text(
-  `p${page.page_number}-number`, 'Número da página', String(page.page_number).padStart(2, '0'), 88.5, 95.6, 5.5, 1.8, .9,
-  { color, fontFamily: 'Inter', fontWeight: 700, align: 'right', letterSpacing: .08 },
+  `p${page.page_number}-number`, 'Número da página', String(page.page_number).padStart(2, '0'), 88.5, 95.2, 5.5, 2.2, 1.15,
+  { color, fontFamily: 'Inter', fontWeight: 800, align: 'right', letterSpacing: .04 },
 );
 
 const document = (page: MagazinePage, elements: CanvasElement[], background: CanvasDocument['background'], family: string, numbered = true): CanvasDocument => ({
@@ -172,7 +172,7 @@ const document = (page: MagazinePage, elements: CanvasElement[], background: Can
 
 const quote = (id: string, value: string, x: number, y: number, w: number, h: number, color = COLORS.blue) => [
   text(`${id}-mark`, 'Aspas', '“', x, y - 1, 8, 8, 6.5, { color, fontFamily: 'Georgia', fontWeight: 900, lineHeight: .9 }),
-  text(id, 'Frase de destaque', value, x + 5, y, w - 5, h, 2.15, { color, fontFamily: 'Georgia', fontWeight: 700, lineHeight: 1.15, italic: true, letterSpacing: 0 }),
+  text(id, 'Frase de destaque', value, x + 5, y, w - 5, h, 2.45, { color, fontFamily: 'Georgia', fontWeight: 800, lineHeight: 1.12, italic: true, letterSpacing: 0, minFontSize: 1.75 }),
 ];
 
 function page1(page: MagazinePage) {
@@ -239,22 +239,22 @@ function page4(page: MagazinePage) {
     ['MessageCircle', 'Gabinete aberto', 'Contato permanente, sugestões e participação popular.'],
   ];
   const elements: CanvasElement[] = [
-    image('p4-bg', 'Reunião comunitária demonstrativa', ASSETS.demoMeeting, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, positionX: 52, positionY: 44, allowBleed: true, locked: true }),
-    shape('p4-overlay', 'Sobreposição', 0, 0, 100, 100, 'linear-gradient(110deg,rgba(2,20,38,.99) 0%,rgba(4,65,101,.94) 53%,rgba(6,182,212,.34) 100%)', { allowBleed: true, locked: true, z: 2 }),
-    shape('p4-glow', 'Luz ciano', 62, -12, 50, 45, 'radial-gradient(circle,rgba(103,232,249,.34),rgba(14,116,144,.08) 48%,transparent 72%)', { borderRadius: 50, z: 3 }),
-    label(page, '#67e8f9'), rule('p4-rule', 7.2, '#67e8f9'),
-    text('p4-title', 'Título', page.title || 'O mandato acontece perto das pessoas.', 6, 13, 57, 25, 5.7, { color: '#fff', minFontSize: 3.5, z: 12 }),
-    body('p4-body', page.body || 'Visitas, escuta ativa e fiscalização.', 6, 40, 42, 11, { color: '#d9eef7', fontSize: 1.75, z: 12 }),
+    shape('p4-bg', 'Fundo editorial claro', 0, 0, 100, 100, 'linear-gradient(145deg,#f8fcfd 0%,#e1f5fb 100%)', { allowBleed: true, locked: true }),
+    image('p4-photo', 'Foto institucional', ASSETS.renata, 52, 0, 48, 44, { frameStyle: 'none', borderRadius: 0, positionX: 50, positionY: 38, allowBleed: true, locked: true, opacity: .24 }),
+    shape('p4-photo-wash', 'Lavagem da foto', 50, 0, 50, 47, 'linear-gradient(90deg,rgba(248,252,253,.95),rgba(248,252,253,.38))', { allowBleed: true, locked: true, z: 2 }),
+    label(page, COLORS.blue), rule('p4-rule', 7.2, COLORS.cyan),
+    text('p4-title', 'Título', page.title || 'O mandato acontece perto das pessoas.', 6, 13, 67, 22, 5.3, { color: COLORS.navy, minFontSize: 3.8, z: 12 }),
+    body('p4-body', page.body || 'Visitas, escuta ativa e fiscalização.', 6, 39, 58, 15, { color: '#263f55', fontSize: 2.05, minFontSize: 1.7, z: 12 }),
   ];
   cards.forEach(([iconName, titleValue, description], i) => {
     const x = i % 2 === 0 ? 6 : 29;
-    const y = i < 2 ? 57 : 75;
-    elements.push(shape(`p4-card-${i}`, 'Cartão glass', x, y, 21, 14, 'linear-gradient(145deg,rgba(255,255,255,.20),rgba(255,255,255,.07))', { borderColor: 'rgba(165,243,252,.38)', borderWidth: 1, borderRadius: 3, shadow: '0 12px 32px rgba(0,20,38,.24)', z: 6 }));
-    elements.push(icon(`p4-icon-${i}`, titleValue, iconName, x + 2, y + 2, 5, 4.2, '#67e8f9', 'rgba(255,255,255,.09)'));
-    elements.push(text(`p4-card-title-${i}`, titleValue, titleValue.toUpperCase(), x + 8, y + 2, 11, 3.2, 1.06, { color: '#fff', fontFamily: 'Arial Black', lineHeight: 1.05, z: 12 }));
-    elements.push(body(`p4-card-body-${i}`, description, x + 2, y + 7, 17, 5.5, { color: '#d3e8f2', fontSize: .96, lineHeight: 1.2, z: 12 }));
+    const y = i < 2 ? 59 : 78;
+    elements.push(shape(`p4-card-${i}`, 'Cartão de ação', x, y, 21, 15.5, '#ffffff', { borderColor: '#b7e5f1', borderWidth: 1, borderRadius: 3, shadow: '0 10px 24px rgba(7,89,133,.12)', z: 6 }));
+    elements.push(icon(`p4-icon-${i}`, titleValue, iconName, x + 2, y + 2, 5.4, 4.8, '#fff', COLORS.blue));
+    elements.push(text(`p4-card-title-${i}`, titleValue, titleValue.toUpperCase(), x + 8, y + 2, 11.5, 4.2, 1.12, { color: COLORS.navy, fontFamily: 'Arial Black', lineHeight: 1.05, z: 12, minFontSize: .95 }));
+    elements.push(body(`p4-card-body-${i}`, description, x + 2, y + 8, 17, 5.8, { color: '#38556a', fontSize: 1.08, minFontSize: .95, lineHeight: 1.16, z: 12 }));
   });
-  return document(page, elements, { type: 'color', value: COLORS.navy }, 'hero-mandato');
+  return document(page, elements, { type: 'color', value: '#f8fcfd' }, 'hero-mandato');
 }
 
 function page5(page: MagazinePage) {

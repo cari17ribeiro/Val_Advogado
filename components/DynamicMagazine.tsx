@@ -1,33 +1,16 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { AlertTriangle, ChevronLeft, ChevronRight, LoaderCircle, Maximize2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { CanvasPage } from '@/components/editor/CanvasRenderer';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
 import { fallbackPages } from '@/lib/fallback-pages';
-import type { MagazinePage } from '@/lib/editor-types';
-import { rest } from '@/lib/supabase-rest';
 
 export function DynamicMagazine({ print = false }: { print?: boolean }) {
-  const [pages, setPages] = useState<MagazinePage[]>(fallbackPages);
+  const [pages] = useState(fallbackPages);
   const [index, setIndex] = useState(0);
   const [single, setSingle] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState('');
   const [transitioning, setTransitioning] = useState(false);
-
-  useEffect(() => {
-    rest<MagazinePage[]>('magazine_pages?select=*&is_published=eq.true&order=page_number.asc')
-      .then((data) => {
-        if (data?.length) setPages(data);
-        else setLoadError('O banco não retornou páginas; exibindo a versão de segurança.');
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoadError('Não foi possível sincronizar agora; exibindo a versão de segurança.');
-      })
-      .finally(() => setLoading(false));
-  }, []);
 
   useEffect(() => {
     const update = () => setSingle(window.innerWidth < 900);
@@ -67,12 +50,10 @@ export function DynamicMagazine({ print = false }: { print?: boolean }) {
     return () => window.removeEventListener('keydown', keyboard);
   });
 
-  if (loading) return <div className="db-loading"><LoaderCircle className="spin" /> Carregando revista...</div>;
   if (print) return <div className="canvas-print-magazine">{documents.map(({ page, document }) => <CanvasPage key={page.id} document={document} className="canvas-page-print" />)}</div>;
 
   return (
     <div className="canvas-reader">
-      {loadError && <div className="db-sync-warning"><AlertTriangle size={16} />{loadError}</div>}
       <div className="canvas-reader-stage">
         <button type="button" className="reader-arrow previous" onClick={() => go(-1)} disabled={index === 0} aria-label="Página anterior"><ChevronLeft /></button>
         <div className={`canvas-book ${single ? 'single' : 'spread'} ${transitioning ? 'is-transitioning' : ''}`}>

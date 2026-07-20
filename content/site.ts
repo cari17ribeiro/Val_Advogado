@@ -1,5 +1,3 @@
-const driveImage = (id: string, width = 1600) => `https://drive.google.com/thumbnail?id=${id}&sz=w${width}`;
-
 export const site = {
   name: 'Val Advogado',
   eyebrow: 'Mandato presente, transparente e humano',
@@ -13,17 +11,17 @@ export const site = {
 };
 
 export const photos = {
-  hero: driveImage('1sGUGialjaXCmqFSfPemKoSVwrNs8-4uz', 1800),
-  logo: driveImage('1aDmEvDBwnIDjoj8DLebs02Bo1TtmuQ_e', 900),
-  gabinete: driveImage('18CN1dCySJupMd3Lh52qtodqOs8Vjr_iV', 1400),
-  esporte: driveImage('11xbMhMMR1URa1F7KThvwYz9isZl-vb7l', 1400),
-  inclusao: driveImage('1qr3P1o4SA6nM3n5Aaz-b2ffzulfHFHvL', 1400),
-  familia: driveImage('1UlXqmcoDLPGKImKiHErLi3MI9cuarkZH', 1400),
-  renata: driveImage('1wniEqONORqqaievZICltIekekKHeHmDM', 1400),
-  referenciaAzul: driveImage('1X1VayZJwrpsAXgJUUoiLhj3HSE1Iw7XK', 1600),
-  mosaic: driveImage('1X1VayZJwrpsAXgJUUoiLhj3HSE1Iw7XK', 1600),
-  luvas: driveImage('11xbMhMMR1URa1F7KThvwYz9isZl-vb7l', 1400),
-  acao: driveImage('18CN1dCySJupMd3Lh52qtodqOs8Vjr_iV', 1400),
+  hero: '/media/val-portrait.jpg',
+  logo: '/media/val-logo.jpg',
+  gabinete: '/media/gabinete.jpg',
+  esporte: '/media/publica.jpg',
+  inclusao: '/media/projetos.jpg',
+  familia: '/media/familia.jpg',
+  renata: '/media/grupo.jpg',
+  referenciaAzul: '/media/val-mosaic.jpg',
+  mosaic: '/media/val-mosaic.jpg',
+  luvas: '/media/publica.jpg',
+  acao: '/media/gabinete.jpg',
 };
 
 export const priorityProjects = [
