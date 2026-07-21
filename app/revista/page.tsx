@@ -1,7 +1,12 @@
 ﻿import Link from 'next/link';
 import { DynamicMagazine } from '@/components/DynamicMagazine';
+import { getInitialMagazinePages } from '@/lib/server-magazine-pages';
 
-export default function RevistaPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function RevistaPage() {
+  const pages = await getInitialMagazinePages();
+
   return (
     <main className="reader">
       <div className="readerbar">
@@ -12,7 +17,7 @@ export default function RevistaPage() {
           <Link className="button" href="/admin">Área administrativa</Link>
         </div>
       </div>
-      <DynamicMagazine />
+      <DynamicMagazine initialPages={pages} />
     </main>
   );
 }

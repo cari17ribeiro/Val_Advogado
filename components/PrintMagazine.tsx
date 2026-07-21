@@ -2,11 +2,11 @@
 
 import { CanvasPage, backgroundStyle } from '@/components/editor/CanvasRenderer';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
-import { staticMagazinePages } from '@/lib/static-magazine-pages';
+import type { MagazinePage } from '@/lib/editor-types';
 
-export function PrintMagazine({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) {
+export function PrintMagazine({ pages, mode = 'proof' }: { pages: MagazinePage[]; mode?: 'proof' | 'bleed' }) {
   const bleed = mode === 'bleed';
-  const documents = staticMagazinePages.map((page) => ({ page, document: getCanvasDocument(page) }));
+  const documents = pages.map((page) => ({ page, document: getCanvasDocument(page) }));
 
   return (
     <div

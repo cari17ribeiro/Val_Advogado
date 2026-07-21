@@ -1,11 +1,14 @@
 ﻿import Link from 'next/link';
 import { PrintMagazine } from '@/components/PrintMagazine';
 import { PdfButton } from '@/components/PdfButton';
+import { getInitialMagazinePages } from '@/lib/server-magazine-pages';
 
 type Props = { searchParams: Promise<{ mode?: string; pdf?: string }> };
 
+export const dynamic = 'force-dynamic';
+
 export default async function Impressao({ searchParams }: Props) {
-  const params = await searchParams;
+  const [params, pages] = await Promise.all([searchParams, getInitialMagazinePages()]);
   const mode: 'proof' | 'bleed' = params.mode === 'bleed' || params.pdf === 'bleed' ? 'bleed' : 'proof';
 
   return (
@@ -18,7 +21,7 @@ export default async function Impressao({ searchParams }: Props) {
           <PdfButton mode="bleed" />
         </div>
       </div>
-      <PrintMagazine mode={mode} />
+      <PrintMagazine pages={pages} mode={mode} />
     </main>
   );
 }

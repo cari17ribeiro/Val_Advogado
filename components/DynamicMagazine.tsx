@@ -4,18 +4,19 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BookOpen, ChevronLeft, ChevronRight, Columns2, Maximize2 } from 'lucide-react';
 import { CanvasPage } from '@/components/editor/CanvasRenderer';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
-import { staticMagazinePages } from '@/lib/static-magazine-pages';
+import type { MagazinePage } from '@/lib/editor-types';
+import { fetchPublishedPages, subscribeToMagazineUpdates } from '@/lib/magazine-sync';
 
 type ViewMode = 'single' | 'spread';
 type TurnPhase = 'idle' | 'out-next' | 'in-next' | 'out-previous' | 'in-previous';
 
-export function DynamicMagazine({ print = false }: { print?: boolean }) {
+export function DynamicMagazine({ initialPages, print = false }: { initialPages: MagazinePage[]; print?: boolean }) {
   const [index, setIndex] = useState(0);
+  const [pages, setPages] = useState(initialPages);
   const [viewMode, setViewMode] = useState<ViewMode>('spread');
   const [narrowViewport, setNarrowViewport] = useState(false);
   const [turnPhase, setTurnPhase] = useState<TurnPhase>('idle');
   const animationTimers = useRef<number[]>([]);
-  const pages = staticMagazinePages;
 
   const documents = useMemo(
     () => pages.map((page) => ({ page, document: getCanvasDocument(page) })),
@@ -33,6 +34,27 @@ export function DynamicMagazine({ print = false }: { print?: boolean }) {
     update();
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
+  }, []);
+
+  useEffect(() => {
+    setPages(initialPages);
+  }, [initialPages]);
+
+  useEffect(() => {
+    let active = true;
+    const refresh = () => {
+      void fetchPublishedPages()
+        .then((publishedPages) => {
+          if (active && publishedPages.length > 0) setPages(publishedPages);
+        })
+        .catch((error) => console.error('Não foi possível atualizar a visualização da revista.', error));
+    };
+    const unsubscribe = subscribeToMagazineUpdates(refresh);
+
+    return () => {
+      active = false;
+      unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
