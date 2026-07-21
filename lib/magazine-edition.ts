@@ -10,8 +10,8 @@ import { fallbackPages } from './fallback-pages';
  * educação, fiscalização, proteção animal, segurança e a contracapa.
  */
 export const MAGAZINE_EDITION_SOURCE_PAGES = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-  11, 12, 13, 14, 21, 22, 23, 24, 25, 26,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 11,
+  10, 12, 13, 14, 21, 22, 23, 24, 25, 26,
 ] as const;
 
 export const MAGAZINE_EDITION_PAGE_COUNT = MAGAZINE_EDITION_SOURCE_PAGES.length;
