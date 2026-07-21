@@ -72,9 +72,9 @@ export default function Home() {
       <motion.section id="sobre" className="content-section story-section story-section-v4" variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.7 }}>
         <div className="home-photo-mosaic" aria-label="Mosaico de fotografias do mandato">
           <figure className="mosaic-tile mosaic-main"><img src={photos.familia} alt="Val com sua família" /><figcaption>Família e valores</figcaption></figure>
-          <figure className="mosaic-tile mosaic-gabinete"><img src={photos.gabinete} alt="Atividade no gabinete" /><figcaption>Gabinete presente</figcaption></figure>
+          <figure className="mosaic-tile mosaic-gabinete"><img src={photos.gabinete} alt="Val durante encontro institucional" /><figcaption>Presença e diálogo</figcaption></figure>
           <figure className="mosaic-tile mosaic-acao"><img src={photos.inclusao} alt="Ação de inclusão" /><figcaption>Inclusão</figcaption></figure>
-          <figure className="mosaic-tile mosaic-luta"><img src={photos.esporte} alt="Projeto esportivo apoiado pelo mandato" /><figcaption>Esporte social</figcaption></figure>
+          <figure className="mosaic-tile mosaic-luta"><img src={photos.esporteEquipe} alt="Equipe de projeto esportivo apoiado pelo mandato" /><figcaption>Esporte social</figcaption></figure>
           <figure className="mosaic-tile mosaic-portrait"><img src={photos.hero} alt="Val Advogado" /></figure>
           <div className="mosaic-glass-label"><Scale /><span>Advogado por formação<br /><b>Servidor por vocação</b></span></div>
         </div>
@@ -102,8 +102,8 @@ export default function Home() {
         <motion.article className="cause-panel autism-panel cause-panel-v4" initial={{ opacity: 0, x: -36 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.75 }}>
           <div className="cause-photo-collage">
             <div className="cause-photo-large"><img src={photos.inclusao} alt="Ação de inclusão" /></div>
-            <div className="cause-photo-small"><img src={photos.familia} alt="Família e cuidado" /></div>
-            <div className="cause-photo-small"><img src={photos.gabinete} alt="Atuação do gabinete" /></div>
+            <div className="cause-photo-small"><img src={photos.inclusaoComunidade} alt="Comunidade reunida em uma ação de inclusão" /></div>
+            <div className="cause-photo-small"><img src={photos.comunidade} alt="Val em encontro com uma família" /></div>
           </div>
           <div className="cause-copy glass-panel">
             <span className="cause-icon"><HeartHandshake /></span><small>{priorityProjects[0].kicker}</small><h3>{priorityProjects[0].title}</h3><p>{priorityProjects[0].text}</p>
@@ -133,7 +133,7 @@ export default function Home() {
         </div>
         <div className="street-gallery street-gallery-v4">
           <figure><img src={photos.acao} alt="Ação do mandato nos bairros" /><figcaption>Trabalho de campo</figcaption></figure>
-          <figure><img src={photos.renata} alt="Parceria com Renata Abreu" /><figcaption>Guarujá e Brasília</figcaption></figure>
+          <figure><img src={photos.inclusao} alt="Val em ação de inclusão" /><figcaption>Inclusão que aproxima</figcaption></figure>
           <figure><img src={photos.familia} alt="Val em momento familiar" /><figcaption>Valores e comunidade</figcaption></figure>
         </div>
       </motion.section>
@@ -143,9 +143,9 @@ export default function Home() {
           <span className="section-kicker">Diário visual</span><h2>Fotos que contam o trabalho.</h2><p>Um mosaico dinâmico para valorizar visitas, projetos, encontros e ações do mandato.</p>
         </motion.div>
         <div className="photo-journal-grid">
-          {[photos.gabinete, photos.esporte, photos.inclusao, photos.familia, photos.renata].map((src, index) => (
+          {[photos.gabinete, photos.esporteEquipe, photos.inclusao, photos.familia, photos.comunidade].map((src, index) => (
             <motion.figure key={src} className={`journal-item journal-item-${index + 1}`} initial={{ opacity: 0, scale: .96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: .2 }} transition={{ duration: .55, delay: index * .06 }}>
-              <img src={src} alt={['Gabinete', 'Esporte social', 'Inclusão', 'Família e valores', 'Parceria institucional'][index]} />
+              <img src={src} alt={['Presença institucional', 'Esporte social', 'Inclusão', 'Família e valores', 'Comunidade'][index]} />
             </motion.figure>
           ))}
         </div>

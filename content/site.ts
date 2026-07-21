@@ -13,15 +13,18 @@
 export const photos = {
   hero: '/media/val/capa-sem-fundo.png',
   logo: '/media/val-logo.jpg',
-  gabinete: '/media/val/val-gabinete.jpg',
-  esporte: '/media/val/esporte-01.jpg',
-  inclusao: '/media/val/inclusao-01.jpg',
-  familia: '/media/val/familia-01.jpg',
-  renata: '/media/val/renata-01.jpg',
+  gabinete: '/magazine-assets/67bf3a98f7cc77f5.jpg',
+  esporte: '/magazine-assets/b4934797dc9487d7.png',
+  esporteEquipe: '/magazine-assets/3be44a63b521291d.jpg',
+  esporteInfantil: '/magazine-assets/beb99dff6ea71960.png',
+  inclusao: '/magazine-assets/4d66cb635d1ac7ed.jpg',
+  inclusaoComunidade: '/magazine-assets/cdd9c200adc67664.png',
+  familia: '/magazine-assets/cbf54abc633df7bf.jpg',
+  comunidade: '/magazine-assets/99f465c12f9c0b46.jpg',
   referenciaAzul: '/media/val/referencia-capa.png',
   mosaic: '/media/val/referencia-capa.png',
-  luvas: '/media/val/esporte-02.jpg',
-  acao: '/media/val/val-rua.jpg',
+  luvas: '/magazine-assets/b4934797dc9487d7.png',
+  acao: '/magazine-assets/67bf3a98f7cc77f5.jpg',
 };
 
 export const priorityProjects = [
