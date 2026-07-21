@@ -98,6 +98,8 @@ export type CanvasDocument = {
 export type MagazinePage = {
   id: string;
   page_number: number;
+  /** Número original no snapshot/Supabase antes da curadoria da edição. */
+  source_page_number?: number;
   template: string;
   title: string | null;
   subtitle: string | null;

@@ -8,14 +8,15 @@ import {
 import { VisualEditor } from '@/components/editor/VisualEditor';
 import { defaultCanvasForPage, getCanvasDocument } from '@/lib/default-page-layouts';
 import { fallbackPages } from '@/lib/fallback-pages';
+import { prepareMagazineEditionPages, projectMagazinePage } from '@/lib/magazine-edition';
 import { notifyMagazineUpdated } from '@/lib/magazine-sync';
 import type { CanvasDocument, MagazinePage, MediaItem } from '@/lib/editor-types';
 import { clearSession, readSession, rest, uploadMedia } from '@/lib/supabase-rest';
 
 function completePages(remotePages: MagazinePage[]) {
-  if (!remotePages.length) return fallbackPages;
+  if (!remotePages.length) return prepareMagazineEditionPages(fallbackPages);
   const byNumber = new Map(remotePages.map((page) => [page.page_number, page]));
-  return fallbackPages.map((fallback) => {
+  const completed = fallbackPages.map((fallback) => {
     const page = byNumber.get(fallback.page_number) || fallback;
     const canvas = (page.elements as { canvas?: CanvasDocument } | null)?.canvas;
     const expectedFamily = page.page_number === 1 ? 'capa-infojornal-moderna' : page.page_number === 2 ? 'sumario-infojornal-moderno' : null;
@@ -24,6 +25,7 @@ function completePages(remotePages: MagazinePage[]) {
     }
     return page;
   });
+  return prepareMagazineEditionPages(completed);
 }
 
 export function AdminApp() {
@@ -97,8 +99,9 @@ export function AdminApp() {
     }
     setStatus('Salvando página...'); setStatusType('saving');
     try {
+      const sourcePageNumber = current.source_page_number ?? current.page_number;
       const payload = {
-        page_number: current.page_number,
+        page_number: sourcePageNumber,
         template: current.template,
         title: current.title,
         subtitle: current.subtitle,
@@ -117,7 +120,7 @@ export function AdminApp() {
             body: JSON.stringify(payload),
           }, session.access_token);
         } catch {
-          saved = await rest<MagazinePage[]>(`magazine_pages?page_number=eq.${current.page_number}`, {
+          saved = await rest<MagazinePage[]>(`magazine_pages?page_number=eq.${sourcePageNumber}`, {
             method: 'PATCH',
             body: JSON.stringify(payload),
           }, session.access_token);
@@ -129,7 +132,7 @@ export function AdminApp() {
         }, session.access_token);
       }
       if (!saved?.[0] && !current.id.startsWith('fallback-')) {
-        saved = await rest<MagazinePage[]>(`magazine_pages?page_number=eq.${current.page_number}`, {
+        saved = await rest<MagazinePage[]>(`magazine_pages?page_number=eq.${sourcePageNumber}`, {
           method: 'PATCH',
           body: JSON.stringify(payload),
         }, session.access_token);
@@ -139,8 +142,9 @@ export function AdminApp() {
       }
       if (saved?.[0]) {
         const savedPage = saved[0];
+        const projectedPage = projectMagazinePage(savedPage, activeIndex + 1, sourcePageNumber);
         setPages((currentPages) => {
-          const nextPages = currentPages.map((item, index) => index === activeIndex ? savedPage : item);
+          const nextPages = currentPages.map((item, index) => index === activeIndex ? projectedPage : item);
           pagesRef.current = nextPages;
           return nextPages;
         });

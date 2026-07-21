@@ -6,5 +6,6 @@ out/
 .env.*
 !.env.example
 .vercel/
+tmp/
 pnpm-workspace.yaml
 public/media/demo/community-volunteers.jpg

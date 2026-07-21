@@ -11,7 +11,7 @@ export default async function RevistaPage() {
     <main className="reader">
       <div className="readerbar">
         <Link href="/">â† Voltar ao site</Link>
-        <span>Revista Digital • Edição 01 • 26 páginas</span>
+        <span>Revista Digital • Edição 01 • 20 páginas</span>
         <div className="actions">
           <Link className="button ghost" href="/impressao">Modo impressão</Link>
           <Link className="button" href="/admin">Área administrativa</Link>

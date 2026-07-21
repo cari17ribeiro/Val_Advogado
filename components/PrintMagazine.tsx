@@ -2,11 +2,35 @@
 
 import { CanvasPage, backgroundStyle } from '@/components/editor/CanvasRenderer';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
-import type { MagazinePage } from '@/lib/editor-types';
+import type { CanvasDocument, MagazinePage } from '@/lib/editor-types';
+
+function printAssetSource(source: string) {
+  if (source.startsWith('/magazine-assets/') || source.startsWith('/media/')) {
+    const filename = source.split('/').pop();
+    if (!filename) return source;
+    return `/print-assets/${filename.replace(/\.[^.]+$/, '')}.webp`;
+  }
+  if (source.startsWith('https://suwjmyetnifzeehirpxt.supabase.co/')) {
+    return `/_next/image?url=${encodeURIComponent(source)}&w=1200&q=75`;
+  }
+  return source;
+}
+
+function optimizeDocumentForPrint(document: CanvasDocument): CanvasDocument {
+  return {
+    ...document,
+    background: document.background.type === 'image'
+      ? { ...document.background, value: printAssetSource(document.background.value) }
+      : document.background,
+    elements: document.elements.map((element) => element.type === 'image'
+      ? { ...element, src: printAssetSource(element.src) }
+      : element),
+  };
+}
 
 export function PrintMagazine({ pages, mode = 'proof' }: { pages: MagazinePage[]; mode?: 'proof' | 'bleed' }) {
   const bleed = mode === 'bleed';
-  const documents = pages.map((page) => ({ page, document: getCanvasDocument(page) }));
+  const documents = pages.map((page) => ({ page, document: optimizeDocumentForPrint(getCanvasDocument(page)) }));
 
   return (
     <div

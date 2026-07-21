@@ -753,6 +753,7 @@ img{display:block;max-width:100%}
 .ve-preflight-list{max-height:220px;overflow:auto;padding:7px}.ve-preflight-list button{width:100%;display:flex;align-items:flex-start;gap:7px;padding:8px;border:0;border-radius:8px;background:transparent;text-align:left;color:#435d70;font-size:10px;line-height:1.3;cursor:pointer}.ve-preflight-list button:hover{background:#eef6fa}.ve-preflight-list svg{width:13px;height:13px;flex:0 0 auto}.ve-preflight-list .severity-error{color:#dc2626}.ve-preflight-list .severity-warning{color:#d97706}.ve-preflight-list .severity-info{color:#0284c7}.ve-preflight-list p{margin:0;padding:8px;font-size:10px;line-height:1.4;color:#526b7c}
 
 .print-view-v7{min-height:100vh;background:#c9d3da}.print-toolbar-actions{display:flex;gap:8px;align-items:center}.pdf-mode-bleed{background:#063e61!important}.pdf-mode-proof{background:#0284c7!important}
+.pdf-download-control{display:grid;gap:5px}.pdf-download-error{max-width:260px;color:#fecaca;font:700 10px/1.35 Inter,sans-serif}.pdf-download-control .button:disabled{cursor:wait;opacity:.72}
 .print-magazine-v7{padding:28px;display:grid;justify-content:center;gap:28px;background:#c9d3da}
 .print-sheet-v7{position:relative;background:#fff;box-shadow:0 24px 60px rgba(15,23,42,.23);overflow:visible;isolation:isolate}
 .proof-a5 .print-sheet-v7{width:148mm;height:210mm}.proof-a5 .print-trim-v7{position:absolute;inset:0}

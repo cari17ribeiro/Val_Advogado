@@ -5,6 +5,7 @@ import { BookOpen, ChevronLeft, ChevronRight, Columns2, Maximize2 } from 'lucide
 import { CanvasPage } from '@/components/editor/CanvasRenderer';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
 import type { MagazinePage } from '@/lib/editor-types';
+import { prepareMagazineEditionPages } from '@/lib/magazine-edition';
 import { fetchPublishedPages, subscribeToMagazineUpdates } from '@/lib/magazine-sync';
 
 type ViewMode = 'single' | 'spread';
@@ -45,7 +46,7 @@ export function DynamicMagazine({ initialPages, print = false }: { initialPages:
     const refresh = () => {
       void fetchPublishedPages()
         .then((publishedPages) => {
-          if (active && publishedPages.length > 0) setPages(publishedPages);
+          if (active && publishedPages.length > 0) setPages(prepareMagazineEditionPages(publishedPages));
         })
         .catch((error) => console.error('Não foi possível atualizar a visualização da revista.', error));
     };

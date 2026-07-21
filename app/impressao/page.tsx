@@ -15,7 +15,7 @@ export default async function Impressao({ searchParams }: Props) {
     <main className="db-print-view print-view-v7">
       <div className="print-toolbar">
         <Link href="/">â† Site</Link>
-        <span>Prévia editorial • 26 páginas • A5</span>
+        <span>Prévia editorial • 20 páginas • A5</span>
         <div className="print-toolbar-actions">
           <PdfButton mode="proof" />
           <PdfButton mode="bleed" />
