@@ -11,6 +11,7 @@ export const ASSETS = {
   acao: '/media/val/val-rua.jpg',
   familia: '/media/val/familia-01.jpg',
   inclusao: '/media/val/inclusao-01.jpg',
+  autismTexture: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784590506572-um-close-up-de-um-fundo-colorido-com-pecas-de-quebra-cabeca-generativo-ai-1034560-78805.jpg',
   renata: '/media/val/renata-01.jpg',
   demoMeeting: '/media/val/val-gabinete.jpg',
   demoMartialArts: '/media/val/esporte-02.jpg',
@@ -316,46 +317,61 @@ function page5(page: MagazinePage) {
   const paragraphThree = 'O objetivo é construir uma cidade que reconheça as diferentes necessidades existentes dentro do espectro e ofereça condições para que cada pessoa desenvolva suas potencialidades com dignidade.';
   const highlight = page.quote || 'Inclusão de verdade exige acolhimento, conhecimento, estrutura e investimento.';
   const elements: CanvasElement[] = [
-    shape('p5-orb-blue', 'Luz azul', -13, -8, 58, 42, 'radial-gradient(circle,rgba(72,187,255,.42),rgba(36,99,235,.08) 57%,transparent 72%)', { borderRadius: 50, allowBleed: true, locked: true, z: 1 }),
-    shape('p5-orb-gold', 'Luz dourada', 68, 72, 45, 40, 'radial-gradient(circle,rgba(250,204,21,.28),rgba(245,158,11,.06) 55%,transparent 72%)', { borderRadius: 50, allowBleed: true, locked: true, z: 1 }),
-    shape('p5-spectrum', 'Faixa do espectro', 0, 0, 100, 1.25, 'linear-gradient(90deg,#38bdf8 0%,#6366f1 25%,#a855f7 46%,#f59e0b 70%,#22c55e 86%,#06b6d4 100%)', { allowBleed: true, locked: true, z: 4 }),
-    label(page, '#dff8ff'),
-    rule('p5-rule', 7.2, 'rgba(186,230,253,.72)'),
-    text('p5-kicker', 'Tema', 'AUTISMO  •  INCLUSÃO  •  DIREITOS', 6, 10.2, 58, 3, 1.05, { color: '#9eeaff', fontFamily: 'Inter', fontWeight: 900, letterSpacing: .12, z: 12 }),
-    text('p5-title', 'Título', page.title || 'Autismo: uma causa permanente do mandato', 6, 14, 82, 14, 4.55, { color: '#fff', minFontSize: 3.1, lineHeight: .92, z: 12 }),
-    text('p5-infinity', 'Símbolo da neurodiversidade', '∞', 79, 7.5, 16, 17, 10, { color: 'rgba(255,255,255,.17)', fontFamily: 'Georgia', fontWeight: 700, align: 'center', lineHeight: .82, locked: true, z: 5 }),
-    shape('p5-card-education', 'Cartão glass educação', 6, 31, 88, 16.5, 'linear-gradient(110deg,rgba(255,255,255,.20),rgba(255,255,255,.09))', { borderColor: 'rgba(186,230,253,.42)', borderWidth: 1, borderRadius: 3.2, shadow: '0 12px 30px rgba(3,18,48,.18)', z: 5 }),
-    icon('p5-icon-education', 'Educação inclusiva', 'GraduationCap', 8, 34, 8, 7, '#ffffff', 'rgba(56,189,248,.24)'),
-    text('p5-heading-education', 'Título do bloco', 'INCLUSÃO QUE ACOMPANHA', 18, 33.2, 69, 3, 1.16, { color: '#b9f2ff', fontFamily: 'Inter', fontWeight: 900, letterSpacing: .08, z: 12 }),
-    body('p5-body-education', paragraphOne, 18, 37, 70, 8.2, { color: '#f4fbff', fontSize: 1.24, fontWeight: 560, lineHeight: 1.25, z: 12 }),
-    shape('p5-card-policy', 'Cartão glass políticas públicas', 6, 50, 88, 18.5, 'linear-gradient(110deg,rgba(255,255,255,.18),rgba(255,255,255,.07))', { borderColor: 'rgba(196,181,253,.46)', borderWidth: 1, borderRadius: 3.2, shadow: '0 12px 30px rgba(3,18,48,.16)', z: 5 }),
-    icon('p5-icon-policy', 'Rede de políticas públicas', 'HeartPulse', 8, 54, 8, 7, '#ffffff', 'rgba(168,85,247,.24)'),
-    text('p5-heading-policy', 'Título do bloco', 'UMA POLÍTICA PÚBLICA PERMANENTE', 18, 52.3, 69, 3, 1.16, { color: '#e4d8ff', fontFamily: 'Inter', fontWeight: 900, letterSpacing: .07, z: 12 }),
-    body('p5-body-policy', paragraphTwo, 18, 56.2, 70, 10, { color: '#f7f4ff', fontSize: 1.2, fontWeight: 560, lineHeight: 1.25, z: 12 }),
-    shape('p5-card-dignity', 'Cartão glass dignidade', 6, 71, 88, 13.5, 'linear-gradient(110deg,rgba(255,255,255,.18),rgba(255,255,255,.08))', { borderColor: 'rgba(153,246,228,.46)', borderWidth: 1, borderRadius: 3.2, shadow: '0 12px 30px rgba(3,18,48,.15)', z: 5 }),
-    icon('p5-icon-dignity', 'Dignidade e autonomia', 'Accessibility', 8, 74, 8, 7, '#ffffff', 'rgba(20,184,166,.25)'),
-    text('p5-heading-dignity', 'Título do bloco', 'DIGNIDADE EM TODO O ESPECTRO', 18, 72.8, 69, 3, 1.16, { color: '#baf7ed', fontFamily: 'Inter', fontWeight: 900, letterSpacing: .07, z: 12 }),
-    body('p5-body-dignity', paragraphThree, 18, 76.5, 70, 6.5, { color: '#f1fffc', fontSize: 1.18, fontWeight: 560, lineHeight: 1.24, z: 12 }),
-    shape('p5-highlight', 'Frase de destaque', 6, 87, 88, 8.3, 'linear-gradient(100deg,#f9c74f 0%,#f59e0b 38%,#22c55e 100%)', { borderColor: 'rgba(255,255,255,.48)', borderWidth: 1, borderRadius: 3.2, shadow: '0 13px 30px rgba(3,18,48,.24)', z: 7 }),
-    icon('p5-highlight-icon', 'Acolhimento', 'HeartHandshake', 8, 88.6, 6, 5, '#ffffff', 'rgba(7,31,56,.22)'),
-    text('p5-highlight-text', 'Frase de destaque', highlight, 16, 88.5, 73, 5, 1.48, { color: '#071f38', fontFamily: 'Georgia', fontWeight: 800, italic: true, lineHeight: 1.14, letterSpacing: 0, z: 12 }),
-    pageNumber(page, 'rgba(255,255,255,.72)'),
+    image('p5-autism-texture', 'Textura temática de quebra-cabeças', ASSETS.autismTexture, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, fit: 'cover', opacity: .3, allowBleed: true, locked: true, z: 1 }),
+    shape('p5-spectrum', 'Faixa do espectro', 6, 18.8, 40, 1.1, 'linear-gradient(90deg,#38bdf8,#6366f1,#a855f7,#f59e0b,#22c55e)', { locked: true, z: 6, clipPath: 'polygon(0 20%,98% 0,100% 75%,2% 100%)' }),
+    label(page), rule('p5-rule'),
+    image('p5-logo', 'Logotipo', ASSETS.logo, 77, 2.2, 17, 5.2, { fit: 'contain', frameStyle: 'none', z: 20 }),
+    text('p5-title', 'Título', page.title || 'Autismo: uma causa permanente do mandato', 6, 9.2, 78, 10.5, 5.15, { color: '#062f5b', minFontSize: 3.45, lineHeight: .92, z: 12 }),
+    text('p5-infinity', 'Símbolo da neurodiversidade', '∞', 83, 8.2, 11, 10, 6.8, { color: '#06a6c8', fontFamily: 'Georgia', fontWeight: 800, align: 'center', lineHeight: .8, z: 12 }),
+    shape('p5-ribbon', 'Faixa orgânica azul', 3.5, 21, 57, 15.5, '#062f5b', { clipPath: 'polygon(2% 8%,98% 0,95% 18%,100% 31%,96% 45%,99% 61%,94% 74%,97% 92%,1% 100%,4% 79%,0 64%,4% 47%,0 29%,5% 17%)', z: 7 }),
+    body('p5-paragraph-one', paragraphOne, 7.5, 24, 47.5, 10.5, { color: '#ffffff', fontSize: 1.72, minFontSize: 1.4, fontWeight: 500, lineHeight: 1.22, z: 12 }),
+    image('p5-photo-one', 'Inclusão e acolhimento', ASSETS.inclusao, 61, 20.5, 31, 23.5, { frameStyle: 'polaroid', rotation: 2, positionY: 45, shadow: '0 10px 18px rgba(7,31,56,.18)', z: 10 }),
+    image('p5-photo-two', 'Família e cuidado', ASSETS.demoChild, 7.5, 40.5, 33, 26, { frameStyle: 'polaroid', rotation: -3.5, positionY: 45, shadow: '0 10px 18px rgba(7,31,56,.18)', z: 10 }),
+    shape('p5-note', 'Quadro de políticas públicas', 46, 43, 47, 19.8, 'rgba(255,255,255,.92)', { borderColor: '#062f5b', borderWidth: 1.3, borderRadius: .8, shadow: '4px 4px 0 rgba(7,89,133,.16)', z: 7, rotation: .4 }),
+    icon('p5-note-icon', 'Direitos e políticas públicas', 'Accessibility', 43.2, 41.1, 7, 6, '#062f5b', '#f8fbfc'),
+    body('p5-paragraph-two', paragraphTwo, 49.5, 46, 39.5, 14.5, { color: '#062f5b', fontSize: 1.7, minFontSize: 1.36, fontWeight: 480, lineHeight: 1.22, z: 12 }),
+    body('p5-paragraph-three', paragraphThree, 9, 66.3, 82, 10.2, { color: '#062f5b', fontSize: 1.82, minFontSize: 1.48, fontWeight: 500, lineHeight: 1.24, align: 'center', z: 12 }),
+    shape('p5-callout', 'Compromisso permanente', 8, 77.2, 42, 9.5, '#ffffff', { borderColor: '#062f5b', borderWidth: 1.2, borderRadius: 4, z: 9 }),
+    icon('p5-callout-icon', 'Rede de cuidado', 'HeartHandshake', 9.5, 79, 6, 5.5, '#ffffff', '#06a6c8'),
+    text('p5-callout-text', 'Chamada', 'ACOLHIMENTO + CONHECIMENTO\n+ ESTRUTURA + INVESTIMENTO', 17, 79, 30, 6, 1.45, { color: '#062f5b', fontFamily: 'Inter', fontWeight: 900, align: 'center', lineHeight: 1.08, z: 12 }),
+    image('p5-photo-three', 'Inclusão na comunidade', ASSETS.demoEducation, 56, 76.5, 35, 16.5, { frameStyle: 'polaroid', rotation: 2, positionY: 42, shadow: '0 10px 18px rgba(7,31,56,.18)', z: 10 }),
+    shape('p5-footer', 'Rodapé editorial', 0, 83, 100, 17, '#062f5b', { allowBleed: true, clipPath: 'polygon(0 18%,18% 34%,39% 10%,61% 31%,82% 8%,100% 24%,100% 100%,0 100%)', z: 6 }),
+    text('p5-quote-mark', 'Aspas', '“', 6.5, 87, 6, 5, 4.8, { color: '#ffffff', fontFamily: 'Georgia', fontWeight: 900, z: 13 }),
+    text('p5-highlight-text', 'Frase de destaque', highlight, 11, 87.8, 43, 7.2, 1.68, { color: '#ffffff', fontFamily: 'Manrope', fontWeight: 800, italic: true, lineHeight: 1.12, letterSpacing: 0, minFontSize: 1.35, z: 12 }),
+    pageNumber(page, '#d9f5ff'),
   ];
-  return document(page, elements, { type: 'gradient', value: 'linear-gradient(145deg,#061936 0%,#0b4f8a 34%,#5146a8 65%,#087f8c 100%)' }, 'autismo-permanente', false);
+  return document(page, elements, { type: 'color', value: '#f8fbfc' }, 'autismo-scrapbook', false);
 }
 
 function page6(page: MagazinePage) {
+  const paragraphOne = 'Para Val, uma escola de luta não é apenas um espaço onde se aprende a chutar, defender ou competir. É um ambiente de convivência, disciplina, respeito e construção de oportunidades.';
+  const paragraphTwo = 'Em muitos bairros, esses projetos acolhem crianças e adolescentes no período em que estariam expostos à ociosidade e a diferentes situações de vulnerabilidade. Os professores tornam-se referências, os colegas formam uma rede de apoio e cada avanço dentro do esporte ajuda a desenvolver confiança para enfrentar os desafios fora dele.';
+  const paragraphThree = 'Por isso, o mandato adotou como prioridade o acompanhamento e o apadrinhamento das escolas de luta e de projetos esportivos. O apoio envolve divulgação, articulação de recursos, incentivo aos atletas, aquisição de materiais e aproximação das iniciativas com o poder público.';
+  const highlight = page.quote || 'A luta ensina muito mais do que competir: ensina a cair, levantar e continuar.';
   return document(page, [
-    image('p6-bg', 'Treino demonstrativo', ASSETS.demoBoxing, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, allowBleed: true, locked: true, positionX: 48, positionY: 48, z: 1 }),
-    shape('p6-overlay', 'Degradê de proteção', 0, 0, 100, 100, 'linear-gradient(90deg,rgba(3,31,56,.95),rgba(3,74,105,.74) 54%,rgba(3,31,56,.15))', { allowBleed: true, locked: true, z: 2 }),
-    label(page, '#67e8f9'), rule('p6-rule', 7.2, '#67e8f9'),
-    text('p6-title', 'Título', page.title || 'Esporte que abre caminhos.', 6, 14, 62, 25, 6.0, { color: '#fff', minFontSize: 3.8, z: 12 }),
-    shape('p6-glass', 'Caixa de texto', 6, 45, 49, 25, 'rgba(255,255,255,.88)', { borderRadius: 5, shadow: '0 14px 35px rgba(0,0,0,.22)', z: 6 }),
-    body('p6-body', page.body || 'O apadrinhamento de escolas de luta fortalece oportunidades, disciplina e pertencimento.', 10, 49, 41, 15, { color: COLORS.navy, fontSize: 1.75, fontWeight: 650, z: 12 }),
-    shape('p6-band', 'Faixa', 0, 78, 100, 17, 'linear-gradient(90deg,#075985,#06b6d4)', { allowBleed: true, z: 5 }),
-    text('p6-band-title', 'Chamada', 'APADRINHAMENTO DE ESCOLAS DE LUTA', 6, 82, 88, 6, 2.65, { color: '#fff', fontFamily: 'Arial Black', align: 'center', z: 12 }),
-    text('p6-band-sub', 'Subchamada', 'OPORTUNIDADE • DISCIPLINA • RESPEITO', 6, 89.2, 88, 3, 1.05, { color: '#d9f7ff', fontFamily: 'Inter', fontWeight: 900, align: 'center', letterSpacing: .12, z: 12 }),
-  ], { type: 'color', value: COLORS.navy }, 'hero-esporte');
+    shape('p6-paper', 'Fundo editorial claro', 0, 0, 100, 100, '#f8fbfc', { allowBleed: true, locked: true, z: 1 }),
+    image('p6-texture', 'Textura editorial', ASSETS.mosaic, 0, 0, 100, 100, { frameStyle: 'none', borderRadius: 0, fit: 'cover', opacity: .065, filter: 'grayscale(1)', allowBleed: true, locked: true, z: 2 }),
+    label(page), rule('p6-rule'),
+    image('p6-logo', 'Logotipo', ASSETS.logo, 77, 2.2, 17, 5.2, { fit: 'contain', frameStyle: 'none', z: 20 }),
+    text('p6-title', 'Título', page.title || 'Apadrinhar projetos é acreditar em futuros', 6, 9.2, 79, 10.7, 5.1, { color: '#062f5b', minFontSize: 3.35, lineHeight: .92, z: 12 }),
+    icon('p6-title-icon', 'Artes marciais', 'Swords', 85.5, 10.2, 8, 7, '#ffffff', '#075985'),
+    shape('p6-ribbon', 'Faixa orgânica azul', 3.5, 21, 55, 14.5, '#062f5b', { clipPath: 'polygon(2% 8%,98% 0,95% 18%,100% 31%,96% 45%,99% 61%,94% 74%,97% 92%,1% 100%,4% 79%,0 64%,4% 47%,0 29%,5% 17%)', z: 7 }),
+    body('p6-paragraph-one', paragraphOne, 7.5, 24.1, 45.5, 9.2, { color: '#ffffff', fontSize: 1.78, minFontSize: 1.46, fontWeight: 500, lineHeight: 1.22, z: 12 }),
+    image('p6-photo-one', 'Treino de luta', ASSETS.demoMartialArts, 60, 20.5, 32, 24, { frameStyle: 'polaroid', rotation: 2.2, positionY: 44, shadow: '0 10px 18px rgba(7,31,56,.18)', z: 10 }),
+    image('p6-photo-two', 'Projeto esportivo', ASSETS.demoBoxing, 7, 40.5, 34, 27, { frameStyle: 'polaroid', rotation: -3.2, positionY: 44, shadow: '0 10px 18px rgba(7,31,56,.18)', z: 10 }),
+    shape('p6-note', 'Quadro de impacto social', 45.5, 43, 48, 21.5, 'rgba(255,255,255,.94)', { borderColor: '#062f5b', borderWidth: 1.3, borderRadius: .8, shadow: '4px 4px 0 rgba(7,89,133,.16)', z: 7, rotation: .35 }),
+    icon('p6-note-icon', 'Disciplina e convivência', 'Users', 42.8, 41.1, 7, 6, '#062f5b', '#f8fbfc'),
+    body('p6-paragraph-two', paragraphTwo, 49, 45.5, 40.5, 16.8, { color: '#062f5b', fontSize: 1.62, minFontSize: 1.32, fontWeight: 470, lineHeight: 1.2, z: 12 }),
+    body('p6-paragraph-three', paragraphThree, 8.5, 66.3, 83, 10.8, { color: '#062f5b', fontSize: 1.72, minFontSize: 1.4, fontWeight: 500, lineHeight: 1.22, align: 'center', z: 12 }),
+    shape('p6-callout', 'Rede de apoio', 8, 77.2, 43, 9.5, '#ffffff', { borderColor: '#062f5b', borderWidth: 1.2, borderRadius: 4, z: 9 }),
+    icon('p6-callout-icon', 'Apoio aos projetos', 'Medal', 10, 79, 6, 5.5, '#ffffff', '#075985'),
+    text('p6-callout-text', 'Chamada', 'DIVULGAÇÃO  •  RECURSOS\nMATERIAIS  •  INCENTIVO', 18, 79.1, 30, 5.2, 1.36, { color: '#062f5b', fontFamily: 'Inter', fontWeight: 900, align: 'center', lineHeight: 1.08, z: 12 }),
+    image('p6-photo-three', 'Atletas e futuro', ASSETS.luvas, 57, 76.5, 34, 16, { frameStyle: 'polaroid', rotation: 1.8, positionY: 45, shadow: '0 10px 18px rgba(7,31,56,.18)', z: 10 }),
+    shape('p6-footer', 'Rodapé editorial', 0, 83, 100, 17, '#062f5b', { allowBleed: true, clipPath: 'polygon(0 20%,18% 34%,39% 10%,61% 31%,82% 8%,100% 24%,100% 100%,0 100%)', z: 6 }),
+    text('p6-quote-mark', 'Aspas', '“', 6.5, 87, 6, 5, 4.8, { color: '#ffffff', fontFamily: 'Georgia', fontWeight: 900, z: 13 }),
+    text('p6-highlight-text', 'Frase de destaque', highlight, 11, 87.8, 43, 7.2, 1.68, { color: '#ffffff', fontFamily: 'Manrope', fontWeight: 800, italic: true, lineHeight: 1.12, letterSpacing: 0, minFontSize: 1.35, z: 12 }),
+    pageNumber(page, '#d9f5ff'),
+  ], { type: 'color', value: '#f8fbfc' }, 'lutas-scrapbook', false);
 }
 
 function page7(page: MagazinePage) {
@@ -632,7 +648,7 @@ function page20(page: MagazinePage) {
 
 const BUILDERS: Record<number, (page: MagazinePage) => CanvasDocument> = {
   1: page1, 2: page2, 3: page3, 4: page4, 5: page5,
-  6: page6, 7: page7, 8: page8, 9: page9, 10: page10,
+  6: page7, 7: page6, 8: page8, 9: page9, 10: page10,
   11: page11, 12: page12, 13: page13, 14: page14, 15: page15,
   16: page16, 17: page17, 18: page18, 19: page19, 20: page10,
   21: page18, 22: page11, 23: page16, 24: page17, 25: page19, 26: page20,

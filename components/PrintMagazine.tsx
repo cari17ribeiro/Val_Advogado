@@ -1,29 +1,17 @@
-﻿'use client';
+'use client';
 
-import { useEffect, useMemo, useState } from 'react';
 import { CanvasPage, backgroundStyle } from '@/components/editor/CanvasRenderer';
-import { mergeWithFallback } from '@/lib/client-magazine-pages';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
-import { fallbackPages } from '@/lib/fallback-pages';
-import { fetchPublishedPages } from '@/lib/magazine-sync';
-import type { MagazinePage } from '@/lib/editor-types';
+import { staticMagazinePages } from '@/lib/static-magazine-pages';
 
 export function PrintMagazine({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) {
   const bleed = mode === 'bleed';
-  const [pages, setPages] = useState<MagazinePage[]>(fallbackPages);
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    fetchPublishedPages()
-      .then((pageData) => setPages(mergeWithFallback(pageData, true)))
-      .catch(() => setPages(fallbackPages))
-      .finally(() => setLoaded(true));
-  }, []);
-  const documents = useMemo(() => pages.map((page) => ({ page, document: getCanvasDocument(page) })), [pages]);
+  const documents = staticMagazinePages.map((page) => ({ page, document: getCanvasDocument(page) }));
 
   return (
     <div
       className={`print-magazine-v7 ${bleed ? 'with-bleed' : 'proof-a5'}`}
-      data-print-ready={loaded && documents.length > 0 ? 'true' : 'false'}
+      data-print-ready={documents.length > 0 ? 'true' : 'false'}
       data-page-count={documents.length}
     >
       {documents.map(({ page, document }) => (
@@ -42,4 +30,3 @@ export function PrintMagazine({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) 
     </div>
   );
 }
-

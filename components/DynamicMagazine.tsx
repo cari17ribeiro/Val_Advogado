@@ -1,58 +1,70 @@
-﻿'use client';
+'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { BookOpen, ChevronLeft, ChevronRight, Columns2, Maximize2 } from 'lucide-react';
 import { CanvasPage } from '@/components/editor/CanvasRenderer';
-import { mergeWithFallback } from '@/lib/client-magazine-pages';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
-import { fallbackPages } from '@/lib/fallback-pages';
-import { fetchPublishedPages, subscribeToMagazineUpdates } from '@/lib/magazine-sync';
-import type { MagazinePage } from '@/lib/editor-types';
+import { staticMagazinePages } from '@/lib/static-magazine-pages';
+
+type ViewMode = 'single' | 'spread';
+type TurnPhase = 'idle' | 'out-next' | 'in-next' | 'out-previous' | 'in-previous';
 
 export function DynamicMagazine({ print = false }: { print?: boolean }) {
-  const [pages, setPages] = useState<MagazinePage[]>(fallbackPages);
   const [index, setIndex] = useState(0);
-  const [single, setSingle] = useState(false);
-  const [transitioning, setTransitioning] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>('spread');
+  const [narrowViewport, setNarrowViewport] = useState(false);
+  const [turnPhase, setTurnPhase] = useState<TurnPhase>('idle');
+  const animationTimers = useRef<number[]>([]);
+  const pages = staticMagazinePages;
+
+  const documents = useMemo(
+    () => pages.map((page) => ({ page, document: getCanvasDocument(page) })),
+    [pages],
+  );
+  const single = narrowViewport || viewMode === 'single';
+  const max = single ? documents.length - 1 : Math.max(0, Math.ceil(documents.length / 2) - 1);
+  const visible = useMemo(
+    () => single ? documents.slice(index, index + 1) : documents.slice(index * 2, index * 2 + 2),
+    [documents, index, single],
+  );
 
   useEffect(() => {
-    let active = true;
-    const refresh = () => fetchPublishedPages()
-      .then((pageData) => { if (active) setPages(mergeWithFallback(pageData, true)); })
-      .catch(() => { if (active) setPages(fallbackPages); });
-    void refresh();
-    const unsubscribe = subscribeToMagazineUpdates(refresh);
-    return () => { active = false; unsubscribe(); };
-  }, []);
-
-  useEffect(() => {
-    const update = () => setSingle(window.innerWidth < 900);
+    const update = () => setNarrowViewport(window.innerWidth < 900);
     update();
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, []);
 
-  const documents = useMemo(() => pages.map((page) => ({ page, document: getCanvasDocument(page) })), [pages]);
-  const max = single ? documents.length - 1 : Math.max(0, Math.ceil(documents.length / 2) - 1);
-  const visible = useMemo(() => single ? [documents[index]] : [documents[index * 2], documents[index * 2 + 1]].filter(Boolean), [documents, index, single]);
+  useEffect(() => {
+    setIndex((current) => Math.min(current, max));
+  }, [max]);
+
+  useEffect(() => () => {
+    animationTimers.current.forEach((timer) => window.clearTimeout(timer));
+  }, []);
 
   useEffect(() => {
     const sources = documents.flatMap(({ document }) => [
       document.background.type === 'image' ? document.background.value : '',
-      ...document.elements.filter((element) => element.type === 'image').map((element) => element.type === 'image' ? element.src : ''),
+      ...document.elements
+        .filter((element) => element.type === 'image')
+        .map((element) => element.type === 'image' ? element.src : ''),
     ]).filter(Boolean);
     sources.forEach((source) => { const img = new Image(); img.src = source; });
   }, [documents]);
 
-  const go = (direction: number) => {
+  const go = useCallback((direction: number) => {
     const next = Math.max(0, Math.min(max, index + direction));
-    if (next === index || transitioning) return;
-    setTransitioning(true);
-    window.setTimeout(() => {
+    if (next === index || turnPhase !== 'idle') return;
+
+    const directionName = direction > 0 ? 'next' : 'previous';
+    setTurnPhase(`out-${directionName}` as TurnPhase);
+    animationTimers.current.push(window.setTimeout(() => {
       setIndex(next);
-      window.setTimeout(() => setTransitioning(false), 40);
-    }, 120);
-  };
+      setTurnPhase(`in-${directionName}` as TurnPhase);
+      animationTimers.current.push(window.setTimeout(() => setTurnPhase('idle'), 300));
+    }, 260));
+  }, [index, max, turnPhase]);
 
   useEffect(() => {
     const keyboard = (event: KeyboardEvent) => {
@@ -61,27 +73,47 @@ export function DynamicMagazine({ print = false }: { print?: boolean }) {
     };
     window.addEventListener('keydown', keyboard);
     return () => window.removeEventListener('keydown', keyboard);
-  });
+  }, [go]);
 
-  if (print) return <div className="canvas-print-magazine">{documents.map(({ page, document }) => <CanvasPage key={page.id} document={document} className="canvas-page-print" />)}</div>;
+  const changeView = (nextMode: ViewMode) => {
+    if (narrowViewport || nextMode === viewMode || turnPhase !== 'idle') return;
+    const currentPageIndex = viewMode === 'single' ? index : index * 2;
+    setViewMode(nextMode);
+    setIndex(nextMode === 'single' ? currentPageIndex : Math.floor(currentPageIndex / 2));
+  };
+
+  if (print) {
+    return <div className="canvas-print-magazine">{documents.map(({ page, document }) => <CanvasPage key={page.id} document={document} className="canvas-page-print" />)}</div>;
+  }
 
   return (
     <div className="canvas-reader">
       <div className="canvas-reader-stage">
-        <button type="button" className="reader-arrow previous" onClick={() => go(-1)} disabled={index === 0} aria-label="Página anterior"><ChevronLeft /></button>
-        <div className={`canvas-book ${single ? 'single' : 'spread'} ${transitioning ? 'is-transitioning' : ''}`}>
+        <button type="button" className="reader-arrow previous" onClick={() => go(-1)} disabled={index === 0 || turnPhase !== 'idle'} aria-label="Página anterior"><ChevronLeft /></button>
+        <div className={`canvas-book ${single ? 'single' : 'spread'} turn-${turnPhase}`} aria-live="polite">
           {visible.map(({ page, document }) => <div className="canvas-reader-page" key={page.id}><CanvasPage document={document} /></div>)}
         </div>
-        <button type="button" className="reader-arrow next" onClick={() => go(1)} disabled={index === max} aria-label="Próxima página"><ChevronRight /></button>
+        <button type="button" className="reader-arrow next" onClick={() => go(1)} disabled={index === max || turnPhase !== 'idle'} aria-label="Próxima página"><ChevronRight /></button>
       </div>
+
       <div className="canvas-reader-controls">
         <span>{single ? `Página ${visible[0]?.page.page_number} de ${pages.length}` : `Páginas ${visible[0]?.page.page_number}-${visible.at(-1)?.page.page_number} de ${pages.length}`}</span>
         <div className="canvas-reader-progress"><i style={{ width: `${((index + 1) / (max + 1)) * 100}%` }} /></div>
-        <button type="button" onClick={() => document.documentElement.requestFullscreen?.()}><Maximize2 /> Tela cheia</button>
+        <div className="canvas-reader-actions">
+          <div className="canvas-view-toggle" role="group" aria-label="Modo de visualização">
+            <button type="button" className={single ? 'active' : ''} onClick={() => changeView('single')} disabled={narrowViewport} aria-pressed={single}><BookOpen /> Uma página</button>
+            <button type="button" className={!single ? 'active' : ''} onClick={() => changeView('spread')} disabled={narrowViewport} aria-pressed={!single}><Columns2 /> Duas páginas</button>
+          </div>
+          <button type="button" className="canvas-fullscreen" onClick={() => document.documentElement.requestFullscreen?.()}><Maximize2 /> Tela cheia</button>
+        </div>
       </div>
-      <div className="canvas-reader-thumbs">{documents.map(({ page, document }, pageIndex) => <button type="button" key={page.id} className={(single ? pageIndex : Math.floor(pageIndex / 2)) === index ? 'active' : ''} onClick={() => setIndex(single ? pageIndex : Math.floor(pageIndex / 2))}><span><CanvasPage document={document} /></span><b>{page.page_number}</b></button>)}</div>
+
+      <div className="canvas-reader-thumbs">
+        {documents.map(({ page, document }, pageIndex) => {
+          const target = single ? pageIndex : Math.floor(pageIndex / 2);
+          return <button type="button" key={page.id} className={target === index ? 'active' : ''} onClick={() => turnPhase === 'idle' && setIndex(target)} aria-label={`Ir para a página ${page.page_number}`}><span><CanvasPage document={document} /></span><b>{page.page_number}</b></button>;
+        })}
+      </div>
     </div>
   );
 }
-
-
