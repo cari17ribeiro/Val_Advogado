@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -9,7 +9,6 @@ import {
   Building2,
   CheckCircle2,
   GraduationCap,
-  HandHeart,
   HeartHandshake,
   Landmark,
   MapPin,
@@ -24,10 +23,18 @@ import {
 } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { HomeMagazinePreview } from '@/components/HomeMagazinePreview';
-import { causes, photos, priorityProjects, site } from '@/content/site';
+import { causes, homePhotos, photos, priorityProjects, site } from '@/content/site';
 
 const causeIcons = [Stethoscope, GraduationCap, PawPrint, ShieldCheck, Building2, Landmark];
 const reveal = { hidden: { opacity: 0, y: 36 }, visible: { opacity: 1, y: 0 } };
+
+const journalPhotos = [
+  { src: homePhotos.journalInstitutional, alt: 'Presença institucional' },
+  { src: homePhotos.journalSport, alt: 'Esporte social' },
+  { src: homePhotos.journalInclusion, alt: 'Inclusão' },
+  { src: homePhotos.journalFamily, alt: 'Família e valores' },
+  { src: homePhotos.journalCommunity, alt: 'Comunidade' },
+];
 
 export default function Home() {
   return (
@@ -56,7 +63,7 @@ export default function Home() {
         <motion.div className="home-hero-visual" initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.9, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}>
           <div className="portrait-glass portrait-glass-v4">
             <div className="portrait-glow" aria-hidden="true" />
-            <img src={photos.hero} alt="Val Advogado" />
+            <img src={homePhotos.heroPortrait} alt="Val Advogado" style={{ objectPosition: 'center bottom' }} />
           </div>
           <div className="hero-mini-card card-top"><Accessibility size={22} /><div><strong>Inclusão</strong><span>Cuidar de quem cuida</span></div></div>
           <div className="hero-mini-card card-bottom"><Swords size={22} /><div><strong>Esporte social</strong><span>Mais de R$ 710 mil</span></div></div>
@@ -71,11 +78,11 @@ export default function Home() {
 
       <motion.section id="sobre" className="content-section story-section story-section-v4" variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.7 }}>
         <div className="home-photo-mosaic" aria-label="Mosaico de fotografias do mandato">
-          <figure className="mosaic-tile mosaic-main"><img src={photos.familia} alt="Val com sua família" /><figcaption>Família e valores</figcaption></figure>
-          <figure className="mosaic-tile mosaic-gabinete"><img src={photos.gabinete} alt="Val durante encontro institucional" /><figcaption>Presença e diálogo</figcaption></figure>
-          <figure className="mosaic-tile mosaic-acao"><img src={photos.inclusao} alt="Ação de inclusão" /><figcaption>Inclusão</figcaption></figure>
-          <figure className="mosaic-tile mosaic-luta"><img src={photos.esporteEquipe} alt="Equipe de projeto esportivo apoiado pelo mandato" /><figcaption>Esporte social</figcaption></figure>
-          <figure className="mosaic-tile mosaic-portrait"><img src={photos.hero} alt="Val Advogado" /></figure>
+          <figure className="mosaic-tile mosaic-main"><img src={homePhotos.storyFamilyMain} alt="Val com sua família" style={{ objectPosition: 'center 18%' }} /><figcaption>Família e valores</figcaption></figure>
+          <figure className="mosaic-tile mosaic-gabinete"><img src={homePhotos.storyInstitutional} alt="Val durante encontro institucional" style={{ objectPosition: 'center 20%' }} /><figcaption>Presença e diálogo</figcaption></figure>
+          <figure className="mosaic-tile mosaic-acao"><img src={homePhotos.storyInclusion} alt="Ação de inclusão" style={{ objectPosition: 'center center' }} /><figcaption>Inclusão</figcaption></figure>
+          <figure className="mosaic-tile mosaic-luta"><img src={homePhotos.storySport} alt="Equipe de projeto esportivo apoiado pelo mandato" style={{ objectPosition: 'center center' }} /><figcaption>Esporte social</figcaption></figure>
+          <figure className="mosaic-tile mosaic-portrait"><img src={homePhotos.storyPortraitSmall} alt="Val Advogado" style={{ objectFit: 'contain', objectPosition: 'center bottom' }} /></figure>
           <div className="mosaic-glass-label"><Scale /><span>Advogado por formação<br /><b>Servidor por vocação</b></span></div>
         </div>
 
@@ -101,9 +108,9 @@ export default function Home() {
       <section className="cause-showcase content-section">
         <motion.article className="cause-panel autism-panel cause-panel-v4" initial={{ opacity: 0, x: -36 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.75 }}>
           <div className="cause-photo-collage">
-            <div className="cause-photo-large"><img src={photos.inclusao} alt="Ação de inclusão" /></div>
-            <div className="cause-photo-small"><img src={photos.inclusaoComunidade} alt="Comunidade reunida em uma ação de inclusão" /></div>
-            <div className="cause-photo-small"><img src={photos.comunidade} alt="Val em encontro com uma família" /></div>
+            <div className="cause-photo-large"><img src={homePhotos.inclusionLarge} alt="Ação de inclusão" style={{ objectPosition: 'center center' }} /></div>
+            <div className="cause-photo-small"><img src={homePhotos.inclusionCommunity} alt="Comunidade reunida em uma ação de inclusão" style={{ objectPosition: 'center center' }} /></div>
+            <div className="cause-photo-small"><img src={homePhotos.inclusionFamilyOrSupport} alt="Família em ação de acolhimento" style={{ objectPosition: 'center center' }} /></div>
           </div>
           <div className="cause-copy glass-panel">
             <span className="cause-icon"><HeartHandshake /></span><small>{priorityProjects[0].kicker}</small><h3>{priorityProjects[0].title}</h3><p>{priorityProjects[0].text}</p>
@@ -114,7 +121,7 @@ export default function Home() {
 
         <motion.article className="cause-panel fight-panel cause-panel-v4" initial={{ opacity: 0, x: 36 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.75 }}>
           <div className="autism-photo-composition">
-            <img src={photos.esporte} alt="Projeto esportivo apoiado por Val" />
+            <img src={homePhotos.sportLarge} alt="Projeto esportivo apoiado por Val" style={{ objectPosition: 'center center' }} />
             <div className="autism-soft-layer" aria-hidden="true"><div /><div /><Swords /></div>
           </div>
           <div className="cause-copy glass-panel">
@@ -132,9 +139,9 @@ export default function Home() {
           <div className="timeline-list"><div><span>01</span><b>Ouvir</b><small>Receber demandas e conhecer a realidade.</small></div><div><span>02</span><b>Fiscalizar</b><small>Acompanhar serviços e cobrar soluções.</small></div><div><span>03</span><b>Agir</b><small>Encaminhar projetos e prestar contas.</small></div></div>
         </div>
         <div className="street-gallery street-gallery-v4">
-          <figure><img src={photos.acao} alt="Ação do mandato nos bairros" /><figcaption>Trabalho de campo</figcaption></figure>
-          <figure><img src={photos.inclusao} alt="Val em ação de inclusão" /><figcaption>Inclusão que aproxima</figcaption></figure>
-          <figure><img src={photos.familia} alt="Val em momento familiar" /><figcaption>Valores e comunidade</figcaption></figure>
+          <figure><img src={homePhotos.streetMain} alt="Ação do mandato nos bairros" style={{ objectPosition: 'center 20%' }} /><figcaption>Trabalho de campo</figcaption></figure>
+          <figure><img src={homePhotos.streetInclusion} alt="Val em ação de inclusão" style={{ objectPosition: 'center center' }} /><figcaption>Inclusão que aproxima</figcaption></figure>
+          <figure><img src={homePhotos.streetCommunity} alt="Val em encontro com a comunidade" style={{ objectPosition: 'center center' }} /><figcaption>Valores e comunidade</figcaption></figure>
         </div>
       </motion.section>
 
@@ -143,9 +150,9 @@ export default function Home() {
           <span className="section-kicker">Diário visual</span><h2>Fotos que contam o trabalho.</h2><p>Um mosaico dinâmico para valorizar visitas, projetos, encontros e ações do mandato.</p>
         </motion.div>
         <div className="photo-journal-grid">
-          {[photos.gabinete, photos.esporteEquipe, photos.inclusao, photos.familia, photos.comunidade].map((src, index) => (
-            <motion.figure key={src} className={`journal-item journal-item-${index + 1}`} initial={{ opacity: 0, scale: .96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: .2 }} transition={{ duration: .55, delay: index * .06 }}>
-              <img src={src} alt={['Presença institucional', 'Esporte social', 'Inclusão', 'Família e valores', 'Comunidade'][index]} />
+          {journalPhotos.map(({ src, alt }, index) => (
+            <motion.figure key={`${src}-${index}`} className={`journal-item journal-item-${index + 1}`} initial={{ opacity: 0, scale: .96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: .2 }} transition={{ duration: .55, delay: index * .06 }}>
+              <img src={src} alt={alt} style={{ objectPosition: 'center center' }} />
             </motion.figure>
           ))}
         </div>
@@ -175,6 +182,3 @@ export default function Home() {
     </main>
   );
 }
-
-
-
