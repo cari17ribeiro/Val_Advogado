@@ -1,4 +1,4 @@
-﻿export const site = {
+export const site = {
   name: 'Val Advogado',
   eyebrow: 'Mandato presente, transparente e humano',
   headline: 'Presença que cuida. Trabalho que transforma.',
@@ -10,21 +10,23 @@
   address: 'Guarujá, São Paulo',
 };
 
+const storage = 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads';
+
 export const photos = {
   hero: '/media/val/capa-sem-fundo.png',
   logo: '/media/val-logo.jpg',
-  gabinete: '/magazine-assets/67bf3a98f7cc77f5.jpg',
-  esporte: '/magazine-assets/b4934797dc9487d7.png',
-  esporteEquipe: '/magazine-assets/3be44a63b521291d.jpg',
-  esporteInfantil: '/magazine-assets/beb99dff6ea71960.png',
-  inclusao: '/magazine-assets/4d66cb635d1ac7ed.jpg',
-  inclusaoComunidade: '/magazine-assets/cdd9c200adc67664.png',
-  familia: '/magazine-assets/cbf54abc633df7bf.jpg',
-  comunidade: '/magazine-assets/99f465c12f9c0b46.jpg',
+  gabinete: `${storage}/1784679102977-39188e54-0037-4081-841d-9e8e78c836cc.png`,
+  esporte: `${storage}/1784606053975-71207c59-220c-4080-8e3a-86f38ab7b4af.png`,
+  esporteEquipe: `${storage}/1784606583095-criancas.png`,
+  esporteInfantil: `${storage}/1784605334345-design-sem-nome-6-.png`,
+  inclusao: `${storage}/1784633318326-2c2ac1cc-98ac-4346-9e5d-0bee8f7eec35.png`,
+  inclusaoComunidade: `${storage}/1784690573609-saveclip.app-590415039-18304095424249977-9214076341299288469-n.webp`,
+  familia: `${storage}/1784564705428-8241692b-e7f4-4fec-af34-9066646ea930.jpg`,
+  comunidade: `${storage}/1784577998881-img-2207-original.jpg`,
   referenciaAzul: '/media/val/referencia-capa.png',
   mosaic: '/media/val/referencia-capa.png',
-  luvas: '/magazine-assets/b4934797dc9487d7.png',
-  acao: '/magazine-assets/67bf3a98f7cc77f5.jpg',
+  luvas: `${storage}/1784605555731-luvas.png`,
+  acao: `${storage}/1784736357253-a.png`,
 };
 
 export const priorityProjects = [
@@ -54,5 +56,3 @@ export const causes = [
   { title: 'Água e saneamento', text: "Cobrança de soluções para falta d'água, baixa pressão, vazamentos e desassoreamento." },
   { title: 'Desenvolvimento', text: 'Incentivo ao empreendedorismo, comércio eletrônico municipal e geração de renda.' },
 ];
-
-
