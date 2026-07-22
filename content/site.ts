@@ -1,4 +1,4 @@
-﻿export const site = {
+export const site = {
   name: 'Val Advogado',
   eyebrow: 'Mandato presente, transparente e humano',
   headline: 'Presença que cuida. Trabalho que transforma.',
@@ -13,18 +13,18 @@
 export const photos = {
   hero: '/media/val/capa-sem-fundo.png',
   logo: '/media/val-logo.jpg',
-  gabinete: '/magazine-assets/67bf3a98f7cc77f5.jpg',
-  esporte: '/magazine-assets/b4934797dc9487d7.png',
-  esporteEquipe: '/magazine-assets/3be44a63b521291d.jpg',
-  esporteInfantil: '/magazine-assets/beb99dff6ea71960.png',
-  inclusao: '/magazine-assets/4d66cb635d1ac7ed.jpg',
-  inclusaoComunidade: '/magazine-assets/cdd9c200adc67664.png',
-  familia: '/magazine-assets/cbf54abc633df7bf.jpg',
-  comunidade: '/magazine-assets/99f465c12f9c0b46.jpg',
+  gabinete: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784602781783-capturar.png',
+  esporte: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784604357181-sda.png',
+  esporteEquipe: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784605555731-luvas.png',
+  esporteInfantil: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784605555731-luvas.png',
+  inclusao: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784595693141-autismo.png',
+  inclusaoComunidade: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784595653175-universo.png',
+  familia: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784565368346-screenshot-20260603-154522-instagram.jpg',
+  comunidade: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784577241140-sindrome-de-down.jpg',
   referenciaAzul: '/media/val/referencia-capa.png',
   mosaic: '/media/val/referencia-capa.png',
-  luvas: '/magazine-assets/b4934797dc9487d7.png',
-  acao: '/magazine-assets/67bf3a98f7cc77f5.jpg',
+  luvas: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784633552769-elite.png',
+  acao: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784675163904-capturar.png',
 };
 
 export const priorityProjects = [
@@ -54,4 +54,3 @@ export const causes = [
   { title: 'Água e saneamento', text: "Cobrança de soluções para falta d'água, baixa pressão, vazamentos e desassoreamento." },
   { title: 'Desenvolvimento', text: 'Incentivo ao empreendedorismo, comércio eletrônico municipal e geração de renda.' },
 ];
-
