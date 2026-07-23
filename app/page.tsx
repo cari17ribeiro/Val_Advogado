@@ -55,6 +55,21 @@ export default function Home() {
             <Link href="/revista" className="primary-action"><BookOpen size={19} /> Folhear revista <ArrowRight size={18} /></Link>
             <a href={site.whatsapp} className="secondary-action"><MessageCircle size={19} /> Falar com o gabinete</a>
           </div>
+          <div className="hero-connect-card">
+            <div className="hero-connect-qr">
+              <img
+                src="https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784781723091-capturar.jpg"
+                alt="QR code para acessar os canais digitais do Val Advogado"
+                width="104"
+                height="104"
+              />
+            </div>
+            <div className="hero-connect-copy">
+              <span>Se conecte com a gente</span>
+              <strong>Aponte a câmera do celular</strong>
+              <small>Escaneie o QR code e acompanhe nossos canais digitais.</small>
+            </div>
+          </div>
           <div className="hero-trust" aria-label="Valores do mandato">
             <span><ShieldCheck /> Transparência</span><span><MapPin /> Presença</span><span><Users /> Escuta ativa</span>
           </div>

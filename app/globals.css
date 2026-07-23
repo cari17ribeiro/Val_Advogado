@@ -879,4 +879,115 @@ img{display:block;max-width:100%}
   }
 }
 
+/* Convite de conexão no bloco principal */
+.hero-connect-card{
+  width:min(100%,560px);
+  margin-top:18px;
+  padding:12px 16px 12px 12px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  border:1px solid rgba(103,232,249,.34);
+  border-radius:22px;
+  background:linear-gradient(135deg,rgba(14,165,233,.16),rgba(3,15,31,.48));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 16px 34px rgba(2,6,23,.2);
+  backdrop-filter:blur(16px);
+}
+
+.hero-connect-qr{
+  width:94px;
+  height:94px;
+  flex:0 0 94px;
+  display:grid;
+  place-items:center;
+  padding:5px;
+  overflow:hidden;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 0 0 1px rgba(255,255,255,.55),0 0 28px rgba(34,211,238,.22);
+}
+
+.hero-connect-qr img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  border-radius:11px;
+}
+
+.hero-connect-copy{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:3px;
+}
+
+.hero-connect-copy span{
+  color:#67e8f9;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.16em;
+  line-height:1.25;
+  text-transform:uppercase;
+}
+
+.hero-connect-copy strong{
+  color:#fff;
+  font:800 clamp(15px,1.35vw,18px)/1.25 'Manrope',sans-serif;
+}
+
+.hero-connect-copy small{
+  max-width:330px;
+  color:#c8dcee;
+  font-size:11px;
+  line-height:1.45;
+}
+
+.hero-connect-card + .hero-trust{
+  margin-top:22px;
+}
+
+@media (max-width:680px){
+  .hero-connect-card{
+    width:100%;
+    margin-top:14px;
+    padding:10px;
+    gap:12px;
+    border-radius:18px;
+  }
+
+  .hero-connect-qr{
+    width:82px;
+    height:82px;
+    flex-basis:82px;
+    border-radius:14px;
+  }
+
+  .hero-connect-copy strong{
+    font-size:14px;
+  }
+
+  .hero-connect-copy small{
+    font-size:10px;
+  }
+}
+
+@media (max-width:390px){
+  .hero-connect-card{
+    align-items:flex-start;
+  }
+
+  .hero-connect-qr{
+    width:74px;
+    height:74px;
+    flex-basis:74px;
+  }
+
+  .hero-connect-copy span{
+    font-size:8px;
+    letter-spacing:.11em;
+  }
+}
+
 
