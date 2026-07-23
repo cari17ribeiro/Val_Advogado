@@ -335,7 +335,7 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
           <button type="button" onClick={() => fileInputRef.current?.click()}><ImagePlus /><span>Foto</span></button>
           <button type="button" onClick={addShape}><Shapes /><span>Forma</span></button>
           <button type="button" onClick={addIcon}><Sparkles /><span>Ícone</span></button>
-          <button type="button" onClick={onResetTemplate}><RotateCcw /><span>Modelo</span></button>
+          <button type="button" onClick={onResetTemplate} title="Restaurar a última versão salva"><RotateCcw /><span>Restaurar</span></button>
         </div>
         <input ref={fileInputRef} hidden type="file" accept="image/*" onChange={(event) => uploadNew(event.target.files?.[0])} />
 

@@ -13,6 +13,8 @@ import { notifyMagazineUpdated } from '@/lib/magazine-sync';
 import type { CanvasDocument, MagazinePage, MediaItem } from '@/lib/editor-types';
 import { clearSession, readSession, rest, uploadMedia } from '@/lib/supabase-rest';
 
+const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
+
 function completePages(remotePages: MagazinePage[]) {
   if (!remotePages.length) return prepareMagazineEditionPages(fallbackPages);
   const byNumber = new Map(remotePages.map((page) => [page.page_number, page]));
@@ -37,6 +39,7 @@ export function AdminApp() {
   const [dirty, setDirty] = useState(false);
   const [loading, setLoading] = useState(true);
   const pagesRef = useRef<MagazinePage[]>([]);
+  const savedPagesRef = useRef<MagazinePage[]>([]);
   const selectedIndexRef = useRef(0);
   const session = useMemo(() => readSession(), []);
   const page = pages[selectedIndex];
@@ -53,6 +56,7 @@ export function AdminApp() {
     ]).then(([pageData, mediaData]) => {
       const nextPages = completePages(pageData);
       pagesRef.current = nextPages;
+      savedPagesRef.current = clone(nextPages);
       setPages(nextPages);
       setMedia(mediaData);
     }).catch((error: Error) => {
@@ -84,8 +88,9 @@ export function AdminApp() {
   }, [selectedIndex]);
 
   const resetTemplate = () => {
-    if (!page || !confirm('Restaurar o modelo desta página? Os elementos personalizados da página serão substituídos.')) return;
-    updateCanvas(defaultCanvasForPage(page));
+    const savedPage = savedPagesRef.current[selectedIndexRef.current];
+    if (!page || !savedPage || !confirm('Restaurar esta página para a última versão salva? As alterações ainda não salvas serão descartadas.')) return;
+    updateCanvas(clone(getCanvasDocument(savedPage)));
   };
 
   const savePage = useCallback(async () => {
@@ -148,6 +153,8 @@ export function AdminApp() {
           pagesRef.current = nextPages;
           return nextPages;
         });
+        savedPagesRef.current = savedPagesRef.current.map((item, index) =>
+          index === activeIndex ? clone(projectedPage) : item);
         notifyMagazineUpdated(savedPage);
       }
       setDirty(false); setStatus('Página salva e sincronizada.'); setStatusType('success');
