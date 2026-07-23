@@ -4,15 +4,15 @@ export const site = {
   headline: 'Presença que cuida. Trabalho que transforma.',
   description:
     'Uma vida transformada pela educação. Um mandato dedicado a transformar outras vidas, com inclusão, esporte, saúde, segurança e presença nos bairros.',
-  whatsapp: 'https://wa.me/5513996023101',
-  instagram: 'https://instagram.com/',
+  whatsapp: 'https://www.whatsapp.com/channel/0029VaHaNzTIHphHk6TBm71G',
+  instagram: 'https://www.instagram.com/val.advogado_oficial/',
   email: 'vereador_val_adv@camaraguaruja.sp.gov.br',
   address: 'Guarujá, São Paulo',
 };
 
 export const photos = {
   hero: '/media/val/capa-sem-fundo.png',
-  logo: '/media/val-logo.jpg',
+  logo: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784776051392-fc3cc5b0-070e-44b5-9509-306bcc2fd7a7.png',
   gabinete: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784602781783-capturar.png',
   esporte: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784604357181-sda.png',
   esporteEquipe: 'https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784605555731-luvas.png',
