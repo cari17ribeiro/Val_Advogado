@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } from 'react';
 import { BookOpen, ChevronLeft, ChevronRight, Columns2, Maximize2 } from 'lucide-react';
 import { CanvasPage } from '@/components/editor/CanvasRenderer';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
@@ -18,6 +18,7 @@ export function DynamicMagazine({ initialPages, print = false }: { initialPages:
   const [narrowViewport, setNarrowViewport] = useState(false);
   const [turnPhase, setTurnPhase] = useState<TurnPhase>('idle');
   const animationTimers = useRef<number[]>([]);
+  const touchStart = useRef<{ x: number; y: number; at: number } | null>(null);
 
   const documents = useMemo(
     () => pages.map((page) => ({ page, document: getCanvasDocument(page) })),
@@ -89,6 +90,29 @@ export function DynamicMagazine({ initialPages, print = false }: { initialPages:
     }, 260));
   }, [index, max, turnPhase]);
 
+  const startSwipe = useCallback((event: TouchEvent<HTMLDivElement>) => {
+    if (!narrowViewport || turnPhase !== 'idle' || event.touches.length !== 1) {
+      touchStart.current = null;
+      return;
+    }
+    const touch = event.touches[0];
+    touchStart.current = { x: touch.clientX, y: touch.clientY, at: Date.now() };
+  }, [narrowViewport, turnPhase]);
+
+  const finishSwipe = useCallback((event: TouchEvent<HTMLDivElement>) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!narrowViewport || !start || event.changedTouches.length !== 1) return;
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - start.x;
+    const deltaY = touch.clientY - start.y;
+    const elapsed = Date.now() - start.at;
+    const horizontalSwipe = Math.abs(deltaX) >= 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2;
+
+    if (horizontalSwipe && elapsed <= 900) go(deltaX < 0 ? 1 : -1);
+  }, [go, narrowViewport]);
+
   useEffect(() => {
     const keyboard = (event: KeyboardEvent) => {
       if (event.key === 'ArrowRight') go(1);
@@ -113,7 +137,13 @@ export function DynamicMagazine({ initialPages, print = false }: { initialPages:
     <div className="canvas-reader">
       <div className="canvas-reader-stage">
         <button type="button" className="reader-arrow previous" onClick={() => go(-1)} disabled={index === 0 || turnPhase !== 'idle'} aria-label="Página anterior"><ChevronLeft /></button>
-        <div className={`canvas-book ${single ? 'single' : 'spread'} turn-${turnPhase}`} aria-live="polite">
+        <div
+          className={`canvas-book ${single ? 'single' : 'spread'} turn-${turnPhase}`}
+          aria-live="polite"
+          onTouchStart={startSwipe}
+          onTouchEnd={finishSwipe}
+          onTouchCancel={() => { touchStart.current = null; }}
+        >
           {visible.map(({ page, document }) => <div className="canvas-reader-page" key={page.id}><CanvasPage document={document} /></div>)}
         </div>
         <button type="button" className="reader-arrow next" onClick={() => go(1)} disabled={index === max || turnPhase !== 'idle'} aria-label="Próxima página"><ChevronRight /></button>
