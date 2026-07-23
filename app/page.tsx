@@ -55,7 +55,13 @@ export default function Home() {
             <Link href="/revista" className="primary-action"><BookOpen size={19} /> Folhear revista <ArrowRight size={18} /></Link>
             <a href={site.whatsapp} className="secondary-action"><MessageCircle size={19} /> Falar com o gabinete</a>
           </div>
-          <div className="hero-connect-card">
+          <a
+            href="https://bioval.my.canva.site"
+            className="hero-connect-card"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Acessar os canais digitais do Val Advogado"
+          >
             <div className="hero-connect-qr">
               <img
                 src="https://suwjmyetnifzeehirpxt.supabase.co/storage/v1/object/public/val-media/uploads/1784781723091-capturar.jpg"
@@ -69,7 +75,7 @@ export default function Home() {
               <strong>Aponte a câmera do celular</strong>
               <small>Escaneie o QR code e acompanhe nossos canais digitais.</small>
             </div>
-          </div>
+          </a>
           <div className="hero-trust" aria-label="Valores do mandato">
             <span><ShieldCheck /> Transparência</span><span><MapPin /> Presença</span><span><Users /> Escuta ativa</span>
           </div>
