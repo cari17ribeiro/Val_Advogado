@@ -370,7 +370,6 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
                   selectedId={selectedId}
                   showSafeArea={showSafeArea}
                   showTrimGuide={showTrimGuide}
-                  performanceMode
                   onSelect={setSelectedId}
                   onElementPointerDown={startGesture}
                   onElementDoubleClick={(element) => { setSelectedId(element.id); setTimeout(() => window.document.getElementById('ve-text-content')?.focus(), 30); }}

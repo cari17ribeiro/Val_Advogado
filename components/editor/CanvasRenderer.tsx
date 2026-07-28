@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useMemo } from 'react';
 import {
   Accessibility, BookOpen, CalendarDays, Download, Dumbbell, GraduationCap,
   HeartHandshake, HeartPulse, Layers3, MapPinned, Medal, MessageCircle,
@@ -48,47 +48,14 @@ export function elementBoxStyle(element: CanvasElement): React.CSSProperties {
   } as React.CSSProperties;
 }
 
-function AutoFitText({ element, disabled = false }: { element: TextElement; disabled?: boolean }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-
-  useLayoutEffect(() => {
-    // Justified text must keep the exact size chosen in the editor. Applying
-    // auto-fit only in the reader made those blocks noticeably smaller.
-    if (disabled || element.align === 'justify') {
-      setScale((current) => (current === 1 ? current : 1));
-      return;
-    }
-    const node = ref.current;
-    if (!node) return;
-    let frame = 0;
-    const fit = () => {
-      const min = Math.min(1, (element.minFontSize ?? element.fontSize * .55) / element.fontSize);
-      let next = 1;
-      node.style.setProperty('--fit-scale', '1');
-      for (let i = 0; i < 24; i += 1) {
-        const overflow = node.scrollHeight > node.clientHeight + 1 || node.scrollWidth > node.clientWidth + 1;
-        if (!overflow || next <= min) break;
-        next = Math.max(min, next - .035);
-        node.style.setProperty('--fit-scale', String(next));
-      }
-      setScale((current) => (Math.abs(current - next) < .01 ? current : next));
-    };
-    frame = requestAnimationFrame(fit);
-    const observer = new ResizeObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(fit); });
-    observer.observe(node);
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); };
-  }, [disabled, element.text, element.fontSize, element.minFontSize, element.fontFamily, element.fontWeight, element.lineHeight, element.letterSpacing, element.align, element.w, element.h]);
-
+function CanvasText({ element }: { element: TextElement }) {
   return (
     <div
-      ref={ref}
       className="canvas-text-autofit"
       style={{
-        '--fit-scale': scale,
         color: element.color,
         fontFamily: PRINT_FONT_STACKS[element.fontFamily] || `'${element.fontFamily}', Arial, sans-serif`,
-        fontSize: `calc(${element.fontSize}cqw * var(--fit-scale))`,
+        fontSize: `${element.fontSize}cqw`,
         fontWeight: element.fontWeight,
         lineHeight: element.lineHeight,
         letterSpacing: `${element.letterSpacing}em`,
@@ -119,8 +86,8 @@ function imageFrameStyle(element: ImageElement): React.CSSProperties {
   return base;
 }
 
-export function CanvasElementView({ element, performanceMode = false }: { element: CanvasElement; performanceMode?: boolean }) {
-  if (element.type === 'text') return <AutoFitText element={element} disabled={performanceMode} />;
+export function CanvasElementView({ element }: { element: CanvasElement }) {
+  if (element.type === 'text') return <CanvasText element={element} />;
   if (element.type === 'image') {
     return (
       <div className={`canvas-image-frame frame-${element.frameStyle || 'rounded'}`} style={imageFrameStyle(element)}>
@@ -163,12 +130,11 @@ export type CanvasPageProps = {
   onSelect?: (id: string | null) => void;
   onElementPointerDown?: (event: React.PointerEvent<HTMLElement>, element: CanvasElement, action: 'move' | 'resize') => void;
   onElementDoubleClick?: (element: CanvasElement) => void;
-  performanceMode?: boolean;
 };
 
 export function CanvasPage({
   document, className = '', selectedId, interactive = false, showSafeArea = false, showTrimGuide = false,
-  onSelect, onElementPointerDown, onElementDoubleClick, performanceMode = false,
+  onSelect, onElementPointerDown, onElementDoubleClick,
 }: CanvasPageProps) {
   const sorted = useMemo(() => [...document.elements].sort((a, b) => a.z - b.z), [document.elements]);
   return (
@@ -195,7 +161,7 @@ export function CanvasPage({
           }}
           onDoubleClick={(event) => { event.stopPropagation(); onElementDoubleClick?.(element); }}
         >
-          <CanvasElementView element={element} performanceMode={performanceMode} />
+          <CanvasElementView element={element} />
           {interactive && selectedId === element.id && !element.locked && (
             <>
               <span className="canvas-selection-label">{element.name}</span>
