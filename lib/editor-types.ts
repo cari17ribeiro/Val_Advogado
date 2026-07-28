@@ -97,6 +97,7 @@ export type CanvasDocument = {
 
 export type MagazinePage = {
   id: string;
+  edition_id?: string;
   page_number: number;
   /** Número original no snapshot/Supabase antes da curadoria da edição. */
   source_page_number?: number;
@@ -108,6 +109,21 @@ export type MagazinePage = {
   background: string | null;
   elements: Record<string, unknown> | null;
   is_published: boolean;
+  updated_at?: string;
+};
+
+export type MagazineEditionStatus = 'draft' | 'published' | 'archived';
+
+export type MagazineEdition = {
+  id: string;
+  slug: string;
+  title: string;
+  edition_number: number;
+  status: MagazineEditionStatus;
+  cover_image_url: string | null;
+  published_at: string | null;
+  settings: Record<string, unknown>;
+  created_at?: string;
   updated_at?: string;
 };
 

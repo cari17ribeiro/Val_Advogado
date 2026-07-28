@@ -47,7 +47,10 @@ export function DynamicMagazine({ initialPages, print = false }: { initialPages:
     const refresh = () => {
       void fetchPublishedPages()
         .then((publishedPages) => {
-          if (active && publishedPages.length > 0) setPages(prepareMagazineEditionPages(publishedPages));
+          if (active && publishedPages.length > 0) {
+            setPages(prepareMagazineEditionPages(publishedPages));
+            setIndex(0);
+          }
         })
         .catch((error) => console.error('Não foi possível atualizar a visualização da revista.', error));
     };

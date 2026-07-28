@@ -1007,4 +1007,32 @@ img{display:block;max-width:100%}
   }
 }
 
+/* Gerenciamento de edições da revista */
+.canva-edition-picker{min-width:210px;display:flex;align-items:center;gap:7px}
+.canva-edition-picker>span{color:#7dd3fc;font-size:8px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+.canva-edition-picker select{width:min(290px,24vw);height:34px;padding:0 30px 0 10px;border:1px solid rgba(125,211,252,.28);border-radius:9px;background:#0d263a;color:#e8f7fc;font:750 10px Inter;outline:none;cursor:pointer}
+.canva-edition-picker select:focus{border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.12)}
+.canva-online-badge{padding:4px 7px;border:1px solid rgba(110,231,183,.28);border-radius:999px;background:rgba(5,150,105,.18);color:#a7f3d0;font-size:8px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.canva-admin-topbar nav .canva-publish{background:rgba(5,150,105,.16);color:#a7f3d0}
+.canva-admin-topbar nav .canva-publish:hover{background:rgba(5,150,105,.28);color:#d1fae5}
+.canva-admin-topbar nav .canva-publish:disabled{opacity:.62;cursor:default}
+
+@media(max-width:1500px){
+  .canva-page-name strong{display:none}
+  .canva-admin-topbar nav button:not(.canva-save):not(.canva-logout){width:38px;padding:0;justify-content:center;font-size:0}
+  .canva-edition-picker select{width:230px}
+}
+
+@media(max-width:950px){
+  .canva-edition-picker{min-width:0}
+  .canva-edition-picker>span,.canva-online-badge{display:none}
+  .canva-edition-picker select{width:190px}
+}
+
+@media(max-width:720px){
+  .canva-page-name{display:block}
+  .canva-edition-picker select{width:min(42vw,180px)}
+  .canva-admin-topbar nav .canva-publish{display:none}
+}
+
 

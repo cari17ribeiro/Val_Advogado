@@ -18,6 +18,8 @@ Principais recursos:
 - PDF de prova no formato final A5, 148 x 210 mm;
 - PDF para grÃ¡fica com sangria, 154 x 216 mm;
 - revista digital separada da composiÃ§Ã£o de impressÃ£o;
+- gerenciamento de múltiplas edições, com rascunhos independentes e apenas uma edição online;
+- criação de nova edição por cópia integral, preservando textos, imagens e layouts da edição de origem;
 - layouts salvos em `magazine_pages.elements.canvas`.
 
 ## Rotas
@@ -78,6 +80,17 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sua_chave_publicavel
 ```
 
 Cadastre no Supabase Authentication um e-mail real que vocÃª controle e adicione o mesmo endereÃ§o Ã  tabela `admin_allowlist`.
+
+### Edições da revista
+
+- `magazine_editions` guarda o título, número e estado de cada edição;
+- `magazine_pages.edition_id` separa as páginas de cada revista;
+- `draft` é uma edição em preparação;
+- `published` é a única edição exibida no site, na revista e na impressão;
+- `archived` preserva a edição que saiu do ar;
+- as funções `duplicate_magazine_edition` e `publish_magazine_edition` exigem usuário administrador autenticado.
+
+As migrações em `supabase/migrations` preservam a edição atual e impedem que duas edições sejam publicadas simultaneamente.
 
 ## Executar localmente
 

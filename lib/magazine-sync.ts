@@ -1,26 +1,56 @@
-import type { MagazinePage } from './editor-types';
+import type { MagazineEdition, MagazinePage } from './editor-types';
 import { rest } from './supabase-rest';
 
 const CHANNEL_NAME = 'val-magazine-updates';
 const STORAGE_KEY = 'val_magazine_updated_at';
 
-export async function fetchPublishedPages() {
-  return rest<MagazinePage[]>('magazine_pages?select=*&is_published=eq.true&order=page_number.asc');
+const EDITION_FIELDS = 'id,slug,title,edition_number,status,cover_image_url,published_at,settings,created_at,updated_at';
+
+export async function fetchOnlineEdition(token?: string) {
+  const editions = await rest<MagazineEdition[]>(
+    `magazine_editions?select=${EDITION_FIELDS}&status=eq.published&order=published_at.desc.nullslast,edition_number.desc&limit=1`,
+    {},
+    token,
+  );
+  return editions[0] || null;
 }
 
-export function notifyMagazineUpdated(page: MagazinePage) {
+export async function fetchEditionPages(editionId: string, token?: string) {
+  return rest<MagazinePage[]>(
+    `magazine_pages?select=*&edition_id=eq.${encodeURIComponent(editionId)}&order=page_number.asc`,
+    {},
+    token,
+  );
+}
+
+export async function fetchPublishedPages() {
+  const edition = await fetchOnlineEdition();
+  if (!edition) return [];
+  const pages = await fetchEditionPages(edition.id);
+  return pages.filter((page) => page.is_published);
+}
+
+function broadcastMagazineUpdate(message: Record<string, unknown>) {
   if (typeof window === 'undefined') return;
-  const message = {
-    pageId: page.id,
-    pageNumber: page.page_number,
-    updatedAt: page.updated_at || new Date().toISOString(),
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(message));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...message, notifiedAt: new Date().toISOString() }));
   if ('BroadcastChannel' in window) {
     const channel = new BroadcastChannel(CHANNEL_NAME);
     channel.postMessage(message);
     channel.close();
   }
+}
+
+export function notifyMagazineUpdated(page: MagazinePage) {
+  broadcastMagazineUpdate({
+    pageId: page.id,
+    editionId: page.edition_id,
+    pageNumber: page.page_number,
+    updatedAt: page.updated_at || new Date().toISOString(),
+  });
+}
+
+export function notifyMagazineEditionUpdated(editionId: string) {
+  broadcastMagazineUpdate({ editionId, publishedAt: new Date().toISOString() });
 }
 
 export function subscribeToMagazineUpdates(refresh: () => void) {

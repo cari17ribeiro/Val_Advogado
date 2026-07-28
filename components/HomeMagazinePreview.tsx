@@ -1,15 +1,35 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CanvasPage } from '@/components/editor/CanvasRenderer';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
-import { staticMagazinePages } from '@/lib/static-magazine-pages';
+import type { MagazinePage } from '@/lib/editor-types';
+import { prepareMagazineEditionPages } from '@/lib/magazine-edition';
+import { fetchPublishedPages, subscribeToMagazineUpdates } from '@/lib/magazine-sync';
 
 export function HomeMagazinePreview() {
+  const [pages, setPages] = useState<MagazinePage[]>([]);
   const previewPages = useMemo(
-    () => staticMagazinePages.slice(0, 2).map((page) => ({ page, document: getCanvasDocument(page) })),
-    [],
+    () => pages.slice(0, 2).map((page) => ({ page, document: getCanvasDocument(page) })),
+    [pages],
   );
+
+  useEffect(() => {
+    let active = true;
+    const refresh = () => {
+      void fetchPublishedPages()
+        .then((onlinePages) => {
+          if (active && onlinePages.length) setPages(prepareMagazineEditionPages(onlinePages));
+        })
+        .catch((error) => console.error('Não foi possível carregar a prévia da edição online.', error));
+    };
+    refresh();
+    const unsubscribe = subscribeToMagazineUpdates(refresh);
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     const sources = previewPages.flatMap(({ document }) => [
@@ -24,6 +44,14 @@ export function HomeMagazinePreview() {
       img.src = source;
     });
   }, [previewPages]);
+
+  if (!previewPages.length) {
+    return (
+      <div className="home-magazine-live-preview is-loading" aria-label="Carregando prévia da revista digital">
+        <span className="ve-loader" />
+      </div>
+    );
+  }
 
   return (
     <div className="home-magazine-live-preview" aria-label="Prévia da revista digital">
