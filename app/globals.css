@@ -1035,4 +1035,6 @@ img{display:block;max-width:100%}
   .canva-admin-topbar nav .canva-publish{display:none}
 }
 
+/* Cinco controles: esquerda, centro, direita, justificado e itálico */
+.ve-align{grid-template-columns:repeat(5,minmax(0,1fr))}
 

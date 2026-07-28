@@ -1,5 +1,5 @@
 export type ElementType = 'text' | 'image' | 'shape' | 'icon';
-export type TextAlign = 'left' | 'center' | 'right';
+export type TextAlign = 'left' | 'center' | 'right' | 'justify';
 export type ImageFit = 'cover' | 'contain';
 export type ImageFrameStyle = 'none' | 'rounded' | 'polaroid' | 'circle' | 'arch' | 'torn';
 

@@ -2,7 +2,7 @@
 
 import { Component, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
-  AlignCenter, AlignLeft, AlignRight, AlertTriangle, ArrowDown, ArrowUp, CheckCircle2, Copy, ImagePlus,
+  AlignCenter, AlignJustify, AlignLeft, AlignRight, AlertTriangle, ArrowDown, ArrowUp, CheckCircle2, Copy, ImagePlus,
   Info, Layers3, Lock, Maximize, MousePointer2, Palette, Plus, Redo2, RotateCcw,
   ScanLine, Shapes, Sparkles, Trash2, Type, Undo2, Unlock, Upload, ZoomIn, ZoomOut,
 } from 'lucide-react';
@@ -439,7 +439,13 @@ function TextInspector({ element, onChange }: { element: TextElement; onChange: 
     <label className="ve-field"><span>Fonte</span><select value={element.fontFamily} onChange={(event) => patch({ fontFamily: event.target.value as TextElement['fontFamily'] })}><option>Arial Black</option><option>Manrope</option><option>Playfair Display</option><option>Inter</option><option>Georgia</option><option>Arial</option></select></label>
     <div className="ve-grid-2"><NumberControl label="Tamanho" value={element.fontSize} min={.8} max={14} step={.1} onChange={(fontSize) => patch({ fontSize })} /><NumberControl label="Peso" value={element.fontWeight} min={300} max={900} step={50} onChange={(fontWeight) => patch({ fontWeight })} /><NumberControl label="Entrelinhas" value={element.lineHeight} min={.7} max={2.2} step={.05} onChange={(lineHeight) => patch({ lineHeight })} /><NumberControl label="Espaçamento" value={element.letterSpacing} min={-.1} max={.3} step={.01} onChange={(letterSpacing) => patch({ letterSpacing })} /></div>
     <ColorControl label="Cor do texto" value={element.color} onChange={(color) => patch({ color })} />
-    <div className="ve-align"><button type="button" className={element.align === 'left' ? 'active' : ''} onClick={() => patch({ align: 'left' })}><AlignLeft /></button><button type="button" className={element.align === 'center' ? 'active' : ''} onClick={() => patch({ align: 'center' })}><AlignCenter /></button><button type="button" className={element.align === 'right' ? 'active' : ''} onClick={() => patch({ align: 'right' })}><AlignRight /></button><button type="button" className={element.italic ? 'active' : ''} onClick={() => patch({ italic: !element.italic })}><i>I</i></button></div>
+    <div className="ve-align">
+      <button type="button" title="Alinhar à esquerda" aria-label="Alinhar à esquerda" className={element.align === 'left' ? 'active' : ''} onClick={() => patch({ align: 'left' })}><AlignLeft /></button>
+      <button type="button" title="Centralizar" aria-label="Centralizar" className={element.align === 'center' ? 'active' : ''} onClick={() => patch({ align: 'center' })}><AlignCenter /></button>
+      <button type="button" title="Alinhar à direita" aria-label="Alinhar à direita" className={element.align === 'right' ? 'active' : ''} onClick={() => patch({ align: 'right' })}><AlignRight /></button>
+      <button type="button" title="Justificar texto" aria-label="Justificar texto" className={element.align === 'justify' ? 'active' : ''} onClick={() => patch({ align: 'justify' })}><AlignJustify /></button>
+      <button type="button" title="Itálico" aria-label="Itálico" className={element.italic ? 'active' : ''} onClick={() => patch({ italic: !element.italic })}><i>I</i></button>
+    </div>
   </div>;
 }
 
