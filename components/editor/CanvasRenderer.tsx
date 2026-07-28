@@ -53,7 +53,9 @@ function AutoFitText({ element, disabled = false }: { element: TextElement; disa
   const [scale, setScale] = useState(1);
 
   useLayoutEffect(() => {
-    if (disabled) {
+    // Justified text must keep the exact size chosen in the editor. Applying
+    // auto-fit only in the reader made those blocks noticeably smaller.
+    if (disabled || element.align === 'justify') {
       setScale((current) => (current === 1 ? current : 1));
       return;
     }
@@ -76,7 +78,7 @@ function AutoFitText({ element, disabled = false }: { element: TextElement; disa
     const observer = new ResizeObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(fit); });
     observer.observe(node);
     return () => { cancelAnimationFrame(frame); observer.disconnect(); };
-  }, [disabled, element.text, element.fontSize, element.minFontSize, element.fontFamily, element.fontWeight, element.lineHeight, element.letterSpacing, element.w, element.h]);
+  }, [disabled, element.text, element.fontSize, element.minFontSize, element.fontFamily, element.fontWeight, element.lineHeight, element.letterSpacing, element.align, element.w, element.h]);
 
   return (
     <div
