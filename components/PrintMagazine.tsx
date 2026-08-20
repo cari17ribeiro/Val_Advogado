@@ -55,7 +55,7 @@ function printAssetSource(source: string) {
     return LOCAL_PRINT_ASSETS.has(printFilename) ? `/print-assets/${printFilename}` : source;
   }
   if (source.startsWith('https://suwjmyetnifzeehirpxt.supabase.co/')) {
-    return source;
+    return `/_next/image?url=${encodeURIComponent(source)}&w=1600&q=72`;
   }
   return source;
 }
