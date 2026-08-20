@@ -10,11 +10,11 @@ export type MagazineEditionResult = {
   pages: MagazinePage[];
 };
 
-export async function getInitialMagazineEdition(): Promise<MagazineEditionResult> {
+export async function getInitialMagazineEdition(token?: string): Promise<MagazineEditionResult> {
   try {
-    const edition = await fetchOnlineEdition();
+    const edition = await fetchOnlineEdition(token);
     if (!edition) return { edition: null, pages: staticMagazinePages };
-    const publishedPages = (await fetchEditionPages(edition.id)).filter((page) => page.is_published);
+    const publishedPages = (await fetchEditionPages(edition.id, token)).filter((page) => page.is_published);
     return {
       edition,
       pages: publishedPages.length > 0 ? prepareMagazineEditionPages(publishedPages) : staticMagazinePages,
@@ -25,6 +25,6 @@ export async function getInitialMagazineEdition(): Promise<MagazineEditionResult
   }
 }
 
-export async function getInitialMagazinePages(): Promise<MagazinePage[]> {
-  return (await getInitialMagazineEdition()).pages;
+export async function getInitialMagazinePages(token?: string): Promise<MagazinePage[]> {
+  return (await getInitialMagazineEdition(token)).pages;
 }
