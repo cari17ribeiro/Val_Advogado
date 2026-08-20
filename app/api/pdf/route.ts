@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   const token = params.get('token');
   const pageWidth = mode === 'bleed' ? '154mm' : '148mm';
   const pageHeight = mode === 'bleed' ? '216mm' : '210mm';
-  const viewport = { width: 1400, height: 1800, deviceScaleFactor: 1 };
+  const viewport = { width: 1400, height: 1800, deviceScaleFactor: mode === 'bleed' ? 3 : 2 };
   try {
     const localExecutablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
     browser = await puppeteer.launch({
@@ -152,6 +152,58 @@ export async function GET(request: NextRequest) {
         requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
       });
     });
+    const sheets = await page.$$('.print-sheet-v7');
+    if (sheets.length !== MAGAZINE_EDITION_PAGE_COUNT) {
+      throw new Error(`A prévia renderizou ${sheets.length} páginas, mas eram esperadas ${MAGAZINE_EDITION_PAGE_COUNT}.`);
+    }
+    const pageImages: string[] = [];
+    for (const sheet of sheets) {
+      const image = await sheet.screenshot({
+        type: 'png',
+        encoding: 'base64',
+        omitBackground: false,
+      });
+      pageImages.push(`data:image/png;base64,${image}`);
+    }
+    await page.setContent(`<!doctype html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <style>
+            @page { size: ${pageWidth} ${pageHeight}; margin: 0; }
+            html, body {
+              width: ${pageWidth};
+              margin: 0;
+              padding: 0;
+              background: #fff;
+            }
+            .pdf-page {
+              width: ${pageWidth};
+              height: ${pageHeight};
+              margin: 0;
+              padding: 0;
+              page-break-after: always;
+              break-after: page;
+              overflow: hidden;
+              background: #fff;
+            }
+            .pdf-page:last-child {
+              page-break-after: auto;
+              break-after: auto;
+            }
+            img {
+              display: block;
+              width: 100%;
+              height: 100%;
+              object-fit: fill;
+            }
+          </style>
+        </head>
+        <body>
+          ${pageImages.map((src) => `<section class="pdf-page"><img src="${src}" alt="" /></section>`).join('')}
+        </body>
+      </html>`, { waitUntil: 'load' });
+    await page.emulateMediaType('screen');
     const pdf = await page.pdf({
       width: pageWidth,
       height: pageHeight,
