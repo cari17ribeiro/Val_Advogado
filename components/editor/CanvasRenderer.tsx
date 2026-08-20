@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   Accessibility, BookOpen, CalendarDays, Download, Dumbbell, GraduationCap,
   HeartHandshake, HeartPulse, Layers3, MapPinned, Medal, MessageCircle,
@@ -49,17 +49,70 @@ export function elementBoxStyle(element: CanvasElement): React.CSSProperties {
 }
 
 function CanvasText({ element }: { element: TextElement }) {
+  const textRef = useRef<HTMLDivElement>(null);
+  const [fontSize, setFontSize] = useState(element.fontSize);
+  const [fitReady, setFitReady] = useState(false);
+
+  useLayoutEffect(() => {
+    const node = textRef.current;
+    if (!node) return;
+
+    let cancelled = false;
+    const fitText = async () => {
+      setFitReady(false);
+      setFontSize(element.fontSize);
+      await document.fonts.ready;
+      if (cancelled) return;
+
+      const minimum = element.minFontSize ?? Math.max(1.45, element.fontSize * 0.72);
+      let nextSize = element.fontSize;
+
+      for (let attempt = 0; attempt < 24; attempt += 1) {
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        if (cancelled) return;
+        const overflows = node.scrollHeight > node.clientHeight + 1 || node.scrollWidth > node.clientWidth + 1;
+        if (!overflows || nextSize <= minimum) break;
+        nextSize = Math.max(minimum, nextSize * 0.96);
+        setFontSize(nextSize);
+      }
+
+      if (!cancelled) setFitReady(true);
+    };
+
+    void fitText();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    element.text,
+    element.fontFamily,
+    element.fontSize,
+    element.fontWeight,
+    element.lineHeight,
+    element.letterSpacing,
+    element.w,
+    element.h,
+    element.minFontSize,
+  ]);
+
   return (
     <div
+      ref={textRef}
       className="canvas-text-autofit"
+      data-align={element.align}
+      data-fit-ready={fitReady ? 'true' : 'false'}
       style={{
         color: element.color,
         fontFamily: PRINT_FONT_STACKS[element.fontFamily] || `'${element.fontFamily}', Arial, sans-serif`,
-        fontSize: `${element.fontSize}cqw`,
+        fontSize: `${fontSize}cqw`,
         fontWeight: element.fontWeight,
         lineHeight: element.lineHeight,
         letterSpacing: `${element.letterSpacing}em`,
         textAlign: element.align,
+        textAlignLast: element.align === 'justify' ? 'left' : undefined,
+        wordBreak: element.align === 'justify' ? 'normal' : undefined,
+        overflowWrap: element.align === 'justify' ? 'anywhere' : 'break-word',
         fontStyle: element.italic ? 'italic' : 'normal',
         textTransform: element.uppercase ? 'uppercase' : 'none',
         background: element.background || 'transparent',
