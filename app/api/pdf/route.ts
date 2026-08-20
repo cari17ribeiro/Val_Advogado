@@ -18,7 +18,8 @@ export async function GET(request: NextRequest) {
   const token = params.get('token');
   const pageWidth = mode === 'bleed' ? '154mm' : '148mm';
   const pageHeight = mode === 'bleed' ? '216mm' : '210mm';
-  const viewport = { width: 1400, height: 1800, deviceScaleFactor: mode === 'bleed' ? 3 : 2 };
+  const rasterize = params.get('raster') === '1' && mode === 'proof';
+  const viewport = { width: 1200, height: 1700, deviceScaleFactor: rasterize ? 2 : 1 };
   try {
     const localExecutablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
     browser = await puppeteer.launch({
@@ -126,14 +127,17 @@ export async function GET(request: NextRequest) {
       console.warn('[api/pdf] PDF gerado com imagens ausentes', { count: brokenImages.length, brokenImages });
     }
     const fontStatus = await page.evaluate(async () => {
-      await Promise.all([
-        document.fonts.load('400 16px Inter'),
-        document.fonts.load('650 16px Inter'),
-        document.fonts.load('800 16px Manrope'),
-        document.fonts.load('700 16px "Playfair Display"'),
-        document.fonts.load('400 16px "DM Sans"'),
+      await Promise.race([
+        Promise.all([
+          document.fonts.load('400 16px Inter'),
+          document.fonts.load('650 16px Inter'),
+          document.fonts.load('800 16px Manrope'),
+          document.fonts.load('700 16px "Playfair Display"'),
+          document.fonts.load('400 16px "DM Sans"'),
+          document.fonts.ready,
+        ]),
+        new Promise((resolve) => { window.setTimeout(resolve, 4000); }),
       ]);
-      await document.fonts.ready;
       return {
         inter: document.fonts.check('650 16px Inter'),
         manrope: document.fonts.check('800 16px Manrope'),
@@ -142,68 +146,76 @@ export async function GET(request: NextRequest) {
       };
     });
     console.info('[api/pdf] Fontes carregadas', fontStatus);
-    await page.waitForFunction(
-      () => [...document.querySelectorAll('.canvas-text-autofit')]
-        .every((element) => element.getAttribute('data-fit-ready') === 'true'),
-      { timeout: 10_000 },
-    );
+    try {
+      await page.waitForFunction(
+        () => [...document.querySelectorAll('.canvas-text-autofit')]
+          .every((element) => element.getAttribute('data-fit-ready') === 'true'),
+        { timeout: 5_000 },
+      );
+    } catch (fitError) {
+      console.warn('[api/pdf] Auto-fit de texto não finalizou antes do PDF', errorMessage(fitError));
+    }
     await page.evaluate(async () => {
       await new Promise<void>((resolve) => {
         requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
       });
     });
-    const sheets = await page.$$('.print-sheet-v7');
-    if (sheets.length !== MAGAZINE_EDITION_PAGE_COUNT) {
-      throw new Error(`A prévia renderizou ${sheets.length} páginas, mas eram esperadas ${MAGAZINE_EDITION_PAGE_COUNT}.`);
+    if (rasterize) {
+      const sheets = await page.$$('.print-sheet-v7');
+      if (sheets.length !== MAGAZINE_EDITION_PAGE_COUNT) {
+        throw new Error(`A prévia renderizou ${sheets.length} páginas, mas eram esperadas ${MAGAZINE_EDITION_PAGE_COUNT}.`);
+      }
+      const pageImages: string[] = [];
+      for (const sheet of sheets) {
+        await sheet.evaluate((element) => element.scrollIntoView({ block: 'center', inline: 'center' }));
+        const image = await sheet.screenshot({
+          type: 'jpeg',
+          quality: 90,
+          encoding: 'base64',
+          omitBackground: false,
+        });
+        pageImages.push(`data:image/jpeg;base64,${image}`);
+      }
+      await page.setContent(`<!doctype html>
+        <html>
+          <head>
+            <meta charset="utf-8" />
+            <style>
+              @page { size: ${pageWidth} ${pageHeight}; margin: 0; }
+              html, body {
+                width: ${pageWidth};
+                margin: 0;
+                padding: 0;
+                background: #fff;
+              }
+              .pdf-page {
+                width: ${pageWidth};
+                height: ${pageHeight};
+                margin: 0;
+                padding: 0;
+                page-break-after: always;
+                break-after: page;
+                overflow: hidden;
+                background: #fff;
+              }
+              .pdf-page:last-child {
+                page-break-after: auto;
+                break-after: auto;
+              }
+              img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: fill;
+              }
+            </style>
+          </head>
+          <body>
+            ${pageImages.map((src) => `<section class="pdf-page"><img src="${src}" alt="" /></section>`).join('')}
+          </body>
+        </html>`, { waitUntil: 'load' });
+      await page.emulateMediaType('screen');
     }
-    const pageImages: string[] = [];
-    for (const sheet of sheets) {
-      const image = await sheet.screenshot({
-        type: 'png',
-        encoding: 'base64',
-        omitBackground: false,
-      });
-      pageImages.push(`data:image/png;base64,${image}`);
-    }
-    await page.setContent(`<!doctype html>
-      <html>
-        <head>
-          <meta charset="utf-8" />
-          <style>
-            @page { size: ${pageWidth} ${pageHeight}; margin: 0; }
-            html, body {
-              width: ${pageWidth};
-              margin: 0;
-              padding: 0;
-              background: #fff;
-            }
-            .pdf-page {
-              width: ${pageWidth};
-              height: ${pageHeight};
-              margin: 0;
-              padding: 0;
-              page-break-after: always;
-              break-after: page;
-              overflow: hidden;
-              background: #fff;
-            }
-            .pdf-page:last-child {
-              page-break-after: auto;
-              break-after: auto;
-            }
-            img {
-              display: block;
-              width: 100%;
-              height: 100%;
-              object-fit: fill;
-            }
-          </style>
-        </head>
-        <body>
-          ${pageImages.map((src) => `<section class="pdf-page"><img src="${src}" alt="" /></section>`).join('')}
-        </body>
-      </html>`, { waitUntil: 'load' });
-    await page.emulateMediaType('screen');
     const pdf = await page.pdf({
       width: pageWidth,
       height: pageHeight,
