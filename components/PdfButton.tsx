@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import { Download, Printer } from 'lucide-react';
@@ -19,8 +19,8 @@ export function PdfButton({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) {
       const response = await fetch(`/api/pdf?${query.toString()}`);
       const contentType = response.headers.get('content-type') || '';
       if (!response.ok || !contentType.includes('application/pdf')) {
-        const payload = await response.json().catch(() => null) as { error?: string } | null;
-        throw new Error(payload?.error || 'Falha ao gerar PDF');
+        const payload = await response.json().catch(() => null) as { detail?: string; error?: string } | null;
+        throw new Error(payload?.detail || payload?.error || 'Falha ao gerar PDF');
       }
       const blob = await response.blob();
       const signature = new TextDecoder('ascii').decode(await blob.slice(0, 5).arrayBuffer());
