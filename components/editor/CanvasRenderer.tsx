@@ -17,11 +17,11 @@ const ICONS: Record<string, LucideIcon> = {
 };
 
 const PRINT_FONT_STACKS: Record<string, string> = {
-  'Arial Black': 'var(--font-manrope), Arial Black, Arial, sans-serif',
-  Inter: 'var(--font-inter), Arial, sans-serif',
-  Georgia: 'var(--font-playfair), Georgia, serif',
-  Manrope: 'var(--font-manrope), Arial, sans-serif',
-  'DM Sans': 'var(--font-dm-sans), Arial, sans-serif',
+  'Arial Black': 'Manrope, var(--font-manrope), Arial Black, Arial, sans-serif',
+  Inter: 'Inter, var(--font-inter), Arial, sans-serif',
+  Georgia: '"Playfair Display", var(--font-playfair), Georgia, serif',
+  Manrope: 'Manrope, var(--font-manrope), Arial, sans-serif',
+  'DM Sans': '"DM Sans", var(--font-dm-sans), Arial, sans-serif',
 };
 
 export const iconNames = Object.keys(ICONS);
