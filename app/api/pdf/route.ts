@@ -18,16 +18,17 @@ export async function GET(request: NextRequest) {
   const token = params.get('token');
   const pageWidth = mode === 'bleed' ? '154mm' : '148mm';
   const pageHeight = mode === 'bleed' ? '216mm' : '210mm';
+  const viewport = { width: 1400, height: 1800, deviceScaleFactor: 1 };
   try {
     const localExecutablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
     browser = await puppeteer.launch({
       args: localExecutablePath ? ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] : chromium.args,
-      defaultViewport: { width: 900, height: 1280 },
+      defaultViewport: viewport,
       executablePath: localExecutablePath || await chromium.executablePath(),
       headless: true,
     });
     const page = await browser.newPage();
-    await page.setViewport({ width: 900, height: 1280, deviceScaleFactor: 1 });
+    await page.setViewport(viewport);
     page.on('pageerror', (pageError) => {
       console.warn('[api/pdf] Erro na pagina de impressao', errorMessage(pageError));
     });
@@ -60,6 +61,8 @@ export async function GET(request: NextRequest) {
           transition: none !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
+          -webkit-text-size-adjust: 100% !important;
+          text-size-adjust: 100% !important;
         }
         .print-toolbar, .print-sync-warning {
           display: none !important;
@@ -105,6 +108,7 @@ export async function GET(request: NextRequest) {
         }
         .canvas-text-autofit {
           overflow: hidden !important;
+          font-synthesis: none !important;
         }
       `,
     });
@@ -121,9 +125,23 @@ export async function GET(request: NextRequest) {
     if (brokenImages.length > 0) {
       console.warn('[api/pdf] PDF gerado com imagens ausentes', { count: brokenImages.length, brokenImages });
     }
-    await page.evaluate(async () => {
+    const fontStatus = await page.evaluate(async () => {
+      await Promise.all([
+        document.fonts.load('400 16px Inter'),
+        document.fonts.load('650 16px Inter'),
+        document.fonts.load('800 16px Manrope'),
+        document.fonts.load('700 16px "Playfair Display"'),
+        document.fonts.load('400 16px "DM Sans"'),
+      ]);
       await document.fonts.ready;
+      return {
+        inter: document.fonts.check('650 16px Inter'),
+        manrope: document.fonts.check('800 16px Manrope'),
+        playfair: document.fonts.check('700 16px "Playfair Display"'),
+        dmSans: document.fonts.check('400 16px "DM Sans"'),
+      };
     });
+    console.info('[api/pdf] Fontes carregadas', fontStatus);
     await page.evaluate(async () => {
       await new Promise<void>((resolve) => {
         requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
