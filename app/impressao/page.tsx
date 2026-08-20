@@ -1,14 +1,15 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import { PrintMagazine } from '@/components/PrintMagazine';
 import { PdfButton } from '@/components/PdfButton';
 import { getInitialMagazineEdition } from '@/lib/server-magazine-pages';
 
-type Props = { searchParams: Promise<{ mode?: string; pdf?: string }> };
+type Props = { searchParams: Promise<{ mode?: string; pdf?: string; token?: string }> };
 
 export const dynamic = 'force-dynamic';
 
 export default async function Impressao({ searchParams }: Props) {
-  const [params, magazine] = await Promise.all([searchParams, getInitialMagazineEdition()]);
+  const params = await searchParams;
+  const magazine = await getInitialMagazineEdition(params.token);
   const { edition, pages } = magazine;
   const mode: 'proof' | 'bleed' = params.mode === 'bleed' || params.pdf === 'bleed' ? 'bleed' : 'proof';
 
