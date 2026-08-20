@@ -61,7 +61,10 @@ function CanvasText({ element }: { element: TextElement }) {
     const fitText = async () => {
       setFitReady(false);
       setFontSize(element.fontSize);
-      await document.fonts.ready;
+      await Promise.race([
+        document.fonts.ready,
+        new Promise<void>((resolve) => { window.setTimeout(resolve, 1500); }),
+      ]);
       if (cancelled) return;
 
       const minimum = element.minFontSize ?? Math.max(1.45, element.fontSize * 0.72);
