@@ -142,6 +142,11 @@ export async function GET(request: NextRequest) {
       };
     });
     console.info('[api/pdf] Fontes carregadas', fontStatus);
+    await page.waitForFunction(
+      () => [...document.querySelectorAll('.canvas-text-autofit')]
+        .every((element) => element.getAttribute('data-fit-ready') === 'true'),
+      { timeout: 10_000 },
+    );
     await page.evaluate(async () => {
       await new Promise<void>((resolve) => {
         requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
