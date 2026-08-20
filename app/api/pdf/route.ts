@@ -6,6 +6,10 @@ import { MAGAZINE_EDITION_PAGE_COUNT } from '@/lib/magazine-edition';
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
+function errorMessage(error: unknown) {
+  return error instanceof Error ? error.message : String(error);
+}
+
 export async function GET(request: NextRequest) {
   let browser;
   const startedAt = Date.now();
@@ -25,7 +29,7 @@ export async function GET(request: NextRequest) {
     const page = await browser.newPage();
     await page.setViewport({ width: 900, height: 1280, deviceScaleFactor: 1 });
     page.on('pageerror', (pageError) => {
-      console.warn('[api/pdf] Erro na pagina de impressao', pageError.message);
+      console.warn('[api/pdf] Erro na pagina de impressao', errorMessage(pageError));
     });
     page.on('requestfailed', (failedRequest) => {
       const url = failedRequest.url();
@@ -121,7 +125,9 @@ export async function GET(request: NextRequest) {
       await document.fonts.ready;
     });
     await page.evaluate(async () => {
-      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      });
     });
     const pdf = await page.pdf({
       width: pageWidth,
