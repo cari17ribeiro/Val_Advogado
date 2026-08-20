@@ -1,7 +1,11 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import { CanvasPage, backgroundStyle } from '@/components/editor/CanvasRenderer';
 import { getCanvasDocument } from '@/lib/default-page-layouts';
+import { prepareMagazineEditionPages } from '@/lib/magazine-edition';
+import { fetchEditionPages } from '@/lib/magazine-sync';
+import { readSession } from '@/lib/supabase-rest';
 import type { CanvasDocument, MagazinePage } from '@/lib/editor-types';
 
 const LOCAL_PRINT_ASSETS = new Set([
@@ -55,7 +59,7 @@ function printAssetSource(source: string) {
     return LOCAL_PRINT_ASSETS.has(printFilename) ? `/print-assets/${printFilename}` : source;
   }
   if (source.startsWith('https://suwjmyetnifzeehirpxt.supabase.co/')) {
-    return `/_next/image?url=${encodeURIComponent(source)}&w=1600&q=72`;
+    return source;
   }
   return source;
 }
@@ -72,9 +76,36 @@ function optimizeDocumentForPrint(document: CanvasDocument): CanvasDocument {
   };
 }
 
-export function PrintMagazine({ pages, mode = 'proof' }: { pages: MagazinePage[]; mode?: 'proof' | 'bleed' }) {
+export function PrintMagazine({
+  pages: initialPages,
+  mode = 'proof',
+  editionId,
+}: {
+  pages: MagazinePage[];
+  mode?: 'proof' | 'bleed';
+  editionId?: string;
+}) {
+  const [pages, setPages] = useState(initialPages);
   const bleed = mode === 'bleed';
-  const documents = pages.map((page) => ({ page, document: optimizeDocumentForPrint(getCanvasDocument(page)) }));
+
+  useEffect(() => { setPages(initialPages); }, [initialPages]);
+
+  useEffect(() => {
+    const token = readSession()?.access_token;
+    if (!editionId || !token) return;
+    let active = true;
+    void fetchEditionPages(editionId, token)
+      .then((editionPages) => {
+        if (active && editionPages.length > 0) setPages(prepareMagazineEditionPages(editionPages));
+      })
+      .catch((error) => console.error('Não foi possível atualizar a prévia da edição selecionada.', error));
+    return () => { active = false; };
+  }, [editionId]);
+
+  const documents = useMemo(
+    () => pages.map((page) => ({ page, document: optimizeDocumentForPrint(getCanvasDocument(page)) })),
+    [pages],
+  );
 
   return (
     <div
@@ -90,7 +121,7 @@ export function PrintMagazine({ pages, mode = 'proof' }: { pages: MagazinePage[]
           data-page={page.page_number}
         >
           <div className="print-trim-v7">
-            <CanvasPage document={document} className="canvas-page-print-v7" />
+            <CanvasPage document={document} className="canvas-page-print-v7" autoFitText />
           </div>
           {bleed && <div className="print-crop-marks" aria-hidden="true" />}
         </section>

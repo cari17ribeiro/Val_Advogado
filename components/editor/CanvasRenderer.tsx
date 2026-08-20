@@ -48,10 +48,12 @@ export function elementBoxStyle(element: CanvasElement): React.CSSProperties {
   } as React.CSSProperties;
 }
 
-function CanvasText({ element }: { element: TextElement }) {
+function CanvasText({ element, autoFit = false }: { element: TextElement; autoFit?: boolean }) {
   const textRef = useRef<HTMLDivElement>(null);
   const [fontSize, setFontSize] = useState(element.fontSize);
+  const [lineHeight, setLineHeight] = useState(element.lineHeight);
   const [fitReady, setFitReady] = useState(false);
+  const [fitOverflow, setFitOverflow] = useState(false);
 
   useLayoutEffect(() => {
     const node = textRef.current;
@@ -60,26 +62,65 @@ function CanvasText({ element }: { element: TextElement }) {
     let cancelled = false;
     const fitText = async () => {
       setFitReady(false);
+      setFitOverflow(false);
       setFontSize(element.fontSize);
+      setLineHeight(element.lineHeight);
+
+      if (!autoFit) {
+        node.style.fontSize = `${element.fontSize}cqw`;
+        node.style.lineHeight = String(element.lineHeight);
+        setFitReady(true);
+        return;
+      }
+
       await Promise.race([
         document.fonts.ready,
-        new Promise<void>((resolve) => { window.setTimeout(resolve, 1500); }),
+        new Promise<void>((resolve) => { window.setTimeout(resolve, 4000); }),
       ]);
       if (cancelled) return;
 
-      const minimum = element.minFontSize ?? Math.max(1.45, element.fontSize * 0.72);
-      let nextSize = element.fontSize;
+      const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      const overflows = () => node.scrollHeight > node.clientHeight + 1 || node.scrollWidth > node.clientWidth + 1;
+      const applySize = (size: number) => { node.style.fontSize = `${size}cqw`; };
+      const configuredMinimum = element.minFontSize ?? element.fontSize * 0.55;
+      const minimum = Math.max(0.5, Math.min(configuredMinimum, element.fontSize * 0.65));
+      let fittedSize = element.fontSize;
+      let fittedLineHeight = element.lineHeight;
 
-      for (let attempt = 0; attempt < 24; attempt += 1) {
-        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-        if (cancelled) return;
-        const overflows = node.scrollHeight > node.clientHeight + 1 || node.scrollWidth > node.clientWidth + 1;
-        if (!overflows || nextSize <= minimum) break;
-        nextSize = Math.max(minimum, nextSize * 0.96);
-        setFontSize(nextSize);
+      applySize(fittedSize);
+      await frame();
+
+      if (overflows()) {
+        applySize(minimum);
+        await frame();
+
+        if (overflows()) {
+          fittedLineHeight = Math.max(1, Math.min(element.lineHeight, 1.25));
+          node.style.lineHeight = String(fittedLineHeight);
+          await frame();
+          fittedSize = minimum;
+          if (overflows()) setFitOverflow(true);
+        } else {
+          let low = minimum;
+          let high = element.fontSize;
+          for (let attempt = 0; attempt < 12; attempt += 1) {
+            const candidate = (low + high) / 2;
+            applySize(candidate);
+            await frame();
+            if (cancelled) return;
+            if (overflows()) high = candidate;
+            else low = candidate;
+          }
+          fittedSize = low;
+        }
       }
 
-      if (!cancelled) setFitReady(true);
+      if (!cancelled) {
+        applySize(fittedSize);
+        setFontSize(fittedSize);
+        setLineHeight(fittedLineHeight);
+        setFitReady(true);
+      }
     };
 
     void fitText();
@@ -97,6 +138,7 @@ function CanvasText({ element }: { element: TextElement }) {
     element.w,
     element.h,
     element.minFontSize,
+    autoFit,
   ]);
 
   return (
@@ -105,12 +147,13 @@ function CanvasText({ element }: { element: TextElement }) {
       className="canvas-text-autofit"
       data-align={element.align}
       data-fit-ready={fitReady ? 'true' : 'false'}
+      data-fit-overflow={fitOverflow ? 'true' : 'false'}
       style={{
         color: element.color,
         fontFamily: PRINT_FONT_STACKS[element.fontFamily] || `'${element.fontFamily}', Arial, sans-serif`,
         fontSize: `${fontSize}cqw`,
         fontWeight: element.fontWeight,
-        lineHeight: element.lineHeight,
+        lineHeight,
         letterSpacing: `${element.letterSpacing}em`,
         textAlign: element.align,
         textAlignLast: element.align === 'justify' ? 'left' : undefined,
@@ -142,8 +185,8 @@ function imageFrameStyle(element: ImageElement): React.CSSProperties {
   return base;
 }
 
-export function CanvasElementView({ element }: { element: CanvasElement }) {
-  if (element.type === 'text') return <CanvasText element={element} />;
+export function CanvasElementView({ element, autoFitText = false }: { element: CanvasElement; autoFitText?: boolean }) {
+  if (element.type === 'text') return <CanvasText element={element} autoFit={autoFitText} />;
   if (element.type === 'image') {
     return (
       <div className={`canvas-image-frame frame-${element.frameStyle || 'rounded'}`} style={imageFrameStyle(element)}>
@@ -181,6 +224,7 @@ export type CanvasPageProps = {
   className?: string;
   selectedId?: string | null;
   interactive?: boolean;
+  autoFitText?: boolean;
   showSafeArea?: boolean;
   showTrimGuide?: boolean;
   onSelect?: (id: string | null) => void;
@@ -189,7 +233,7 @@ export type CanvasPageProps = {
 };
 
 export function CanvasPage({
-  document, className = '', selectedId, interactive = false, showSafeArea = false, showTrimGuide = false,
+  document, className = '', selectedId, interactive = false, autoFitText = false, showSafeArea = false, showTrimGuide = false,
   onSelect, onElementPointerDown, onElementDoubleClick,
 }: CanvasPageProps) {
   const sorted = useMemo(() => [...document.elements].sort((a, b) => a.z - b.z), [document.elements]);
@@ -217,7 +261,7 @@ export function CanvasPage({
           }}
           onDoubleClick={(event) => { event.stopPropagation(); onElementDoubleClick?.(element); }}
         >
-          <CanvasElementView element={element} />
+          <CanvasElementView element={element} autoFitText={autoFitText} />
           {interactive && selectedId === element.id && !element.locked && (
             <>
               <span className="canvas-selection-label">{element.name}</span>

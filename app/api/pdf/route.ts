@@ -15,11 +15,13 @@ export async function GET(request: NextRequest) {
   const startedAt = Date.now();
   const params = new URL(request.url).searchParams;
   const mode = params.get('mode') === 'bleed' ? 'bleed' : 'proof';
-  const token = params.get('token');
+  const authorization = request.headers.get('authorization');
+  const editionId = params.get('edition');
   const pageWidth = mode === 'bleed' ? '154mm' : '148mm';
   const pageHeight = mode === 'bleed' ? '216mm' : '210mm';
   const rasterize = params.get('raster') === '1' && mode === 'proof';
   const viewport = { width: 1200, height: 1700, deviceScaleFactor: rasterize ? 2 : 1 };
+  const origin = new URL(request.url).origin;
   try {
     const localExecutablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
     browser = await puppeteer.launch({
@@ -30,6 +32,17 @@ export async function GET(request: NextRequest) {
     });
     const page = await browser.newPage();
     await page.setViewport(viewport);
+    if (authorization) {
+      await page.setRequestInterception(true);
+      page.on('request', (pageRequest) => {
+        const requestOrigin = new URL(pageRequest.url()).origin;
+        if (requestOrigin === origin) {
+          void pageRequest.continue({ headers: { ...pageRequest.headers(), Authorization: authorization } });
+        } else {
+          void pageRequest.continue();
+        }
+      });
+    }
     page.on('pageerror', (pageError) => {
       console.warn('[api/pdf] Erro na pagina de impressao', errorMessage(pageError));
     });
@@ -42,9 +55,8 @@ export async function GET(request: NextRequest) {
         });
       }
     });
-    const origin = new URL(request.url).origin;
     const previewParams = new URLSearchParams({ pdf: mode, mode });
-    if (token) previewParams.set('token', token);
+    if (editionId) previewParams.set('edition', editionId);
     await page.goto(`${origin}/impressao?${previewParams.toString()}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
     await page.emulateMediaType('screen');
     await page.addStyleTag({

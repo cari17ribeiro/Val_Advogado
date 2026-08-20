@@ -2,7 +2,7 @@ import 'server-only';
 
 import type { MagazineEdition, MagazinePage } from './editor-types';
 import { prepareMagazineEditionPages } from './magazine-edition';
-import { fetchEditionPages, fetchOnlineEdition } from './magazine-sync';
+import { fetchEditionById, fetchEditionPages, fetchOnlineEdition } from './magazine-sync';
 import { staticMagazinePages } from './static-magazine-pages';
 
 export type MagazineEditionResult = {
@@ -10,9 +10,9 @@ export type MagazineEditionResult = {
   pages: MagazinePage[];
 };
 
-export async function getInitialMagazineEdition(token?: string): Promise<MagazineEditionResult> {
+export async function getInitialMagazineEdition(token?: string, editionId?: string): Promise<MagazineEditionResult> {
   try {
-    const edition = await fetchOnlineEdition(token);
+    const edition = editionId ? await fetchEditionById(editionId, token) : await fetchOnlineEdition(token);
     if (!edition) return { edition: null, pages: staticMagazinePages };
     const publishedPages = (await fetchEditionPages(edition.id, token)).filter((page) => page.is_published);
     return {
@@ -25,6 +25,6 @@ export async function getInitialMagazineEdition(token?: string): Promise<Magazin
   }
 }
 
-export async function getInitialMagazinePages(token?: string): Promise<MagazinePage[]> {
-  return (await getInitialMagazineEdition(token)).pages;
+export async function getInitialMagazinePages(token?: string, editionId?: string): Promise<MagazinePage[]> {
+  return (await getInitialMagazineEdition(token, editionId)).pages;
 }

@@ -314,7 +314,7 @@ export function AdminApp() {
         <nav>
           <a href="/" target="_blank"><Home /> Site</a>
           <a href="/revista" target="_blank"><BookOpen /> Visualizar</a>
-          <a href="/impressao" target="_blank"><FileDown /> PDF</a>
+          <a href={`/impressao?edition=${encodeURIComponent(selectedEditionId)}`} target="_blank"><FileDown /> PDF</a>
           <button type="button" onClick={() => void createEdition()} disabled={statusType === 'saving'} title="Criar uma nova edição a partir desta"><Plus /> Nova edição</button>
           <button type="button" className="canva-publish" onClick={() => void publishEdition()} disabled={statusType === 'saving' || selectedEdition?.status === 'published'} title={selectedEdition?.status === 'published' ? 'Esta edição já está online' : 'Colocar esta edição online'}><RadioTower /> {selectedEdition?.status === 'published' ? 'Online' : 'Colocar online'}</button>
           <button type="button" className="canva-save" onClick={() => void savePage()} disabled={statusType === 'saving'}><Save /> {statusType === 'saving' ? 'Salvando...' : 'Salvar'}</button>

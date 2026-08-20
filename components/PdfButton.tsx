@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Download, Printer } from 'lucide-react';
 import { readSession } from '@/lib/supabase-rest';
 
-export function PdfButton({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) {
+export function PdfButton({ mode = 'proof', editionId }: { mode?: 'proof' | 'bleed'; editionId?: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const isBleed = mode === 'bleed';
@@ -15,8 +15,12 @@ export function PdfButton({ mode = 'proof' }: { mode?: 'proof' | 'bleed' }) {
     try {
       const token = readSession()?.access_token;
       const query = new URLSearchParams({ mode });
-      if (token) query.set('token', token);
-      const response = await fetch(`/api/pdf?${query.toString()}`);
+      if (editionId) query.set('edition', editionId);
+      if (!isBleed) query.set('raster', '1');
+      const response = await fetch(`/api/pdf?${query.toString()}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        cache: 'no-store',
+      });
       const contentType = response.headers.get('content-type') || '';
       if (!response.ok || !contentType.includes('application/pdf')) {
         const payload = await response.json().catch(() => null) as { detail?: string; error?: string } | null;

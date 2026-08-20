@@ -15,6 +15,15 @@ export async function fetchOnlineEdition(token?: string) {
   return editions[0] || null;
 }
 
+export async function fetchEditionById(editionId: string, token?: string) {
+  const editions = await rest<MagazineEdition[]>(
+    `magazine_editions?select=${EDITION_FIELDS}&id=eq.${encodeURIComponent(editionId)}&limit=1`,
+    {},
+    token,
+  );
+  return editions[0] || null;
+}
+
 export async function fetchEditionPages(editionId: string, token?: string) {
   return rest<MagazinePage[]>(
     `magazine_pages?select=*&edition_id=eq.${encodeURIComponent(editionId)}&order=page_number.asc`,

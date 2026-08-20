@@ -13,7 +13,7 @@ export default async function RevistaPage() {
   return (
     <main className="reader">
       <div className="readerbar">
-        <Link href="/">â† Voltar ao site</Link>
+        <Link href="/">← Voltar ao site</Link>
         <span>Revista Digital • {editionLabel} • {pages.length} páginas</span>
         <div className="actions">
           <Link className="button ghost" href="/impressao">Modo impressão</Link>
