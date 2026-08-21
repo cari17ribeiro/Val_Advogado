@@ -21,6 +21,9 @@ const hasTransparencyFormat = (file?: File | string) => {
 };
 
 const DEFAULT_IMAGE = 'https://i.ibb.co/gZQkNzDq/Capturar.png';
+const A5_CSS_WIDTH = 148 * 96 / 25.4;
+const A5_CSS_HEIGHT = 210 * 96 / 25.4;
+const FIT_ZOOM = 82;
 
 export type VisualEditorProps = {
   pageKey: string;
@@ -110,7 +113,7 @@ function NumberControl({ label, value, min, max, step = 1, onChange }: { label: 
 
 export function VisualEditor({ pageKey, document, onChange, onUpload, media, onResetTemplate, onUploadError }: VisualEditorProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [zoom, setZoom] = useState(62);
+  const [zoom, setZoom] = useState(FIT_ZOOM);
   const [showSafeArea, setShowSafeArea] = useState(true);
   const [showTrimGuide, setShowTrimGuide] = useState(true);
   const [undoStack, setUndoStack] = useState<CanvasDocument[]>([]);
@@ -358,15 +361,16 @@ export function VisualEditor({ pageKey, document, onChange, onUpload, media, onR
             <button type="button" onClick={redo} disabled={!redoStack.length} title="Refazer"><Redo2 /></button>
           </div>
           <div className="ve-guides"><label><input type="checkbox" checked={showSafeArea} onChange={(event) => setShowSafeArea(event.target.checked)} /> Margem segura</label><label><input type="checkbox" checked={showTrimGuide} onChange={(event) => setShowTrimGuide(event.target.checked)} /> Linha de corte</label></div>
-          <div className="ve-zoom"><button type="button" onClick={() => setZoom((value) => clamp(value - 5, 30, 105))}><ZoomOut /></button><span>{zoom}%</span><button type="button" onClick={() => setZoom((value) => clamp(value + 5, 30, 105))}><ZoomIn /></button><button type="button" onClick={() => setZoom(62)} title="Ajustar"><Maximize /></button></div>
+          <div className="ve-zoom"><button type="button" onClick={() => setZoom((value) => clamp(value - 5, 30, 105))}><ZoomOut /></button><span>{zoom}%</span><button type="button" onClick={() => setZoom((value) => clamp(value + 5, 30, 105))}><ZoomIn /></button><button type="button" onClick={() => setZoom(FIT_ZOOM)} title="Ajustar"><Maximize /></button></div>
         </div>
         <div className="ve-stage" ref={canvasHostRef}>
-          <div className="ve-page-scale" style={{ width: 744 * zoom / 100, height: 1052 * zoom / 100 }}>
-            <div style={{ width: 744, height: 1052, transform: `scale(${zoom / 100})`, transformOrigin: 'top left' }}>
+          <div className="ve-page-scale" style={{ width: A5_CSS_WIDTH * zoom / 100, height: A5_CSS_HEIGHT * zoom / 100 }}>
+            <div style={{ width: A5_CSS_WIDTH, height: A5_CSS_HEIGHT, transform: `scale(${zoom / 100})`, transformOrigin: 'top left' }}>
               <EditorErrorBoundary resetKey={`${pageKey}-${document.elements.length}`}>
                 <CanvasPage
                   document={document}
                   interactive
+                  autoFitText
                   selectedId={selectedId}
                   showSafeArea={showSafeArea}
                   showTrimGuide={showTrimGuide}

@@ -33,13 +33,47 @@ function renumberCanvas(document: CanvasDocument, displayPageNumber: number): Ca
   return { ...document, elements };
 }
 
+function normalizePrintLayout(document: CanvasDocument, pageNumber: number): CanvasDocument {
+  const elements = document.elements.map((element): CanvasElement => {
+    if (
+      pageNumber === 1
+      && element.type === 'text'
+      && element.text.startsWith('Uma trajetória de trabalho')
+    ) {
+      return { ...element, align: 'left' };
+    }
+
+    if (pageNumber === 12) {
+      if (element.type === 'text' && element.text.startsWith('A proteção animal exige')) {
+        return { ...element, align: 'left' };
+      }
+      if (element.type === 'icon' && element.x >= 57 && element.y >= 55) {
+        return { ...element, w: Math.min(element.w, 8.5) };
+      }
+      if (element.type === 'text' && (
+        element.text.startsWith('A proposta reconhece')
+        || element.text.startsWith('Permite a circulação')
+      )) {
+        return { ...element, x: 67, w: 29 };
+      }
+    }
+
+    return element;
+  });
+
+  return { ...document, elements };
+}
+
 export function projectMagazinePage(
   sourcePage: MagazinePage,
   displayPageNumber: number,
   sourcePageNumber = sourcePage.source_page_number ?? sourcePage.page_number,
 ): MagazinePage {
   const storedCanvas = (sourcePage.elements as { canvas?: CanvasDocument } | null)?.canvas;
-  const canvas = renumberCanvas(storedCanvas || defaultCanvasForPage(sourcePage), displayPageNumber);
+  const canvas = normalizePrintLayout(
+    renumberCanvas(storedCanvas || defaultCanvasForPage(sourcePage), displayPageNumber),
+    displayPageNumber,
+  );
 
   return {
     ...sourcePage,

@@ -73,45 +73,16 @@ function printAssetSource(source: string, optimizeRemoteImages: boolean) {
   return source;
 }
 
-function adjustPrintLayout(document: CanvasDocument, pageNumber: number): CanvasDocument['elements'] {
-  return document.elements.map((element) => {
-    if (pageNumber === 1) {
-      if (element.type === 'text' && element.text.startsWith('Uma trajetória de trabalho')) {
-        return { ...element, align: 'left' };
-      }
-    }
-
-    if (pageNumber === 12) {
-      if (element.type === 'text' && element.text.startsWith('A proteção animal exige')) {
-        return { ...element, align: 'left' };
-      }
-      if (element.type === 'icon' && element.x >= 57 && element.y >= 55) {
-        return { ...element, w: Math.min(element.w, 8.5) };
-      }
-      if (element.type === 'text' && (
-        element.text.startsWith('A proposta reconhece')
-        || element.text.startsWith('Permite a circulação')
-      )) {
-        return { ...element, x: 67, w: 29 };
-      }
-    }
-
-    return element;
-  });
-}
-
 function optimizeDocumentForPrint(
   document: CanvasDocument,
   optimizeRemoteImages: boolean,
-  pageNumber: number,
 ): CanvasDocument {
-  const adjustedElements = adjustPrintLayout(document, pageNumber);
   return {
     ...document,
     background: document.background.type === 'image'
       ? { ...document.background, value: printAssetSource(document.background.value, optimizeRemoteImages) }
       : document.background,
-    elements: adjustedElements.map((element) => {
+    elements: document.elements.map((element) => {
       if (element.type === 'image') {
         return { ...element, src: printAssetSource(element.src, optimizeRemoteImages) };
       }
@@ -151,7 +122,7 @@ export function PrintMagazine({
   const documents = useMemo(
     () => pages.map((page) => ({
       page,
-      document: optimizeDocumentForPrint(getCanvasDocument(page), optimizeRemoteImages, page.page_number),
+      document: optimizeDocumentForPrint(getCanvasDocument(page), optimizeRemoteImages),
     })),
     [pages, optimizeRemoteImages],
   );
