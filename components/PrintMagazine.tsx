@@ -51,7 +51,7 @@ const LOCAL_PRINT_ASSETS = new Set([
   'val-oficial.webp',
 ]);
 
-function printAssetSource(source: string) {
+function printAssetSource(source: string, optimizeRemoteImages: boolean) {
   if (source.startsWith('/magazine-assets/') || source.startsWith('/media/')) {
     const filename = source.split('/').pop();
     if (!filename) return source;
@@ -59,19 +59,21 @@ function printAssetSource(source: string) {
     return LOCAL_PRINT_ASSETS.has(printFilename) ? `/print-assets/${printFilename}` : source;
   }
   if (source.startsWith('https://suwjmyetnifzeehirpxt.supabase.co/')) {
-    return source;
+    return optimizeRemoteImages
+      ? `/_next/image?url=${encodeURIComponent(source)}&w=1200&q=72`
+      : source;
   }
   return source;
 }
 
-function optimizeDocumentForPrint(document: CanvasDocument): CanvasDocument {
+function optimizeDocumentForPrint(document: CanvasDocument, optimizeRemoteImages: boolean): CanvasDocument {
   return {
     ...document,
     background: document.background.type === 'image'
-      ? { ...document.background, value: printAssetSource(document.background.value) }
+      ? { ...document.background, value: printAssetSource(document.background.value, optimizeRemoteImages) }
       : document.background,
     elements: document.elements.map((element) => element.type === 'image'
-      ? { ...element, src: printAssetSource(element.src) }
+      ? { ...element, src: printAssetSource(element.src, optimizeRemoteImages) }
       : element),
   };
 }
@@ -80,10 +82,12 @@ export function PrintMagazine({
   pages: initialPages,
   mode = 'proof',
   editionId,
+  optimizeRemoteImages = false,
 }: {
   pages: MagazinePage[];
   mode?: 'proof' | 'bleed';
   editionId?: string;
+  optimizeRemoteImages?: boolean;
 }) {
   const [pages, setPages] = useState(initialPages);
   const bleed = mode === 'bleed';
@@ -103,8 +107,11 @@ export function PrintMagazine({
   }, [editionId]);
 
   const documents = useMemo(
-    () => pages.map((page) => ({ page, document: optimizeDocumentForPrint(getCanvasDocument(page)) })),
-    [pages],
+    () => pages.map((page) => ({
+      page,
+      document: optimizeDocumentForPrint(getCanvasDocument(page), optimizeRemoteImages),
+    })),
+    [pages, optimizeRemoteImages],
   );
 
   return (

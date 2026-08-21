@@ -27,7 +27,12 @@ export default async function Impressao({ searchParams }: Props) {
           <PdfButton mode="bleed" editionId={params.edition || edition?.id} />
         </div>
       </div>
-      <PrintMagazine pages={pages} mode={mode} editionId={params.edition} />
+      <PrintMagazine
+        pages={pages}
+        mode={mode}
+        editionId={params.edition}
+        optimizeRemoteImages={Boolean(params.pdf)}
+      />
     </main>
   );
 }
