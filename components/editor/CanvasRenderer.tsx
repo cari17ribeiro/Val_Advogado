@@ -82,12 +82,16 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
       const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
       const overflows = () => node.scrollHeight > node.clientHeight + 1 || node.scrollWidth > node.clientWidth + 1;
       const applySize = (size: number) => { node.style.fontSize = `${size}cqw`; };
-      const configuredMinimum = element.minFontSize ?? element.fontSize * 0.55;
-      const minimum = Math.max(0.5, Math.min(configuredMinimum, element.fontSize * 0.65));
+      const configuredMinimum = element.minFontSize ?? element.fontSize * 0.72;
+      const minimum = Math.min(
+        element.fontSize,
+        Math.max(1.48, Math.min(configuredMinimum, element.fontSize * 0.72)),
+      );
       let fittedSize = element.fontSize;
       let fittedLineHeight = element.lineHeight;
 
       applySize(fittedSize);
+      node.style.lineHeight = String(fittedLineHeight);
       await frame();
 
       if (overflows()) {
@@ -95,7 +99,7 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
         await frame();
 
         if (overflows()) {
-          fittedLineHeight = Math.max(1, Math.min(element.lineHeight, 1.25));
+          fittedLineHeight = Math.max(1, Math.min(element.lineHeight, 1.05));
           node.style.lineHeight = String(fittedLineHeight);
           await frame();
           fittedSize = minimum;
@@ -148,6 +152,8 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
       data-align={element.align}
       data-fit-ready={fitReady ? 'true' : 'false'}
       data-fit-overflow={fitOverflow ? 'true' : 'false'}
+      data-original-font-size={element.fontSize}
+      data-fitted-font-size={fontSize}
       style={{
         color: element.color,
         fontFamily: PRINT_FONT_STACKS[element.fontFamily] || `'${element.fontFamily}', Arial, sans-serif`,
@@ -155,7 +161,7 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
         fontWeight: element.fontWeight,
         lineHeight,
         letterSpacing: `${element.letterSpacing}em`,
-        textAlign: element.align,
+        textAlign: autoFit && element.align === 'justify' ? 'left' : element.align,
         textAlignLast: element.align === 'justify' ? 'left' : undefined,
         wordBreak: element.align === 'justify' ? 'normal' : undefined,
         overflowWrap: element.align === 'justify' ? 'anywhere' : 'break-word',
@@ -165,6 +171,7 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
         padding: `${element.padding ?? 0}cqw`,
         borderRadius: `${element.borderRadius ?? 0}cqw`,
         WebkitTextStroke: element.strokeWidth ? `${element.strokeWidth}px ${element.strokeColor || '#000000'}` : undefined,
+        overflow: fitOverflow ? 'visible' : undefined,
       } as React.CSSProperties}
     >{element.text}</div>
   );

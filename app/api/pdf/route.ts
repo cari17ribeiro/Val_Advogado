@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
   const params = new URL(request.url).searchParams;
   const mode = params.get('mode') === 'bleed' ? 'bleed' : 'proof';
   const authorization = request.headers.get('authorization');
+  const cookie = request.headers.get('cookie');
   const editionId = params.get('edition');
   const pageWidth = mode === 'bleed' ? '154mm' : '148mm';
   const pageHeight = mode === 'bleed' ? '216mm' : '210mm';
@@ -32,12 +33,18 @@ export async function GET(request: NextRequest) {
     });
     const page = await browser.newPage();
     await page.setViewport(viewport);
-    if (authorization) {
+    if (authorization || cookie) {
       await page.setRequestInterception(true);
       page.on('request', (pageRequest) => {
         const requestOrigin = new URL(pageRequest.url()).origin;
         if (requestOrigin === origin) {
-          void pageRequest.continue({ headers: { ...pageRequest.headers(), Authorization: authorization } });
+          void pageRequest.continue({
+            headers: {
+              ...pageRequest.headers(),
+              ...(authorization ? { Authorization: authorization } : {}),
+              ...(cookie ? { Cookie: cookie } : {}),
+            },
+          });
         } else {
           void pageRequest.continue();
         }
@@ -122,6 +129,9 @@ export async function GET(request: NextRequest) {
         .canvas-text-autofit {
           overflow: hidden !important;
           font-synthesis: none !important;
+        }
+        .canvas-text-autofit[data-fit-overflow="true"] {
+          overflow: visible !important;
         }
       `,
     });
