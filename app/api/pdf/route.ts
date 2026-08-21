@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   const pageWidth = mode === 'bleed' ? '154mm' : '148mm';
   const pageHeight = mode === 'bleed' ? '216mm' : '210mm';
   const rasterize = params.get('raster') === '1' && mode === 'proof';
-  const viewport = { width: 1200, height: 1700, deviceScaleFactor: rasterize ? 2 : 1 };
+  const viewport = { width: 1200, height: 1700, deviceScaleFactor: 1 };
   const origin = new URL(request.url).origin;
   try {
     const localExecutablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
@@ -192,7 +192,7 @@ export async function GET(request: NextRequest) {
         await sheet.evaluate((element) => element.scrollIntoView({ block: 'center', inline: 'center' }));
         const image = await sheet.screenshot({
           type: 'jpeg',
-          quality: 90,
+          quality: 82,
           encoding: 'base64',
           omitBackground: false,
         });
