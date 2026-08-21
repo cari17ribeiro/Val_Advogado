@@ -59,9 +59,16 @@ function printAssetSource(source: string, optimizeRemoteImages: boolean) {
     return LOCAL_PRINT_ASSETS.has(printFilename) ? `/print-assets/${printFilename}` : source;
   }
   if (source.startsWith('https://suwjmyetnifzeehirpxt.supabase.co/')) {
-    return optimizeRemoteImages
-      ? `/_next/image?url=${encodeURIComponent(source)}&w=1200&q=72`
-      : source;
+    if (!optimizeRemoteImages) return source;
+    const optimizedSource = new URL(source);
+    optimizedSource.pathname = optimizedSource.pathname.replace(
+      '/storage/v1/object/public/',
+      '/storage/v1/render/image/public/',
+    );
+    optimizedSource.searchParams.set('width', '1000');
+    optimizedSource.searchParams.set('quality', '72');
+    optimizedSource.searchParams.set('resize', 'contain');
+    return optimizedSource.toString();
   }
   return source;
 }
