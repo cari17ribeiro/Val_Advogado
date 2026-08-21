@@ -7,6 +7,7 @@ import {
   PawPrint, PhoneCall, QrCode, Scale, School, Share2, ShieldCheck, Sparkles,
   Swords, Users, type LucideIcon,
 } from 'lucide-react';
+import { hyphenateSync } from 'hyphen/pt';
 import type { CanvasDocument, CanvasElement, IconElement, ImageElement, TextElement } from '@/lib/editor-types';
 
 const ICONS: Record<string, LucideIcon> = {
@@ -54,8 +55,12 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
   const [lineHeight, setLineHeight] = useState(element.lineHeight);
   const [fitReady, setFitReady] = useState(false);
   const [fitOverflow, setFitOverflow] = useState(false);
-  const readableJustify = element.align === 'justify' && element.w / Math.max(fontSize, 1) >= 24;
-  const renderedAlign = element.align === 'justify' && !readableJustify ? 'left' : element.align;
+  const wordCount = element.text.trim().split(/\s+/).filter(Boolean).length;
+  const isJustified = element.align === 'justify' && wordCount >= 10;
+  const renderedText = useMemo(
+    () => (isJustified ? hyphenateSync(element.text) : element.text),
+    [element.text, isJustified],
+  );
 
   useLayoutEffect(() => {
     const node = textRef.current;
@@ -144,6 +149,7 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
     element.w,
     element.h,
     element.minFontSize,
+    element.align,
     autoFit,
   ]);
 
@@ -164,13 +170,13 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
         fontWeight: element.fontWeight,
         lineHeight,
         letterSpacing: `${element.letterSpacing}em`,
-        textAlign: renderedAlign,
-        textAlignLast: readableJustify ? 'left' : undefined,
-        textJustify: readableJustify ? 'inter-word' : undefined,
-        textWrap: readableJustify ? 'balance' : undefined,
-        wordBreak: readableJustify ? 'normal' : undefined,
+        textAlign: element.align === 'justify' && !isJustified ? 'left' : element.align,
+        textAlignLast: isJustified ? 'left' : undefined,
+        textJustify: isJustified ? 'inter-word' : undefined,
+        textWrap: isJustified ? 'balance' : undefined,
+        wordBreak: isJustified ? 'normal' : undefined,
         overflowWrap: 'break-word',
-        hyphens: readableJustify ? 'auto' : undefined,
+        hyphens: isJustified ? 'auto' : undefined,
         fontStyle: element.italic ? 'italic' : 'normal',
         textTransform: element.uppercase ? 'uppercase' : 'none',
         background: element.background || 'transparent',
@@ -179,7 +185,7 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
         WebkitTextStroke: element.strokeWidth ? `${element.strokeWidth}px ${element.strokeColor || '#000000'}` : undefined,
         overflow: fitOverflow ? 'visible' : undefined,
       } as React.CSSProperties}
-    >{element.text}</div>
+    >{renderedText}</div>
   );
 }
 
