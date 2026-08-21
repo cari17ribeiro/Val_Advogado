@@ -203,12 +203,32 @@ export async function GET(request: NextRequest) {
             .map((image) => image.decode().catch(() => undefined)));
           await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
         });
-        const image = await sheets[index].screenshot({
-          type: 'jpeg',
-          quality: 82,
-          encoding: 'base64',
-          omitBackground: false,
-        });
+        const box = await sheets[index].boundingBox();
+        if (!box) throw new Error(`Não foi possível medir a página ${index + 1}.`);
+        let image = '';
+        for (let attempt = 1; attempt <= 3; attempt += 1) {
+          try {
+            image = await page.screenshot({
+              type: 'jpeg',
+              quality: 82,
+              encoding: 'base64',
+              omitBackground: false,
+              captureBeyondViewport: false,
+              clip: {
+                x: Math.max(0, box.x),
+                y: Math.max(0, box.y),
+                width: box.width,
+                height: box.height,
+              },
+            });
+            break;
+          } catch (captureError) {
+            if (attempt === 3) {
+              throw new Error(`Falha ao capturar a página ${index + 1}: ${errorMessage(captureError)}`);
+            }
+            await new Promise((resolve) => setTimeout(resolve, 150));
+          }
+        }
         pageImages.push(`data:image/jpeg;base64,${image}`);
         if ((index + 1) % 5 === 0 || index + 1 === sheets.length) {
           console.info('[api/pdf] Páginas rasterizadas', { completed: index + 1, total: sheets.length });
