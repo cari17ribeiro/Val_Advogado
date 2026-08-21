@@ -54,6 +54,8 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
   const [lineHeight, setLineHeight] = useState(element.lineHeight);
   const [fitReady, setFitReady] = useState(false);
   const [fitOverflow, setFitOverflow] = useState(false);
+  const readableJustify = element.align === 'justify' && element.w / Math.max(fontSize, 1) >= 24;
+  const renderedAlign = element.align === 'justify' && !readableJustify ? 'left' : element.align;
 
   useLayoutEffect(() => {
     const node = textRef.current;
@@ -148,6 +150,7 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
   return (
     <div
       ref={textRef}
+      lang="pt-BR"
       className="canvas-text-autofit"
       data-align={element.align}
       data-fit-ready={fitReady ? 'true' : 'false'}
@@ -161,10 +164,13 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
         fontWeight: element.fontWeight,
         lineHeight,
         letterSpacing: `${element.letterSpacing}em`,
-        textAlign: autoFit && element.align === 'justify' ? 'left' : element.align,
-        textAlignLast: element.align === 'justify' ? 'left' : undefined,
-        wordBreak: element.align === 'justify' ? 'normal' : undefined,
-        overflowWrap: element.align === 'justify' ? 'anywhere' : 'break-word',
+        textAlign: renderedAlign,
+        textAlignLast: readableJustify ? 'left' : undefined,
+        textJustify: readableJustify ? 'inter-word' : undefined,
+        textWrap: readableJustify ? 'balance' : undefined,
+        wordBreak: readableJustify ? 'normal' : undefined,
+        overflowWrap: 'break-word',
+        hyphens: readableJustify ? 'auto' : undefined,
         fontStyle: element.italic ? 'italic' : 'normal',
         textTransform: element.uppercase ? 'uppercase' : 'none',
         background: element.background || 'transparent',
