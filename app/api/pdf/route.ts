@@ -188,15 +188,31 @@ export async function GET(request: NextRequest) {
         throw new Error(`A prévia renderizou ${sheets.length} páginas, mas eram esperadas ${MAGAZINE_EDITION_PAGE_COUNT}.`);
       }
       const pageImages: string[] = [];
-      for (const sheet of sheets) {
-        await sheet.evaluate((element) => element.scrollIntoView({ block: 'center', inline: 'center' }));
-        const image = await sheet.screenshot({
+      for (let index = 0; index < sheets.length; index += 1) {
+        await page.evaluate((activeIndex) => {
+          const pageSheets = [...document.querySelectorAll<HTMLElement>('.print-sheet-v7')];
+          pageSheets.forEach((sheet, sheetIndex) => {
+            sheet.style.display = sheetIndex === activeIndex ? 'block' : 'none';
+            sheet.style.breakAfter = 'auto';
+            sheet.style.pageBreakAfter = 'auto';
+          });
+          window.scrollTo(0, 0);
+        }, index);
+        await sheets[index].evaluate(async (element) => {
+          await Promise.all([...element.querySelectorAll('img')]
+            .map((image) => image.decode().catch(() => undefined)));
+          await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+        });
+        const image = await sheets[index].screenshot({
           type: 'jpeg',
           quality: 82,
           encoding: 'base64',
           omitBackground: false,
         });
         pageImages.push(`data:image/jpeg;base64,${image}`);
+        if ((index + 1) % 5 === 0 || index + 1 === sheets.length) {
+          console.info('[api/pdf] Páginas rasterizadas', { completed: index + 1, total: sheets.length });
+        }
       }
       await page.setContent(`<!doctype html>
         <html>
