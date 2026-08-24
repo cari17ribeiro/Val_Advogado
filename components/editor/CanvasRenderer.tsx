@@ -55,6 +55,7 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
   const [lineHeight, setLineHeight] = useState(element.lineHeight);
   const [fitReady, setFitReady] = useState(false);
   const [fitOverflow, setFitOverflow] = useState(false);
+  const fitEnabled = autoFit && element.autoFit !== false;
   const isJustified = element.align === 'justify';
   const renderedText = useMemo(
     () => (isJustified ? hyphenateSync(element.text) : element.text),
@@ -72,7 +73,7 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
       setFontSize(element.fontSize);
       setLineHeight(element.lineHeight);
 
-      if (!autoFit) {
+      if (!fitEnabled) {
         node.style.fontSize = `${element.fontSize}cqw`;
         node.style.lineHeight = String(element.lineHeight);
         setFitReady(true);
@@ -149,7 +150,7 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
     element.h,
     element.minFontSize,
     element.align,
-    autoFit,
+    fitEnabled,
   ]);
 
   return (

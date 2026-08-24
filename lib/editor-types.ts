@@ -35,6 +35,7 @@ export type TextElement = CanvasElementBase & {
   fontFamily: 'Inter' | 'Manrope' | 'Playfair Display' | 'Georgia' | 'Arial' | 'Arial Black';
   fontSize: number;
   minFontSize?: number;
+  autoFit?: boolean;
   fontWeight: number;
   lineHeight: number;
   letterSpacing: number;
