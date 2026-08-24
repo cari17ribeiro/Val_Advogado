@@ -55,8 +55,7 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
   const [lineHeight, setLineHeight] = useState(element.lineHeight);
   const [fitReady, setFitReady] = useState(false);
   const [fitOverflow, setFitOverflow] = useState(false);
-  const wordCount = element.text.trim().split(/\s+/).filter(Boolean).length;
-  const isJustified = element.align === 'justify' && wordCount >= 10;
+  const isJustified = element.align === 'justify';
   const renderedText = useMemo(
     () => (isJustified ? hyphenateSync(element.text) : element.text),
     [element.text, isJustified],
@@ -170,10 +169,10 @@ function CanvasText({ element, autoFit = false }: { element: TextElement; autoFi
         fontWeight: element.fontWeight,
         lineHeight,
         letterSpacing: `${element.letterSpacing}em`,
-        textAlign: element.align === 'justify' && !isJustified ? 'left' : element.align,
+        textAlign: element.align,
         textAlignLast: isJustified ? 'left' : undefined,
         textJustify: isJustified ? 'inter-word' : undefined,
-        textWrap: isJustified ? 'balance' : undefined,
+        textWrap: isJustified ? 'pretty' : undefined,
         wordBreak: isJustified ? 'normal' : undefined,
         overflowWrap: 'break-word',
         hyphens: isJustified ? 'auto' : undefined,

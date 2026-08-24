@@ -35,18 +35,7 @@ function renumberCanvas(document: CanvasDocument, displayPageNumber: number): Ca
 
 function normalizePrintLayout(document: CanvasDocument, pageNumber: number): CanvasDocument {
   const elements = document.elements.map((element): CanvasElement => {
-    if (
-      pageNumber === 1
-      && element.type === 'text'
-      && element.text.startsWith('Uma trajetória de trabalho')
-    ) {
-      return { ...element, align: 'left' };
-    }
-
     if (pageNumber === 12) {
-      if (element.type === 'text' && element.text.startsWith('A proteção animal exige')) {
-        return { ...element, align: 'left' };
-      }
       if (element.type === 'icon' && element.x >= 57 && element.y >= 55) {
         return { ...element, w: Math.min(element.w, 8.5) };
       }
