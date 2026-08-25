@@ -51,7 +51,12 @@ const LOCAL_PRINT_ASSETS = new Set([
   'val-oficial.webp',
 ]);
 
-function printAssetSource(source: string, optimizeRemoteImages: boolean) {
+function printAssetSource(
+  source: string,
+  optimizeRemoteImages: boolean,
+  preserveOriginal = false,
+) {
+  if (preserveOriginal) return source;
   if (source.startsWith('/magazine-assets/') || source.startsWith('/media/')) {
     const filename = source.split('/').pop();
     if (!filename) return source;
@@ -84,7 +89,11 @@ function optimizeDocumentForPrint(
       : document.background,
     elements: document.elements.map((element) => {
       if (element.type === 'image') {
-        return { ...element, src: printAssetSource(element.src, optimizeRemoteImages) };
+        const isCoverPortrait = element.alt === 'Retrato principal em destaque';
+        return {
+          ...element,
+          src: printAssetSource(element.src, optimizeRemoteImages, isCoverPortrait),
+        };
       }
       return element;
     }),

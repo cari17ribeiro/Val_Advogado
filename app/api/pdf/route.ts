@@ -212,7 +212,7 @@ export async function GET(request: NextRequest) {
           try {
             image = await page.screenshot({
               type: 'jpeg',
-              quality: 94,
+              quality: index === 0 ? 100 : 94,
               encoding: 'base64',
               omitBackground: false,
               captureBeyondViewport: false,
