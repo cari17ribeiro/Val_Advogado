@@ -65,8 +65,8 @@ function printAssetSource(source: string, optimizeRemoteImages: boolean) {
       '/storage/v1/object/public/',
       '/storage/v1/render/image/public/',
     );
-    optimizedSource.searchParams.set('width', '1000');
-    optimizedSource.searchParams.set('quality', '72');
+    optimizedSource.searchParams.set('width', '1600');
+    optimizedSource.searchParams.set('quality', '90');
     optimizedSource.searchParams.set('resize', 'contain');
     return optimizedSource.toString();
   }

@@ -21,7 +21,9 @@ export async function GET(request: NextRequest) {
   const pageWidth = mode === 'bleed' ? '154mm' : '148mm';
   const pageHeight = mode === 'bleed' ? '216mm' : '210mm';
   const rasterize = params.get('raster') === '1' && mode === 'proof';
-  const viewport = { width: 1200, height: 1700, deviceScaleFactor: 1.5 };
+  // A folha A5 mede cerca de 559 px CSS; escala 2,5 produz ~1.398 px,
+  // equivalente a aproximadamente 240 DPI sem exceder a memória da função.
+  const viewport = { width: 1200, height: 1700, deviceScaleFactor: 2.5 };
   const origin = new URL(request.url).origin;
   try {
     const localExecutablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
@@ -210,7 +212,7 @@ export async function GET(request: NextRequest) {
           try {
             image = await page.screenshot({
               type: 'jpeg',
-              quality: 88,
+              quality: 94,
               encoding: 'base64',
               omitBackground: false,
               captureBeyondViewport: false,
